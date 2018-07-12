@@ -1,0 +1,42 @@
+doctype html
+- var dur = 2;
+html
+  head
+    title Dixit Online - Create
+    link(href='/css/main.css', rel='stylesheet')
+  body
+    .error #{errmessage}
+    form(action="/create", method="POST")
+      table
+        tr
+          td
+            label Stage Duration:
+          td
+            input(
+              type="number", step="1", pattern="\d+", min=1, max=14,
+              name="dur", value=dur,
+              title="Interval between stages (Joining game, captioning, and voting)"
+            )
+            label(for="dur")
+            | 
+            | days.
+        tr
+          td
+            label Decks to Use:
+          td
+            ul(required)
+              for deck in decks
+                li(style="display: inline")
+                  label
+                    input(type="checkbox",name="decks[]",value=deck,checked,required)
+                    | #{deck}
+        tr
+          td
+            label Max Players (0 for no limit):
+          td
+            input(type="number", step="1", pattern="\d+",
+              name="max", value=0, min=0
+            )
+      input(type="submit", value="Create Game")
+            
+  

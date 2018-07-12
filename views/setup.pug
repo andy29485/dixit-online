@@ -1,0 +1,47 @@
+doctype html
+html
+  head
+    title Dixit Online - Game Setup
+    link(href='/css/main.css', rel='stylesheet')
+  body
+    h1 Registration
+    table
+      - let index = 0
+      th(colspan=2) Players in game:
+      each player in players
+        tr
+          td #{++index}
+          td #{player.name}
+    form
+      if players.map(p => p.username).includes(username)
+        button(
+          formaction="/leave/"+gameid,
+          type='submit',
+          formmethod="POST",
+        ) Leave Game
+      else
+        - let can_join = players.length < maxplayers || maxplayers === 0;
+        button(
+          formaction="/join/"+gameid,
+          type='submit',
+          formmethod="POST",
+          disabled=!can_join,
+          title=(can_join ? false : 'Player limit reached'),
+        ) Join Game
+    div
+      | Registration closes
+      |
+      b #{enddate}
+    div
+      | Max players
+      |
+      b #{maxplayers === 0 ? "None" : maxplayers}
+    form
+      - let can_start = players.length >= 3;
+      button(
+        formaction="/next/"+gameid,
+        type='submit',
+        formmethod="POST",
+        disabled=!can_start,
+        title=(can_start ? false : 'Not enough people'),
+      ) End Setup

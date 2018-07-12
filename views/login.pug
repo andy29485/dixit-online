@@ -1,0 +1,14 @@
+.error #{loginmessage}
+form(action="/login", method="POST")
+  table
+    tr
+      td
+        label Username:
+      td
+        input(type="text", name="username", placeholder="username" autofocus)
+    tr
+      td
+        label Password:
+      td
+        input(type="password", name="password")
+  input(type="submit", value="Submit")

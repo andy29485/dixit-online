@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+    title Dixit Online #{user.name}'s Profile
+    link(href='/css/main.css', rel='stylesheet')
+  body
+    h1 #{user.name}'s Profile
+    if games
+      h3 Active Games
+      ol
+        for game in games
+          li
+            a(href='/game/'+game) Game #{game}
+    div
+      a(href="/create") Create Game
+      

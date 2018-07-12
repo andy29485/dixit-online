@@ -1,0 +1,30 @@
+doctype html
+html
+  head
+    title Dixit Online
+    link(href='/css/main.css', rel='stylesheet')
+    script(language="Javascript").
+      function hideReg() {
+          document.getElementById("reg").style.visibility="hidden";
+          document.getElementById("lgn").style.visibility="visible";  
+          document.getElementById("lgnbox").checked = true;
+          document.getElementById("regbox").checked = false;  
+      }
+
+      function hideLgn() {
+          document.getElementById("lgn").style.visibility="hidden";
+          document.getElementById("reg").style.visibility="visible";
+          document.getElementById("lgnbox").checked = false;
+          document.getElementById("regbox").checked = true;
+      }
+  body
+    div
+      div(class="lgnreg", style=(register ? 'visibility:hidden' : ''), id="lgn")
+        include login.pug
+      div(class="lgnreg", style=(register ? '' : 'visibility:hidden'), id="reg")
+        include register.pug
+    
+      label Login
+        input(type="radio", id="lgnbox", onClick="hideReg()", checked=!register)
+      label Register
+        input(type="radio", id="regbox", onClick="hideLgn()", checked=register)

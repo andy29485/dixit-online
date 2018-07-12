@@ -1,0 +1,30 @@
+doctype html
+html
+  head
+    title Dixit Online - Guess Cards
+    link(href='/css/main.css', rel='stylesheet')
+  body
+    h1 Results
+    table(style="width:100%")
+      tr
+        th
+        th Caption
+        th Dealer's Name
+        th Dealer's Card
+        th Other Cards 
+      - let index = 0
+      each caption in captions
+        tr
+          td #{++index}
+          td #{caption.cname}
+          td #{caption.quote}
+          td
+            img(src=caption.image)
+            | #{caption.votes[caption.image] || 0}
+          td
+            div(class="wrap")
+              for card in caption.cards
+                div(class="box")
+                  div(class="boxInner")
+                    img(src=card)
+                    | #{caption.votes[card] || 0}

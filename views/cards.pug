@@ -1,0 +1,19 @@
+link(href='/css/cards.css', rel='stylesheet')
+
+// include cards.pug {cards:['file.png']}
+unless cardpicker
+  - cardpicker='cardpicker'
+unless selected
+  - selected=""
+
+div(class="wrap")
+  for card in cards
+    // div(class="box")
+    label(class="box")
+      - let c = (selected === card);
+      if onclick
+        input(type="radio",name=cardpicker,checked=c,onclick=onclick,value=card)
+      else
+        input(type="radio",name=cardpicker,checked=c,value=card)
+      div(class="boxInner")
+        img(src=card)

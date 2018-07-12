@@ -1,0 +1,18 @@
+doctype html
+html
+  head
+    title Dixit Online - Waiting for Other Players
+    link(href='/css/main.css', rel='stylesheet')
+  body
+    table
+      - let index = 0
+      th(colspan=3) Waiting
+      each player in players
+        tr
+          td #{++index}
+          td #{player.name}
+          td #{player.stat}
+    div
+      | Stage Ends
+      |
+      b #{enddate}

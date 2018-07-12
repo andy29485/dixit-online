@@ -1,0 +1,14 @@
+doctype html
+html
+  head
+    title Dixit Online - Choose Card
+    link(href='/css/main.css', rel='stylesheet')
+  body
+    form(action="/caption/"+code, method="POST")
+      include cards.pug
+      input(type="text", name="quote", placeholder="Caption", required)
+      input(type="submit", value="Submit")
+    div
+      | Stage Ends
+      |
+      b #{enddate}

@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    title Dixit Online - #{title}
+    link(href='/css/main.css', rel='stylesheet')
+  body
+    h1 #{title}
+    form(action=action, method="POST")
+      table
+        - let index = 0
+        each caption in quotes
+          unless caption.uname == uname
+            tr
+              td #{++index}
+              td(style="width:15%") #{caption.quote}
+              td(style="width:85%") 
+                - let cardpicker = "picker_"+caption.id
+                - let selected = caption.selected
+                if caption.cards
+                  - cards = caption.cards
+                include cards
+      input(type="submit", value="Submit")

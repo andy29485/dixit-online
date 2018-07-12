@@ -1,0 +1,24 @@
+.error #{regmessage}
+form(action="/register", method="POST")
+  table
+    tr
+      td
+        label Name:
+      td
+        input(type="text", name="name", placeholder="First Last" autofocus)
+    tr
+      td
+        label Username:
+      td
+        input(type="text", name="username", placeholder="username")
+    tr
+      td
+        label Password:
+      td
+        input(type="password", name="password")
+    tr
+      td
+        label Confirm Password:
+      td
+        input(type="password", name="password2")
+  input(type="submit", value="Submit")
