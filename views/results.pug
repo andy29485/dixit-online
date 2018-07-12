@@ -3,28 +3,35 @@ html
   head
     title Dixit Online - Guess Cards
     link(href='/css/main.css', rel='stylesheet')
+    // link(href='/css/cards.css', rel='stylesheet')
   body
     h1 Results
     table(style="width:100%")
-      tr
+      tr(class="wrap")
         th
-        th Caption
         th Dealer's Name
-        th Dealer's Card
-        th Other Cards 
+        th Dealer's Caption
+        th(colspan=2) Dealer's Card
+        th(colspan=2*captions[0].cards.length) Other Cards
+      tr
+        th(colspan=3)
+        th votes
+        th card
+        for card in captions[0].cards
+          th votes
+          th card
       - let index = 0
       each caption in captions
-        tr
+        tr(class="wrap")
           td #{++index}
           td #{caption.cname}
           td #{caption.quote}
-          td
-            img(src=caption.image)
-            | #{caption.votes[caption.image] || 0}
-          td
-            div(class="wrap")
-              for card in caption.cards
-                div(class="box")
-                  div(class="boxInner")
-                    img(src=card)
-                    | #{caption.votes[card] || 0}
+          td(align="right") #{caption.votes[caption.image] || 0}
+          td(class="box")
+            div(class="boxInner")
+              img(src=caption.image)
+          for card in caption.cards
+            td(align="right") #{caption.votes[card] || 0}
+            td(class="box")
+              div(class="boxInner")
+                img(src=card)
