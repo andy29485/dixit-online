@@ -11,6 +11,9 @@ html
       - let gamesarray = games
       h3 Your Active Games
       include gamestable
+
+      if Object.keys(games).length >= maxdisplay
+        a(href='/active') (more)
     else
       h3 Your Active Games - None
 

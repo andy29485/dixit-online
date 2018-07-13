@@ -28,9 +28,8 @@ var ProfileController = {
     User.findOne({username: req.user.username},
     function(err, user) {
       if (err){console.log('profile get err: '+err);}
-      Game.find({
-            users: ObjectID(user._id),
-          })
+      Game.find({users: ObjectID(user._id), stage: {'$ne': 'end'}})
+          .limit(6)
           .sort({name: 'asc'})
           .populate('users')
           .exec(function(err, active) {
@@ -61,6 +60,36 @@ var ProfileController = {
               other:    other   .map(ProfileController.info),
               archived: archived.map(ProfileController.info),
             });
+          });
+        });
+      });
+    });
+  },
+
+  active: function(req, res) {
+    let pageNum = (req.params.page || 1) - 1;
+
+    User.findOne({username: req.user.username},
+    function(err, user) {
+      if (err) {return console.log('search user: '+err);}
+
+      Game.find({users: ObjectID(user._id), stage: {'$ne': 'end'}})
+          .limit(perPage)
+          .skip(perPage * pageNum)
+          .sort({name: 'asc'})
+          .populate('users')
+          .exec(function(err, games) {
+        if (err) {return console.log('search games: '+err);}
+        if (!games) { games = []; }
+
+        Game.count(query, function(err, count) {
+          if (err) {return console.log('search count: '+err);}
+
+          res.render('active', {
+            user:  user,
+            games: games.map(ProfileController.info),
+            page:  pageNum+1,
+            count: count+1,
           });
         });
       });

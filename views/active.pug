@@ -1,0 +1,28 @@
+doctype html
+html
+  head
+    title Dixit Online - Active
+    link(href='/css/main.css', rel='stylesheet')
+  body
+    h1 Your Active Games
+    a(href="/logout") Logout
+    a(href="/profile") Profile
+    
+    if games && Object.keys(games).length > 0
+      - let gamesarray = games
+      include gamestable
+    else
+      h3 None found
+    
+    if count > 1
+      div Pages
+        ul(style="list-style-type: none;")
+          li(style='display:inline;padding:8px;')
+            a(href='/archive/1') First
+          - for(let i=Math.max(0,page-3); i<Math.min(page+4,count); ++i) {
+            li(style='display:inline;padding:8px;')
+              a(href='/archive/'+i) i
+          - }
+          li(style='display:inline;padding:8px;')
+            a(href='/archive/'+count) Last
+    

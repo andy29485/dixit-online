@@ -57,10 +57,12 @@ app.get( '/logout',   auth.logout_get);
 
 app.get('/profile', LoggedIn('/'), profile.profile_get);
 
-app.get('/search',       LoggedIn('/'), profile.search);
-app.get('/search/:page', LoggedIn('/'), profile.search);
+app.get('/search',        LoggedIn('/'), profile.search);
+app.get('/search/:page',  LoggedIn('/'), profile.search);
 app.get('/archive',       LoggedIn('/'), profile.archive);
 app.get('/archive/:page', LoggedIn('/'), profile.archive);
+app.get('/active',        LoggedIn('/'), profile.active);
+app.get('/active/:page',  LoggedIn('/'), profile.active);
 
 app.post('/create',      LoggedIn('/'), game.create_post);
 app.get( '/create',      LoggedIn('/'), game.create_get);
