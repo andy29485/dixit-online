@@ -21,8 +21,7 @@ html
       |
       b #{enddate.toISOString().replace(/[A-Z]/g, ' ')}
     div
-      form(action="/game/"+gameid+"?edit", method="GET")
-        button(type='submit') Edit
+      a(href="?edit") Edit
       
       if uname === players[0].uname && waiting === 0
         form(action="/next/"+gameid, method="POST")

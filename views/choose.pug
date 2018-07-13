@@ -6,7 +6,13 @@ html
   body
     form(action="/caption/"+code, method="POST")
       include cards.pug
-      input(type="text", name="quote", placeholder="Caption", required)
+      input(
+        type="text",
+        name="quote",
+        value=caption,
+        placeholder="Caption",
+        required
+      )
       input(type="submit", value="Submit")
     div
       | Stage Ends

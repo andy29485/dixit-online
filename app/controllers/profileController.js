@@ -27,7 +27,7 @@ var AuthController = {
             admin:  g.users[0].name,
             max:    g.max_players,
             joined: g.users.length,
-            date:   g.deadline.toISOString().replace(/[A-Z]/g, ' '),
+            date:   g.deadline,
           };}
           res.render('profile', {
             user:  user,

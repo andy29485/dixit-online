@@ -257,10 +257,8 @@ var GameController = {
   },
 
   updateDeadline_post: function(req, res) {
-    let code    = req.params.id.toLowerCase();
-    let uname   = req.user.username;
-    let players = req.body.players;
-    players.push(uname);
+    let uname = req.user.username;
+    let code  = req.params.id.toLowerCase();
     Game.findOne({code: code})
         .populate('users', ['name', 'username'])
         .exec(function(err, game) {
@@ -424,10 +422,12 @@ var GameController = {
           let cap = game.captions.get(uname);
           if(!cap || edit) {
             res.render('choose', {
-              cards:   game.hands.get(uname) || [],
-              code:    code,
-              root:    deck_dir.replace(/\/?public\/?/, '/'),
-              enddate: game.deadline,
+              cards:    game.hands.get(uname) || [],
+              code:     code,
+              root:     deck_dir.replace(/\/?public\/?/, '/'),
+              enddate:  game.deadline,
+              selected: (cap || new Map()).get('image'),
+              caption:  (cap || new Map()).get('quote'),
             });
           }
           else {
@@ -528,8 +528,9 @@ var GameController = {
             let cname = game.users.find(u=>u.username === key).name;
             let cards = [];
             let votes = {};
-            for(let card of value.pcards.values()) {
-              cards.push(card);
+            for(let entry of value.pcards.entries()) {
+              let name = game.users.find(u=>u.username === entry[0]).name;
+              cards.push({card:entry[1],cname:name});
             }
             for(let card of value.votes.values()) {
               if(card in votes) ++votes[card];

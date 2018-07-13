@@ -51,16 +51,16 @@ app.get('/', function(req, res) {
 });
 
 app.post('/login',    auth.login);
-app.post('/logout',   auth.logout);
+app.post('/logout',   auth.logout_post);
 app.post('/register', auth.register);
-app.get( '/logout',   auth.logout);
+app.get( '/logout',   auth.logout_get);
 
 app.get('/profile', LoggedIn('/'), profile.profile_get);
 
 app.post('/create',      LoggedIn('/'), game.create_post);
 app.get( '/create',      LoggedIn('/'), game.create_get);
-app.get( '/game/:id',    LoggedIn('/'), game.updateDeadline_post);
-app.post('/extend/:id',  LoggedIn('/'), game.next);
+app.get( '/game/:id',    LoggedIn('/'), game.game);
+app.post('/extend/:id',  LoggedIn('/'), game.updateDeadline_post);
 app.post('/next/:id',    LoggedIn('/'), game.next);
 app.post('/join/:id',    LoggedIn('/'), game.join);
 app.post('/leave/:id',   LoggedIn('/'), game.leave);

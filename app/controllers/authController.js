@@ -19,7 +19,12 @@ var AuthController = {
   },
 
   // Log out a user
-  logout: function(req, res) {
+  logout_get: function(req, res) {
+    req.logout();
+    res.redirect('/');
+    res.end();
+  },
+  logout_post: function(req, res) {
     req.logout();
     res.end();
   },

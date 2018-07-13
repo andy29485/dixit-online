@@ -3,12 +3,12 @@ html
   head
     title Dixit Online - Guess Cards
     link(href='/css/main.css', rel='stylesheet')
-    // link(href='/css/cards.css', rel='stylesheet')
+    //link(href='/css/cards.css', rel='stylesheet')
   body
     h1 Results
     a(href="/logout") Logout
     table(style="width:100%")
-      tr(class="wrap")
+      tr
         th
         th Dealer's Name
         th Dealer's Caption
@@ -35,4 +35,5 @@ html
             td(align="right") #{caption.votes[card] || 0}
             td(class="box")
               div(class="boxInner")
-                img(src=card)
+                img(src=card.card)
+                | #{card.cname}
