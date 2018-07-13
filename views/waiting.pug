@@ -19,7 +19,7 @@ html
     div
       | Stage Ends
       |
-      b #{enddate}
+      b #{enddate.toISOString().replace(/[A-Z]/g, ' ')}
     div
       form(action="/game/"+gameid+"?edit", method="GET")
         button(type='submit') Edit

@@ -67,7 +67,6 @@ var GameController = {
           res.redirect('#error-game');
           return;
         }
-        user.games.set(game.code, game.name);
         user.save(err => {if (err) console.log('join save fail: '+err)});
         res.redirect('/game/'+game.code);
       });
@@ -99,7 +98,6 @@ var GameController = {
         if (!users.includes(user.username)
             && (users.length < game.max_players || game.max_players === 0)) {
           game.users.push(user);
-          user.games.set(code, game.name);
 
           game.save(function(err) {
             if (err) console.log('leave save fail: '+err);
@@ -140,7 +138,6 @@ var GameController = {
 
         if (users.includes(user.username)) {
           game.users.pull(user._id);
-          user.games.splice(user.games.indexOf(code), 1);
 
           game.save(function(err) {
             if (err) console.log('leave save fail: '+err);

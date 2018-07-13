@@ -7,23 +7,56 @@ html
     h1 #{user.name}'s Profile
     a(href="/logout") Logout
     if games && Object.keys(games).length > 0
-      h3 Active Games
-      ol
+      h3 Your Active Games
+      table
+        tr
+          th(align="center") Game Name
+          th(align="center") Admin
+          th(align="center") Players in game / Limit
+          th(align="center") Sign up Duration
+          
         for game in games
-          li
-            a(href='/game/'+game) Game #{games[game]}
+          tr
+            td(align="center") 
+              a(href='/game/'+game.code) #{game.name}
+            td(align="center") #{game.admin}
+            td(align="center") #{game.joined}
+              |
+              | /
+              |
+              | #{game.max===0 ? 'No Limit' : +game.max}
+            td(align="center")
+              | #{game.date.toISOString().replace(/[A-Z]/g, ' ')}
+    else
+      h3 Your Active Games - None
     if other && Object.keys(other).length > 0
       h3 Other Games
       - let index = 0;
-      ol
+      table
+        tr
+          th(align="center") Game Name
+          th(align="center") Admin
+          th(align="center") Players in game / Limit
+          th(align="center") Sign Up Deadline
+          
         for game in other
           - ++index
           if index < 5
-            li
-              a(href='/game/'+game.code) Game #{game.name}
-          else
-            li
-              a(href='/search') (more)
+            tr
+              td(align="center") 
+                a(href='/game/'+game.code) #{game.name}
+              td(align="center") #{game.admin}
+              td(align="center") #{game.joined}
+                |
+                | /
+                |
+                | #{game.max===0 ? 'No Limit' : +game.max}
+              td(align="center")
+                | #{game.date.toISOString().replace(/[A-Z]/g, ' ')}
+        if index >= 5
+          a(href='/search') (more)
+    else
+      h3 Other Games - None
     div
       a(href="/create") Create Game
       

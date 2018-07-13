@@ -11,4 +11,4 @@ html
     div
       | Stage Ends
       |
-      b #{enddate}
+      b #{enddate.toISOString().replace(/[A-Z]/g, ' ')}

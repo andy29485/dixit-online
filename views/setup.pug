@@ -28,25 +28,40 @@ html
               else
                 td
             td #{player.name} #{index===1 ? '(Admin)' : ''}
-      if players.map(p => p.username).includes(username)
-        button(
-          formaction="/leave/"+gameid,
-          type='submit',
-          formmethod="POST",
-        ) Leave Game
+      if (new Date()) < enddate
+        if players.map(p => p.username).includes(username)
+          button(
+            formaction="/leave/"+gameid,
+            type='submit',
+            formmethod="POST",
+          ) Leave Game
+        else
+          - let can_join = players.length<maxplayers || maxplayers===0;
+          button(
+            formaction="/join/"+gameid,
+            type='submit',
+            formmethod="POST",
+            disabled=!can_join,
+            title=(can_join ? false : 'Player limit reached'),
+          ) Join Game
+        div
+          | Registration Closes
+          |
+          b #{enddate.toISOString().replace(/[A-Z]/g, ' ')}
+      else if admin
+        div
+          | Joining Deadline Reached, new users can't join game
+          button(
+            formaction="/join/"+gameid,
+            type='submit',
+            formmethod="POST",
+            title="Deadline Reached, click to extend",
+          ) Extend Deadline
       else
-        - let can_join = players.length < maxplayers || maxplayers === 0;
-        button(
-          formaction="/join/"+gameid,
-          type='submit',
-          formmethod="POST",
-          disabled=!can_join,
-          title=(can_join ? false : 'Player limit reached'),
-        ) Join Game
-      div
-        | Registration closes
-        |
-        b #{enddate}
+        div
+          | Registration Closed (
+          b #{enddate.toISOString().replace(/[A-Z]/g, ' ')}
+          | )
       div
         | Max players
         |

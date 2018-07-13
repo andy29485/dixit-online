@@ -59,7 +59,8 @@ app.get('/profile', LoggedIn('/'), profile.profile_get);
 
 app.post('/create',      LoggedIn('/'), game.create_post);
 app.get( '/create',      LoggedIn('/'), game.create_get);
-app.get( '/game/:id',    LoggedIn('/'), game.game);
+app.get( '/game/:id',    LoggedIn('/'), game.updateDeadline_post);
+app.post('/extend/:id',  LoggedIn('/'), game.next);
 app.post('/next/:id',    LoggedIn('/'), game.next);
 app.post('/join/:id',    LoggedIn('/'), game.join);
 app.post('/leave/:id',   LoggedIn('/'), game.leave);

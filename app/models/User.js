@@ -7,7 +7,6 @@ var schema = new mongoose.Schema({
   username: {type:String,required:true,trim:true,lowercase:true,unique:true},
   password: {type:String,required:true},
   created:  {type:Date,  default:Date.now},
-  games:    {type:Map,   of:String},
 });
 
 //schema.index({username: 1});
