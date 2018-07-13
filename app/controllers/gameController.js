@@ -351,6 +351,7 @@ var GameController = {
       case 'capt':
         game.stage = 'choice';
         // remove used card from hand
+        /* // Don't take out used card
         for(let entry of game.captions.entries()) {
           let uname = entry[0];
           let iCard = game.hands.get(uname).indexOf(entry[1].image);
@@ -360,9 +361,11 @@ var GameController = {
             game.hands.get(uname).splice(iCard, 1, card);
             used.push(card); // remember card drawn
           }
+
         }
         // remember used cards
         game.used_cards = used;
+        */
         break;
       case 'choice':
         game.stage = 'vote';
