@@ -36,6 +36,10 @@ var ProfileController = {
         Game.find({
               users: {'$nin':[ObjectID(user._id)]},
               stage: 'join',
+              '$or': [
+                {max_players: 0},
+                {'$where': 'this.users.length < this.max_players'},
+              ],
             })
             .limit(6)
             .sort({name: 'asc'})
@@ -64,6 +68,10 @@ var ProfileController = {
       let query = {
         users: {'$nin':[ObjectID(user._id)]},
         stage: 'join',
+        '$or': [
+          {max_players: 0},
+          {'$where': 'this.users.length < this.max_players'},
+        ],
       };
 
       Game.find(query)
