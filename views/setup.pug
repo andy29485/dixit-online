@@ -10,6 +10,8 @@ html
     h1 #{gamename}
     h2 Game Setup
     a(href="/logout") Logout
+    a(href="/profile") Profile
+    
     form(action="/next/"+gameid, method="POST")
       table
         - let index = 0

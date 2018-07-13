@@ -4,8 +4,10 @@ html
     title Dixit Online - Archive
     link(href='/css/main.css', rel='stylesheet')
   body
-    a(href="/logout") Logout
     h1 Your Archived Games
+    a(href="/logout") Logout
+    a(href="/profile") Profile
+    
     if games && Object.keys(games).length > 0
       - let gamesarray = games
       include gamestable
