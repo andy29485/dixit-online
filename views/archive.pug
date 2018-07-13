@@ -1,11 +1,11 @@
 doctype html
 html
   head
-    title Dixit Online - Search
+    title Dixit Online - Archive
     link(href='/css/main.css', rel='stylesheet')
   body
     a(href="/logout") Logout
-    h1 Joinable Games
+    h1 Your Archived Games
     if games && Object.keys(games).length > 0
       - let gamesarray = games
       include gamestable
@@ -16,14 +16,11 @@ html
       div Pages
         ul(style="list-style-type: none;")
           li(style='display:inline;padding:8px;')
-            a(href='/search/1') First
+            a(href='/archive/1') First
           - for(let i=Math.max(0,page-3); i<Math.min(page+4,count); ++i) {
             li(style='display:inline;padding:8px;')
-              a(href='/search/'+i) i
+              a(href='/archive/'+i) i
           - }
           li(style='display:inline;padding:8px;')
-            a(href='/search/'+count) Last
+            a(href='/archive/'+count) Last
     
-    div
-      a(href="/create") Create Game
-      

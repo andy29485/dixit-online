@@ -1,0 +1,26 @@
+table(border="1")
+  tr
+    th(align="center") Game Name
+    th(align="center") Stage
+    th(align="center") Admin
+    th(align="center") Players in game / Limit
+    th(align="center") Sign up Duration
+    
+  - let index = 0
+  for game in gamesarray
+    if !maxdisplay || index < maxdisplay
+      - ++index
+      tr
+        td(align="center") 
+          a(href='/game/'+game.code) #{game.name}
+        td(align="center") #{game.stage}
+        td(align="center") #{game.admin}
+        td(align="center") #{game.joined}
+          |
+          | /
+          |
+          | #{game.max===0 ? 'No Limit' : +game.max}
+        td(align="center")
+          | #{game.date.toISOString().replace(/[A-Z]/g, ' ')}
+    else
+      - break

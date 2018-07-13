@@ -6,61 +6,35 @@ html
   body
     h1 #{user.name}'s Profile
     a(href="/logout") Logout
+
     if games && Object.keys(games).length > 0
+      - let gamesarray = games
       h3 Your Active Games
-      table(border="1")
-        tr
-          th(align="center") Game Name
-          th(align="center") Stage
-          th(align="center") Admin
-          th(align="center") Players in game / Limit
-          th(align="center") Sign up Duration
-          
-        for game in games
-          tr
-            td(align="center") 
-              a(href='/game/'+game.code) #{game.name}
-            td(align="center") #{game.stage}
-            td(align="center") #{game.admin}
-            td(align="center") #{game.joined}
-              |
-              | /
-              |
-              | #{game.max===0 ? 'No Limit' : +game.max}
-            td(align="center")
-              | #{game.date.toISOString().replace(/[A-Z]/g, ' ')}
+      include gamestable
     else
       h3 Your Active Games - None
+
     if other && Object.keys(other).length > 0
+      - let maxdisplay = 5;
+      - let gamesarray = other
       h3 Joinable Games
-      - let index = 0;
-      table(border="1")
-        tr
-          th(align="center") Game Name
-          th(align="center") Stage
-          th(align="center") Admin
-          th(align="center") Players in game / Limit
-          th(align="center") Sign Up Deadline
-          
-        for game in other
-          - ++index
-          if index < 5
-            tr
-              td(align="center") 
-                a(href='/game/'+game.code) #{game.name}
-              td(align="center") #{game.stage}
-              td(align="center") #{game.admin}
-              td(align="center") #{game.joined}
-                |
-                | /
-                |
-                | #{game.max===0 ? 'No Limit' : +game.max}
-              td(align="center")
-                | #{game.date.toISOString().replace(/[A-Z]/g, ' ')}
-        if index >= 5
-          a(href='/search') (more)
+      include gamestable
+      
+      if Object.keys(other).length >= maxdisplay
+        a(href='/search') (more)
     else
-      h3 Other Games - None
+      h3 Joinable Games - None
+
+    if archived && Object.keys(archived).length > 0
+      - let maxdisplay = 5;
+      - let gamesarray = archived
+      h3 Archived Games
+      include gamestable
+      
+      if Object.keys(archived).length >= maxdisplay
+        a(href='/archive') (more)
+    else
+      h3 Archived Games - None
+
     div
       a(href="/create") Create Game
-      

@@ -3,6 +3,8 @@ var User     = require('../models/User.js');
 var Game     = require('../models/Game.js');
 var ObjectID = require('mongoose').mongo.ObjectID;
 
+const perPage = 20;
+
 var ProfileController = {
   info: function(g) {
     return {
@@ -30,7 +32,7 @@ var ProfileController = {
             users: ObjectID(user._id),
           })
           .sort({name: 'asc'})
-          .populate({path: 'users', options: { limit: 1 }})
+          .populate('users')
           .exec(function(err, active) {
         if (!active) { active = []; }
         Game.find({
@@ -43,14 +45,22 @@ var ProfileController = {
             })
             .limit(6)
             .sort({name: 'asc'})
-            .populate({path: 'users', options: { limit: 1 }})
+            .populate('users')
             .exec(function(err, other) {
           if (!other) { other = []; }
+          Game.find({users: {'$nin':[ObjectID(user._id)]}, stage: 'end'})
+              .limit(6)
+              .sort({name: 'asc'})
+              .populate('users')
+              .exec(function(err, archived) {
+            if (!archived) { archived = []; }
 
-          res.render('profile', {
-            user:  user,
-            games: active.map(ProfileController.info),
-            other: other .map(ProfileController.info),
+            res.render('profile', {
+              user:     user,
+              games:    active  .map(ProfileController.info),
+              other:    other   .map(ProfileController.info),
+              archived: archived.map(ProfileController.info),
+            });
           });
         });
       });
@@ -58,7 +68,6 @@ var ProfileController = {
   },
 
   search: function(req, res) {
-    let perPage = 20;
     let pageNum = (req.params.page || 1) - 1;
 
     User.findOne({username: req.user.username},
@@ -78,7 +87,42 @@ var ProfileController = {
           .limit(perPage)
           .skip(perPage * pageNum)
           .sort({name: 'asc'})
-          .populate({path: 'users', options: { limit: 1 }})
+          .populate('users')
+          .exec(function(err, games) {
+        if (err) {return console.log('search games: '+err);}
+        if (!games) { games = []; }
+
+        Game.count(query, function(err, count) {
+          if (err) {return console.log('search count: '+err);}
+
+          res.render('search', {
+            user:  user,
+            games: games.map(ProfileController.info),
+            page:  pageNum+1,
+            count: count+1,
+          });
+        });
+      });
+    });
+  },
+
+  archive: function(req, res) {
+    let pageNum = (req.params.page || 1) - 1;
+
+    User.findOne({username: req.user.username},
+    function(err, user) {
+      if (err) {return console.log('search user: '+err);}
+
+      let query = {
+        users: ObjectID(user._id),
+        stage: 'end',
+      };
+
+      Game.find(query)
+          .limit(perPage)
+          .skip(perPage * pageNum)
+          .sort({name: 'asc'})
+          .populate('users')
           .exec(function(err, games) {
         if (err) {return console.log('search games: '+err);}
         if (!games) { games = []; }
