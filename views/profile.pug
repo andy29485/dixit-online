@@ -1,16 +1,17 @@
 doctype html
 html
   head
-    title Dixit Online #{user.name}'s Profile
+    title Dixit Online - #{user.name}'s Profile
     link(href='/css/main.css', rel='stylesheet')
   body
     h1 #{user.name}'s Profile
     a(href="/logout") Logout
     if games && Object.keys(games).length > 0
       h3 Your Active Games
-      table
+      table(border="1")
         tr
           th(align="center") Game Name
+          th(align="center") Stage
           th(align="center") Admin
           th(align="center") Players in game / Limit
           th(align="center") Sign up Duration
@@ -19,6 +20,7 @@ html
           tr
             td(align="center") 
               a(href='/game/'+game.code) #{game.name}
+            td(align="center") #{game.stage}
             td(align="center") #{game.admin}
             td(align="center") #{game.joined}
               |
@@ -32,9 +34,10 @@ html
     if other && Object.keys(other).length > 0
       h3 Other Games
       - let index = 0;
-      table
+      table(border="1")
         tr
           th(align="center") Game Name
+          th(align="center") Stage
           th(align="center") Admin
           th(align="center") Players in game / Limit
           th(align="center") Sign Up Deadline
@@ -45,6 +48,7 @@ html
             tr
               td(align="center") 
                 a(href='/game/'+game.code) #{game.name}
+              td(align="center") #{game.stage}
               td(align="center") #{game.admin}
               td(align="center") #{game.joined}
                 |

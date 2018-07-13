@@ -57,6 +57,9 @@ app.get( '/logout',   auth.logout_get);
 
 app.get('/profile', LoggedIn('/'), profile.profile_get);
 
+app.get('/search',       LoggedIn('/'), profile.search);
+app.get('/search/:page', LoggedIn('/'), profile.search);
+
 app.post('/create',      LoggedIn('/'), game.create_post);
 app.get( '/create',      LoggedIn('/'), game.create_get);
 app.get( '/game/:id',    LoggedIn('/'), game.game);

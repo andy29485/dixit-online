@@ -474,7 +474,7 @@ var GameController = {
           }
           else {
             res.render('guess', {
-              title:  'Guess Cards',
+              title:  'Choose Cards',
               action: '/guess/'+code,
               quotes: shuffle(captions),
               cards:  game.hands.get(uname),
@@ -516,7 +516,7 @@ var GameController = {
           }
           else {
             res.render('guess', {
-              title:  'Vote',
+              title:  'Voting',
               action: '/vote/'+code,
               quotes: shuffle(captions),
               uname:  uname,

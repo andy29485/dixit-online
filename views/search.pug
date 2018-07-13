@@ -1,0 +1,48 @@
+doctype html
+html
+  head
+    title Dixit Online - Search
+    link(href='/css/main.css', rel='stylesheet')
+  body
+    a(href="/logout") Logout
+    h1 Joinable Games
+    if games && Object.keys(games).length > 0
+      table(border="1")
+        tr
+          th(align="center") Game Name
+          th(align="center") Stage
+          th(align="center") Admin
+          th(align="center") Players in game / Limit
+          th(align="center") Sign up Duration
+          
+        for game in games
+          tr
+            td(align="center") 
+              a(href='/game/'+game.code) #{game.name}
+            td(align="center") #{game.stage}
+            td(align="center") #{game.admin}
+            td(align="center") #{game.joined}
+              |
+              | /
+              |
+              | #{game.max===0 ? 'No Limit' : +game.max}
+            td(align="center")
+              | #{game.date.toISOString().replace(/[A-Z]/g, ' ')}
+    else
+      h3 None found
+    
+    div Pages
+      ul(style="list-style-type: none;")
+        li(style='display:inline;padding:8px;')
+          a(href='/search/1') First
+        - for(let i=Math.max(0,page-3); i<Math.min(page+4,count); ++i) {
+          li(style='display:inline;padding:8px;')
+            a(href='/search/'+i) i
+        - }
+        li(style='display:inline;padding:8px;')
+          a(href='/search/'+count) Last
+        
+    
+    div
+      a(href="/create") Create Game
+      
