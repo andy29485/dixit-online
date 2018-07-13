@@ -1,9 +1,13 @@
 doctype html
 html
   head
-    title Dixit Online - Choose Card
+    title Dixit Online - Choose Cards
     link(href='/css/main.css', rel='stylesheet')
   body
+    h1 #{gamename}
+    h2 Choose Cards
+    a(href="/logout") Logout
+    
     form(action="/caption/"+code, method="POST")
       include cards.pug
       input(

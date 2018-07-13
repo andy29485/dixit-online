@@ -425,6 +425,7 @@ var GameController = {
           let cap = game.captions.get(uname);
           if(!cap || edit) {
             res.render('choose', {
+              gamename: game.name,
               cards:    game.hands.get(uname) || [],
               code:     code,
               root:     deck_dir.replace(/\/?public\/?/, '/'),
@@ -435,10 +436,11 @@ var GameController = {
           }
           else {
             res.render('waiting', {
-              uname:   uname,
-              gameid:  code,
-              enddate: game.deadline,
-              players: game.users.map(u => {return {
+              gamename: game.name,
+              uname:    uname,
+              gameid:   code,
+              enddate:  game.deadline,
+              players:  game.users.map(u => {return {
                 name:  u.name,
                 uname: u.username,
                 stat:  game.captions.get(u.username)
@@ -463,10 +465,11 @@ var GameController = {
           });
           if((selected[uname]||0) == game.users.length-1 && !edit) {
             res.render('waiting', {
-              uname:   uname,
-              gameid:  code,
-              enddate: game.deadline,
-              players: game.users.map(u => {return {
+              gamename: game.name,
+              uname:    uname,
+              gameid:   code,
+              enddate:  game.deadline,
+              players:  game.users.map(u => {return {
                 name:  u.name,
                 uname: u.username,
                 stat:  (selected[u.username]||0) == game.users.length-1
@@ -477,11 +480,12 @@ var GameController = {
           }
           else {
             res.render('guess', {
-              title:  'Choose Cards',
-              action: '/guess/'+code,
-              quotes: shuffle(captions),
-              cards:  game.hands.get(uname),
-              uname:  uname,
+              gamename: game.name,
+              title:    'Choose Cards',
+              action:   '/guess/'+code,
+              quotes:   shuffle(captions),
+              cards:    game.hands.get(uname),
+              uname:    uname,
             });
           }
           break;
@@ -505,10 +509,11 @@ var GameController = {
           });
           if((selected[uname]||0) == game.users.length-1&& !edit) {
             res.render('waiting', {
-              uname:   uname,
-              gameid:  code,
-              enddate: game.deadline,
-              players: game.users.map(u => {return {
+              gamename: game.name,
+              uname:    uname,
+              gameid:   code,
+              enddate:  game.deadline,
+              players:  game.users.map(u => {return {
                 name:  u.name,
                 uname: u.username,
                 stat:  (selected[u.username]||0) == game.users.length-1
@@ -519,10 +524,11 @@ var GameController = {
           }
           else {
             res.render('guess', {
-              title:  'Voting',
-              action: '/vote/'+code,
-              quotes: shuffle(captions),
-              uname:  uname,
+              gamename: game.name,
+              title:   'Voting',
+              action:  '/vote/'+code,
+              quotes:  shuffle(captions),
+              uname:   uname,
             });
           }
           break;
@@ -547,7 +553,7 @@ var GameController = {
               cards: cards,
             });
           });
-          res.render('results', {captions: captions});
+          res.render('results', {gamename: game.name, captions: captions});
           break;
       }
     });

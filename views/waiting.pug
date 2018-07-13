@@ -5,7 +5,10 @@ html
     title Dixit Online - Waiting for Other Players
     link(href='/css/main.css', rel='stylesheet')
   body
+    h1 #{gamename}
+    h2 Waiting
     a(href="/logout") Logout
+    
     table
       - let index = 0
       th(colspan=3) Waiting
