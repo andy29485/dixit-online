@@ -5,9 +5,24 @@ html
     title Dixit Online - Create
     link(href='/css/main.css', rel='stylesheet')
   body
+    a(href="/logout") Logout
     .error #{errmessage}
     form(action="/create", method="POST")
       table
+        tr
+          td
+            label Game Name:
+          td
+            input(type="text", name="name", placeholder="Name", required)
+        tr
+          td
+            label Cards per hand:
+          td
+            input(
+              type="number", step="1", pattern="\d+", min=2, max=10,
+              name="numcards", value=5,
+              title="Number of cards to deal to players"
+            )
         tr
           td
             label Stage Duration:

@@ -5,12 +5,25 @@ html
     link(href='/css/main.css', rel='stylesheet')
   body
     h1 #{user.name}'s Profile
-    if games
+    a(href="/logout") Logout
+    if games && Object.keys(games).length > 0
       h3 Active Games
       ol
         for game in games
           li
-            a(href='/game/'+game) Game #{game}
+            a(href='/game/'+game) Game #{games[game]}
+    if other && Object.keys(other).length > 0
+      h3 Other Games
+      - let index = 0;
+      ol
+        for game in other
+          - ++index
+          if index < 5
+            li
+              a(href='/game/'+game.code) Game #{game.name}
+          else
+            li
+              a(href='/search') (more)
     div
       a(href="/create") Create Game
       

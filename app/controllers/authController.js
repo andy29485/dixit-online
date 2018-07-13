@@ -12,9 +12,7 @@ var AuthController = {
 
       req.logIn(user, function(err) {
         if (err) { return next(err); }
-        if(req.session.returnTo) {
-          return res.redirect(req.session.returnTo);
-        }
+
         return res.redirect('/profile');
       });
     })(req, res, next);

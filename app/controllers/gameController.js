@@ -50,7 +50,9 @@ var GameController = {
         return;
       }
       Game.create({
+        name:        req.body.name,
         users:       [user],
+        num_cards:    req.body.numcards,
         max_players:  req.body.max,
         duration:     req.body.dur,
         deadline:     deadline,
@@ -65,7 +67,7 @@ var GameController = {
           res.redirect('#error-game');
           return;
         }
-        user.games.push(game.code);
+        user.games.set(game.code, game.name);
         user.save(err => {if (err) console.log('join save fail: '+err)});
         res.redirect('/game/'+game.code);
       });
@@ -77,17 +79,27 @@ var GameController = {
     User.findOne({username:req.user.username},
     function(err, user) {
       if(err) {console.log('could not find user: '+err);}
-      Game.findOne({code: code}, ['users', 'max_players'])
+      Game.findOne({code: code}, ['users', 'max_players', 'stage', 'name'])
           .populate('users', 'username')
           .exec(function(err, game) {
         if(err) {console.log('find game by id: '+err);}
+        if(!game) {
+          req.flash('game', 'Game does not exist');
+          res.redirect('/create')
+          return;
+        }
+        if(game.stage != 'join') {
+          console.log(game);
+          res.redirect('/game/'+code);
+          return;
+        }
 
         let users = game.users.map(u => u.username);
 
         if (!users.includes(user.username)
             && (users.length < game.max_players || game.max_players === 0)) {
           game.users.push(user);
-          user.games.push(code);
+          user.games.set(code, game.name);
 
           game.save(function(err) {
             if (err) console.log('leave save fail: '+err);
@@ -110,10 +122,19 @@ var GameController = {
     function(err, user) {
       if(err) {console.log('could not find user: '+err);}
 
-      Game.findOne({code: code}, ['users'])
+      Game.findOne({code: code}, ['users', 'stage'])
           .populate('users', 'username')
           .exec(function(err, game) {
         if(err) {console.log('find game by id: '+err);}
+        if(!game) {
+          req.flash('game', 'Game does not exist');
+          res.redirect('/create')
+          return;
+        }
+        if(game.stage != 'join') {
+          res.redirect('/game/'+code);
+          return;
+        }
 
         let users = game.users.map(u => u.username);
 
@@ -142,7 +163,15 @@ var GameController = {
     Game.findOne({code: code},
     function(err, game) {
       if(err) {console.log('find game by id: '+err);}
-      console.log(req.body);
+      if(!game) {
+        req.flash('game', 'Game does not exist');
+        res.redirect('/create')
+        return;
+      }
+      if(game.stage != 'capt') {
+        res.redirect('/game/'+code);
+        return;
+      }
 
       game.captions.set(uname, {
         image:  req.body.cardpicker,
@@ -165,6 +194,15 @@ var GameController = {
     Game.findOne({code: code},
     function(err, game) {
       if(err) {console.log('find game by id: '+err);}
+      if(!game) {
+        req.flash('game', 'Game does not exist');
+        res.redirect('/create')
+        return;
+      }
+      if(game.stage != 'choice') {
+        res.redirect('/game/'+code);
+        return;
+      }
 
       for(let key in req.body) {
         let id    = key.split('_')[1];
@@ -185,6 +223,16 @@ var GameController = {
     Game.findOne({code: code},
     function(err, game) {
       if(err) {console.log('find game by id: '+err);}
+      if(!game) {
+        req.flash('game', 'Game does not exist');
+        res.redirect('/create')
+        return;
+      }
+      if(game.stage != 'vote') {
+        res.redirect('/game/'+code);
+        return;
+      }
+
       for(let key in req.body) {
         let id    = key.split('_')[1];
         let cname = game.captionIds.get(id); // captioner's name
@@ -193,18 +241,6 @@ var GameController = {
 
       game.save(function(err) {
         if (err) console.log('vote save fail: '+err);
-        res.redirect('/game/'+code);
-      });
-    });
-  },
-
-  next: function(req, res) {
-    let code = req.params.id.toLowerCase();
-    Game.findOne({code: code})
-        .populate('users', ['name', 'username'])
-        .exec(function(err, game) {
-      if(err) {console.log('find game by id: '+err);}
-      GameController.nextStage(game, function() {
         res.redirect('/game/'+code);
       });
     });
@@ -223,12 +259,84 @@ var GameController = {
     return Shuffle.shuffle({deck: cards});
   },
 
-  nextStage: function(game, next) {
+  updateDeadline_post: function(req, res) {
+    let code    = req.params.id.toLowerCase();
+    let uname   = req.user.username;
+    let players = req.body.players;
+    players.push(uname);
+    Game.findOne({code: code})
+        .populate('users', ['name', 'username'])
+        .exec(function(err, game) {
+      if(err) {console.log('find game by id: '+err);}
+      if(!game) {
+        req.flash('game', 'Game does not exist');
+        res.redirect('/create')
+        return;
+      }
+      if(game.users[0].username !== uname) {
+        res.redirect('/game/'+code);
+        return;
+      }
+      GameController.updateDeadline(game, true, function() {
+        res.redirect('/game/'+code);
+      });
+    });
+  },
+
+  updateDeadline: function(game, save, next) {
     game.deadline = new Date();
     game.deadline.setDate(game.deadline.getDate() + game.duration);
     game.deadline.setSeconds(0);
     game.deadline.setMinutes(0);
     game.deadline.setUTCHours(0);
+
+    if (save) {
+      game.save(function(err) {
+        if (err) console.log('next save fail: '+err);
+        if (typeof next === 'function') {
+          return next();
+        }
+      });
+    }
+    else if (typeof next === 'function') {
+      return next();
+    }
+  },
+
+  next: function(req, res) {
+    let code    = req.params.id.toLowerCase();
+    let uname   = req.user.username;
+    Game.findOne({code: code})
+        .populate('users', ['name', 'username'])
+        .exec(function(err, game) {
+      if(err) {console.log('find game by id: '+err);}
+      if(!game) {
+        req.flash('game', 'Game does not exist');
+        res.redirect('/create')
+        return;
+      }
+      if(game.users[0].username !== uname) {
+        res.redirect('/game/'+code);
+        return;
+      }
+      if(game.stage === 'join') {
+        let players = req.body.players;
+        players.push(uname);
+        players = game.users.filter(u=>players.includes(u.username));
+        if (players.length < 3) {
+          res.redirect('/game/'+code);
+          return;
+        }
+        game.users = players;
+      }
+      GameController.nextStage(game, res.redirect('/game/'+code));
+    });
+  },
+
+  nextStage: function(game, next) {
+    // cards to replenish hand
+    let deck = GameController.buildDeck(game);
+    let used = game.used_cards;
 
     switch(game.stage) {
       case 'join':
@@ -236,10 +344,8 @@ var GameController = {
           break;
         }
         game.stage = 'capt';
-        let deck  = GameController.buildDeck(game);
-        let used  = game.used_cards;
         let hands = game.users.reduce((o,u) => {
-          let hand = deck.draw(5);
+          let hand = deck.draw(game.num_cards);
           o[u.username] = hand;
           used = used.concat(hand);
           return o;
@@ -249,10 +355,6 @@ var GameController = {
         break;
       case 'capt':
         game.stage = 'choice';
-        // cards to replenish hand
-        let deck  = GameController.buildDeck(game);
-        let used  = game.used_cards;
-
         // remove used card from hand
         for(let entry of game.captions.entries()) {
           let uname = entry[0];
@@ -271,10 +373,6 @@ var GameController = {
         game.stage = 'vote';
         // TODO maybe don't?
 
-        // cards to replenish hand
-        let deck  = GameController.buildDeck(game);
-        let used  = game.used_cards;
-
         // remove used cards from hand
         for(let entry of game.captions.values()) {
           for(let uname of entry.pcards.keys()) {
@@ -291,18 +389,12 @@ var GameController = {
         game.used_cards = used;
         break;
       case 'vote':
-        // TODO
       case 'end':
         game.stage = 'end';
-        // TODO ?
         break;
     }
-    game.save(function(err) {
-      if (err) console.log('next save fail: '+err);
-      if (typeof next === 'function') {
-        next();
-      }
-    });
+
+    return GameController.updateDeadline(game, true, next);
   },
 
   game: function(req, res) {
@@ -316,15 +408,14 @@ var GameController = {
         res.redirect('/create')
         return;
       }
-      if((new Date() > game.deadline) ||
-         (game.users.length == game.captions.size && game.stage == 'capt')) {
-        GameController.nextStage(game);
-      }
       let captions = [];
       let selected = {};
+      let edit = 'edit' in req.query;
+
       switch(game.stage) {
         case 'join':
           res.render('setup', {
+            gamename:   game.name,
             username:   uname,
             players:    game.users,
             enddate:    game.deadline,
@@ -334,7 +425,7 @@ var GameController = {
           break;
         case 'capt':
           let cap = game.captions.get(uname);
-          if(!cap) {
+          if(!cap || edit) {
             res.render('choose', {
               cards:   game.hands.get(uname) || [],
               code:    code,
@@ -344,12 +435,15 @@ var GameController = {
           }
           else {
             res.render('waiting', {
+              uname:   uname,
+              gameid:  code,
               enddate: game.deadline,
               players: game.users.map(u => {return {
-                name: u.name,
-                stat: game.captions.get(u.username)
-                      ? 'Done'
-                      : 'Waiting',
+                name:  u.name,
+                uname: u.username,
+                stat:  game.captions.get(u.username)
+                       ? 'Done'
+                       : 'Waiting',
               };}),
             });
           }
@@ -367,14 +461,17 @@ var GameController = {
               else                selected[u] = 1;
             }
           });
-          if((selected[uname]||0) == game.users.length-1) {
+          if((selected[uname]||0) == game.users.length-1 && !edit) {
             res.render('waiting', {
+              uname:   uname,
+              gameid:  code,
               enddate: game.deadline,
               players: game.users.map(u => {return {
-                name: u.name,
-                stat: (selected[u.username]||0) == game.users.length-1
-                      ? 'Done'
-                      : 'Waiting',
+                name:  u.name,
+                uname: u.username,
+                stat:  (selected[u.username]||0) == game.users.length-1
+                       ? 'Done'
+                       : 'Waiting',
               };}),
             });
           }
@@ -406,14 +503,17 @@ var GameController = {
               else                selected[u] = 1;
             }
           });
-          if((selected[uname]||0) == game.users.length-1) {
+          if((selected[uname]||0) == game.users.length-1&& !edit) {
             res.render('waiting', {
+              uname:   uname,
+              gameid:  code,
               enddate: game.deadline,
               players: game.users.map(u => {return {
-                name: u.name,
-                stat: (selected[u.username]||0) == game.users.length-1
-                      ? 'Done'
-                      : 'Waiting',
+                name:  u.name,
+                uname: u.username,
+                stat:  (selected[u.username]||0) == game.users.length-1
+                       ? 'Done'
+                       : 'Waiting',
               };}),
             });
           }

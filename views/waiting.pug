@@ -1,13 +1,17 @@
 doctype html
+- let waiting = 0
 html
   head
     title Dixit Online - Waiting for Other Players
     link(href='/css/main.css', rel='stylesheet')
   body
+    a(href="/logout") Logout
     table
       - let index = 0
       th(colspan=3) Waiting
       each player in players
+        if player.stat === 'Waiting'
+          - ++waiting;
         tr
           td #{++index}
           td #{player.name}
@@ -16,3 +20,10 @@ html
       | Stage Ends
       |
       b #{enddate}
+    div
+      form(action="/game/"+gameid+"?edit", method="GET")
+        button(type='submit') Edit
+      
+      if uname === players[0].uname && waiting === 0
+        form(action="/next/"+gameid, method="POST")
+          button(type='submit') Next

@@ -30,6 +30,7 @@ var captionSchema = new mongoose.Schema({
 let stages = ['join', 'capt', 'choice', 'vote', 'end'];
 
 var gameSchema = new mongoose.Schema({
+  name:        String,
   users:      [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
   code: {
     type:      String,
@@ -38,6 +39,7 @@ var gameSchema = new mongoose.Schema({
     default:   randId8,
     unique:    true
   },
+  num_cards:   {type:Number, min:2},
   max_players: {type:Number, min:0},
   stage:       {type:String, enum:stages, default:'join'},
   duration:    {type:Number, min:1, max:14},

@@ -5,6 +5,7 @@ html
     link(href='/css/main.css', rel='stylesheet')
   body
     h1 #{title}
+    a(href="/logout") Logout
     form(action=action, method="POST")
       table
         - let index = 0
