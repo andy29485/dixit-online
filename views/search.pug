@@ -1,10 +1,14 @@
 doctype html
+unless path
+  - let path = 'search'
+unless title
+  - let title = 'Joinable'
 html
   head
     title Dixit Online - Search
     link(href='/css/main.css', rel='stylesheet')
   body
-    h1 Joinable Games
+    h1 #{title} Games
     a(href="/logout") Logout
     a(href="/profile") Profile
     
@@ -12,20 +16,20 @@ html
       - let gamesarray = games
       include gamestable
     else
-      h3 None found
+      h3 No Games Found
     
     if count > 1
       div Pages
         ul(style="list-style-type: none;")
           li(style='display:inline;padding:8px;')
-            a(href='/search/1') First
+            a(href='/'+path+'/1') First
           - for(let i=Math.max(0,page-3); i<Math.min(page+4,count); ++i) {
             li(style='display:inline;padding:8px;')
-              a(href='/search/'+i) i
+              a(href='/'+path+'/'+i) i
           - }
           li(style='display:inline;padding:8px;')
-            a(href='/search/'+count) Last
+            a(href='/'+path+'/'+count) Last
     
     div
-      a(href="/create") Create Game
+      a(href="/create") Create New Game
       

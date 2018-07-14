@@ -10,6 +10,7 @@ html
     if games && Object.keys(games).length > 0
       - let gamesarray = games
       h3 Your Active Games
+      - let timetag = 'Stage End Date'
       include gamestable
 
       if Object.keys(games).length >= maxdisplay
@@ -20,6 +21,7 @@ html
     if other && Object.keys(other).length > 0
       - let maxdisplay = 5;
       - let gamesarray = other
+      - let timetag = 'Sign Up Before'
       h3 Joinable Games
       include gamestable
       
@@ -31,6 +33,7 @@ html
     if archived && Object.keys(archived).length > 0
       - let maxdisplay = 5;
       - let gamesarray = archived
+      - let timetag = 'Game End Date'
       h3 Archived Games
       include gamestable
       

@@ -52,7 +52,6 @@ var GameController = {
       Game.create({
         name:        req.body.name,
         users:       [user],
-        num_cards:    req.body.numcards,
         max_players:  req.body.max,
         duration:     req.body.dur,
         deadline:     deadline,
@@ -335,12 +334,13 @@ var GameController = {
 
     switch(game.stage) {
       case 'join':
-        if(game.users.length < 3) {
+        let hand_size = game.users.length+1;
+        if(hand_size < 4) { // not enough users
           break;
         }
         game.stage = 'capt';
         let hands = game.users.reduce((o,u) => {
-          let hand = deck.draw(game.num_cards);
+          let hand = deck.draw(hand_size);
           o[u.username] = hand;
           used = used.concat(hand);
           return o;
@@ -492,8 +492,10 @@ var GameController = {
         case 'vote':
           game.captions.forEach((value, key) => {
             let cards = [value.image];
-            for(let card of value.pcards.values()) {
-              cards.push(card);
+            for(let entry of value.pcards.entries()) {
+              if(uname !== entry[0]) {
+                cards.push(entry[1]);
+              }
             }
             captions.push({
               uname:    key,

@@ -1,10 +1,13 @@
+unless timetag
+  - let timetag = 'Sign Up Before'
+
 table(border="1")
   tr
     th(align="center") Game Name
     th(align="center") Stage
     th(align="center") Admin
     th(align="center") Players in game / Limit
-    th(align="center") Sign up Duration
+    th(align="center") #{timetag}
     
   - let index = 0
   for game in gamesarray

@@ -47,7 +47,7 @@ var ProfileController = {
             .populate('users')
             .exec(function(err, other) {
           if (!other) { other = []; }
-          Game.find({users: {'$nin':[ObjectID(user._id)]}, stage: 'end'})
+          Game.find({users: ObjectID(user._id), stage: 'end'})
               .limit(6)
               .sort({name: 'asc'})
               .populate('users')
@@ -85,11 +85,13 @@ var ProfileController = {
         Game.count(query, function(err, count) {
           if (err) {return console.log('search count: '+err);}
 
-          res.render('active', {
+          res.render('search', {
             user:  user,
             games: games.map(ProfileController.info),
             page:  pageNum+1,
             count: count+1,
+            path:  'active',
+            title: 'Your Active',
           });
         });
       });
@@ -125,10 +127,13 @@ var ProfileController = {
           if (err) {return console.log('search count: '+err);}
 
           res.render('search', {
-            user:  user,
-            games: games.map(ProfileController.info),
-            page:  pageNum+1,
-            count: count+1,
+            user:    user,
+            games:   games.map(ProfileController.info),
+            page:    pageNum+1,
+            count:   count+1,
+            path:    'search',
+            title:   'Joinable',
+            timetag: 'Stage End Date',
           });
         });
       });
@@ -160,10 +165,13 @@ var ProfileController = {
           if (err) {return console.log('search count: '+err);}
 
           res.render('search', {
-            user:  user,
-            games: games.map(ProfileController.info),
-            page:  pageNum+1,
-            count: count+1,
+            user:    user,
+            games:   games.map(ProfileController.info),
+            page:    pageNum+1,
+            count:   count+1,
+            path:    'archive',
+            title:   'Your Archived',
+            timetag: 'Game End Date',
           });
         });
       });
