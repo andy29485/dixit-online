@@ -9,6 +9,7 @@ img.gamecard {
   /* IMAGE STYLES */
   border: 3px solid #000;
   margin: 0 auto;
+  cursor: pointer;
 }
 
 .card-deck {
@@ -16,7 +17,6 @@ img.gamecard {
 }
 
 .card-deck > div > .card > input + img.gamecard:hover {
-  cursor: pointer;
   opacity: 0.45;
 }
 

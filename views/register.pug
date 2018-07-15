@@ -2,22 +2,27 @@
 form(action="/register", method="POST")
   table
     tr
-      td
-        label Name:
-      td
-        input(type="text", name="name", placeholder="First Last" autofocus)
-    tr
-      td
+      td(style="text-align:left")
         label Username:
       td
         input(type="text", name="username", placeholder="username")
     tr
+      td(style="text-align:left")
+        label Email:
       td
+        input(type="email", name="email", placeholder="username@email.com")
+    tr
+      td(style="text-align:left")
+        label Name:
+      td
+        input(type="text", name="name", placeholder="First Last" autofocus)
+    tr
+      td(style="text-align:left")
         label Password:
       td
         input(type="password", name="password")
     tr
-      td
+      td(style="text-align:left")
         label Confirm Password:
       td
         input(type="password", name="password2")

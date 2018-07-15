@@ -19,3 +19,8 @@ block content
         include cards
       - ++index
     input(type="submit", class="btn btn-primary", value="Submit")
+  
+  div
+    | Stage Ends
+    |
+    b #{enddate.toISOString().replace(/[A-Z].*/, '')}

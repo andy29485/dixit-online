@@ -1,21 +1,36 @@
 extends layout
 
 prepend title
-  - let section = "Choose Cards";
+  - let section = "Choose Card";
   
 block content
   div  
-    form(action="/caption/"+code, method="POST")
+    form.form(action="/caption/"+code, method="POST")
+      - let required = 1;
       include cards
-      input(
-        type="text",
-        name="quote",
-        value=caption,
-        placeholder="Caption",
-        required
-      )
+      div.form-group
+        lable(for="quote") Caption:
+        input(
+          id="quote",
+          type="text",
+          name="quote",
+          value=caption,
+          class="form-control",
+          placeholder="Caption",
+          required
+        )
+      div.form-group
+        label(for="explain") Explanation:
+        textarea(
+          id="explain",
+          name="explain",
+          value=caption,
+          class="form-control",
+          placeholder="Explanation",
+          required
+        )
       input(type="submit", class="btn btn-primary", value="Submit")
     div
       | Stage Ends
       |
-      b #{enddate.toISOString().replace(/[A-Z]/g, ' ')}
+      b #{enddate.toISOString().replace(/[A-Z].*/, '')}

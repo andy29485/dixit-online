@@ -59,7 +59,8 @@ app.post('/logout',   auth.logout_post);
 app.post('/register', auth.register);
 app.get( '/logout',   auth.logout_get);
 
-app.get('/profile', LoggedIn('/'), profile.profile_get);
+app.get('/profile',           LoggedIn('/'), profile.profile_get);
+app.get('/profile/:username', LoggedIn('/'), profile.profile_get);
 
 app.get('/search',        LoggedIn('/'), profile.search);
 app.get('/search/:page',  LoggedIn('/'), profile.search);

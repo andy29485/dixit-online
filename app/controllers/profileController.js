@@ -25,7 +25,7 @@ var ProfileController = {
   },
 
   profile_get: function(req, res) {
-    User.findOne({username: req.user.username},
+    User.findOne({username: req.params.username||req.user.username},
     function(err, user) {
       if (err){console.log('profile get err: '+err);}
       Game.find({users: ObjectID(user._id), stage: {'$ne': 'end'}})

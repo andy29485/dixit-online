@@ -7,11 +7,11 @@ unless selected
 div.card-deck.row
   for card in cards
     // div(class="box")
-    div(class="col-5 col-sm-4 col-md-3 col-lg-3 col-xl-2 center-box")
+    div.col-5.col-sm-4.col-md-3.col-lg-3.col-xl-2.center-box
       label.card
         - let c = (selected === card);
-        if onclick
-          input(type="radio",name=cardpicker,checked=c,onclick=onclick,value=card)
+        if required
+          input(type="radio",name=cardpicker,checked=c,value=card,required)
         else
           input(type="radio",name=cardpicker,checked=c,value=card)
         img(src=card, class="card-img rounded gamecard")

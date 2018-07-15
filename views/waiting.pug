@@ -5,10 +5,16 @@ prepend title
   - let section = "Waiting";
 
 block content
+  - let admin = uname === players[0].uname;
   div.table-responsive
-    table
+    table(class="table table-striped table-bordered")
       - let index = 0
-      th(colspan=3) Waiting
+      tr
+        th(colspan=3) Waiting
+      tr
+        th(style="width:3%") #
+        th                   Name
+        th                   Status
       each player in players
         if player.stat === 'Waiting'
           - ++waiting;
@@ -19,10 +25,12 @@ block content
     div
       | Stage Ends
       |
-      b #{enddate.toISOString().replace(/[A-Z]/g, ' ')}
+      b #{enddate.toISOString().replace(/[A-Z].*/, '')}
     div
-      a(href="?edit") Edit
-      
-      if uname === players[0].uname && waiting === 0
-        form(action="/next/"+gameid, method="POST")
-          button(type='submit', class="btn btn-primary") Next
+      if admin && waiting === 0
+        form.btn-group(action="/next/"+gameid, method="POST")
+          a(href="?edit", class="btn btn-primary") Edit
+          button(type='submit', class="btn btn-success") Next
+      else
+        a(href="?edit", class="btn btn-primary") Edit
+        

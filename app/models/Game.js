@@ -10,12 +10,17 @@ var randIdF  = () => hashidsF.encode(Date.now()%168377826559400860);
 var captionSchema = new mongoose.Schema({
   image:    String,
   quote:    String,
+  explain:  String,
   code: {
     type:      String,
     required:  true,
     lowercase: true,
     default:   randIdF,
     unique:    true
+  },
+  lookup: { // card -> username
+    type: Map,
+    of:   String,
   },
   pcards: { // player -> their card
     type: Map,
@@ -24,6 +29,10 @@ var captionSchema = new mongoose.Schema({
   votes: { // voter -> image name
     type: Map,
     of:   String,
+  },
+  scores: { // username -> round score (int)
+    type: Map,
+    of:  [Number],
   },
 });
 
@@ -41,10 +50,10 @@ var gameSchema = new mongoose.Schema({
   },
   max_players: {type:Number, min:0},
   stage:       {type:String, enum:stages, default:'join'},
+  scoring:     {type:String, enum:['orig','v2','rus'], default:'orig'},
   duration:    {type:Number, min:1, max:14},
   deadline:    Date,
   card_dirs:  [String],
-  used_cards: [String],
   captionIds: { // caption._id -> username
     type: Map,
     of:   String,
@@ -56,7 +65,11 @@ var gameSchema = new mongoose.Schema({
   hands: { // username -> array of cards
     type: Map,
     of:  [String],
-  }
+  },
+  scores: { // username -> total score (int)
+    type: Map,
+    of:  [Number],
+  },
 });
 
 exports = module.exports = mongoose.model('Game', gameSchema);

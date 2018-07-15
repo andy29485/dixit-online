@@ -2,8 +2,53 @@ extends layout
 
 prepend title
   - let section = "Results";
+  style.
+    body {
+      padding-right: 0 !important;
+    }
 
-block content
+block content-outer
+  each hand in hands
+    div(
+      class="modal fade",
+      id="hand_"+hand.uname,
+      tabindex="-1",
+      role="dialog",
+      aria-labelledby="modalLabelLarge",
+      aria-hidden="true",
+    )
+      div(class="modal-dialog modal-lg")
+        div.modal-content
+          div.modal-header
+            h4.modal-title #{hand.cname}'s Hand
+            button.close(
+              type="button",
+              data-dismiss="modal",
+              aria-label="Close"
+            )
+              span(aria-hidden="true") &times;
+          div.modal-body
+            div.card-deck.row
+              for card in hand.cards
+                div.col-5.col-sm-4.col-md-3.col-lg-3.col-xl-2.center-box
+                  div.card
+                    img(src=card, class="card-img rounded gamecard")
+
+  div.table-responsive
+    table(class="table table-striped table-bordered")
+      thead
+        tr
+          th(colspan=2) Total Scores
+        tr
+          th Player
+          th Score
+      for score in scores
+        tr
+          td
+            a(href="/profile/"+score.uname) #{score.cname}
+          td
+            span #{score.score}
+  
   div.table-responsive
     table(class="table table-striped table-bordered")
       thead
@@ -12,26 +57,52 @@ block content
           th Dealer's Name
           th Dealer's Caption
           th(colspan=2, ) Dealer's Card
-          th(colspan=3*captions[0].cards.length, ) Other Cards
+          th(colspan=3*captions[0].cards.length) Other Cards
         tr
           th(colspan=3)
-          th votes
+          th votes / score
           th card
           for card in captions[0].cards
-            th votes
+            th votes / score
             th card
             th name
       - let index = 0
       each caption in captions
         tr(class="wrap")
           td #{++index}
-          td #{caption.cname}
-          td #{caption.quote}
-          td(align="right") #{caption.votes[caption.image] || 0}
           td
-            img(class="rounded gamecard" src=caption.image)
+            a(href="/profile/"+caption.uname) #{caption.cname}
+          td
+            span #{caption.quote}
+            hr
+            p #{caption.explain || "<No Explaination>"}
+          td(align="right")
+            span #{caption.votes[caption.image] || 0}
+            hr
+            span #{caption.score[caption.uname] || 0}
+          td
+            img(
+              class="rounded gamecard",
+              src=caption.image,
+              data-toggle="modal",
+              data-target="#hand_"+caption.uname,
+              title=caption.cname + "'s Hand",
+            )
           for card in caption.cards
-            td(align="right") #{caption.votes[card.card] || 0}
+            td(align="right")
+              span #{caption.votes[card.card] || 0}
+              hr
+              span #{caption.scores[card.uname] || 0}
             td
-              img(class="rounded gamecard" src=card.card)
-            td #{card.cname}
+              img(
+                class="rounded gamecard",
+                src=card.card,
+                data-toggle="modal",
+                data-target="#hand_"+card.uname,
+                title=card.cname + "'s Hand",
+              )
+              td
+                a(href="/profile/"+card.uname) #{card.cname}
+                hr
+                div Voted for: #{card.vote||'<No One>'}
+                  

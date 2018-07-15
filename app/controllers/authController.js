@@ -49,6 +49,7 @@ var AuthController = {
     }
     User.create({
          name:     req.body.name,
+         email:    req.body.email,
          username: req.body.username,
          password: User.generateHash(req.body.password),
     }, function(err){

@@ -1,8 +1,9 @@
-th {
+th,td {
   text-align: center;
+}
+th {
   background: #999;
 }
-
 a.disabled {
   color: gray;
   pointer-events: none;

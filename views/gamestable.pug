@@ -4,27 +4,27 @@ unless timetag
 div.table-responsive
   table(class="table table-striped table-bordered")
     tr
-      th(align="center") Game Name
-      th(align="center") Stage
-      th(align="center") Admin
-      th(align="center") Players in game / Limit
-      th(align="center") #{timetag}
+      th Game Name
+      th Stage
+      th Admin
+      th Players in game / Limit
+      th #{timetag}
       
     - let index = 0
     for game in gamesarray
       if !maxdisplay || index < maxdisplay
         - ++index
         tr
-          td(align="center") 
+          td
             a(href='/game/'+game.code) #{game.name}
-          td(align="center") #{game.stage}
-          td(align="center") #{game.admin}
-          td(align="center") #{game.joined}
+          td #{game.stage}
+          td #{game.admin}
+          td #{game.joined}
             |
             | /
             |
             | #{game.max===0 ? 'No Limit' : +game.max}
-          td(align="center")
+          td
             | #{game.date.toISOString().replace(/[A-Z]/g, ' ')}
       else
         - break

@@ -53,13 +53,14 @@ var GameController = {
         name:        req.body.name,
         users:       [user],
         max_players:  req.body.max,
+        scoring:      req.body.scoring,
         duration:     req.body.dur,
         deadline:     deadline,
         card_dirs:    req.body.decks,
-        used_cards:   [],
         captionIds:   {},
         captions:     {},
         hands:        {},
+        scores:       {},
       }, function(err, game) {
         if(err) {
           console.log('create - create game '+err);
@@ -170,10 +171,13 @@ var GameController = {
       }
 
       game.captions.set(uname, {
-        image:  req.body.cardpicker,
-        quote:  req.body.quote,
-        votes:  {},
-        pcards: {},
+        image:   req.body.cardpicker,
+        quote:   req.body.quote,
+        explain: req.body.explain,
+        lookup:  {[req.body.cardpicker]: uname},
+        votes:   {},
+        pcards:  {},
+        scores:  {},
       });
       game.captionIds.set(game.captions.get(uname).code, uname);
 
@@ -201,9 +205,11 @@ var GameController = {
       }
 
       for(let key in req.body) {
-        let id    = key.split('_')[1];
-        let cname = game.captionIds.get(id); // captioner's name
-        game.captions.get(cname).pcards.set(uname, req.body[key]);
+        let id      = key.split('_')[1];
+        let cname   = game.captionIds.get(id); // captioner's name
+        let caption = game.captions.get(cname);
+        caption.pcards.set(uname, req.body[key]);
+        caption.lookup.set(req.body[key], uname);
       }
 
       game.save(function(err) {
@@ -247,9 +253,7 @@ var GameController = {
     for(const dir of game.card_dirs) {
       for(let f of fs.readdirSync('public/'+deck_dir+'/'+dir)) {
         f = deck_dir+'/'+dir+'/'+f;
-        if(!game.used_cards.includes(f)) {
-          cards.push(f);
-        }
+        cards.push(f);
       }
     }
     return Shuffle.shuffle({deck: cards});
@@ -330,7 +334,6 @@ var GameController = {
   nextStage: function(game, next) {
     // cards to replenish hand
     let deck = GameController.buildDeck(game);
-    let used = game.used_cards;
 
     switch(game.stage) {
       case 'join':
@@ -342,11 +345,9 @@ var GameController = {
         let hands = game.users.reduce((o,u) => {
           let hand = deck.draw(hand_size);
           o[u.username] = hand;
-          used = used.concat(hand);
           return o;
         }, {});
         game.hands = hands;
-        game.used_cards = used;
         break;
       case 'capt':
         game.stage = 'choice';
@@ -369,8 +370,9 @@ var GameController = {
         break;
       case 'choice':
         game.stage = 'vote';
-        // TODO maybe don't?
+        // maybe don't?
 
+        /* yep, don't
         // remove used cards from hand
         for(let entry of game.captions.values()) {
           for(let uname of entry.pcards.keys()) {
@@ -385,8 +387,50 @@ var GameController = {
         }
         // remember used cards
         game.used_cards = used;
+        */
         break;
       case 'vote':
+        let totalscores = {}; // user -> total score(int)
+
+        for(let entry of game.captions.entries()) {
+          let uname   = entry[0];
+          let caption = entry[1];
+          let votes   = {}; // card -> num votes
+          let scores  = {}; // user -> round score(int)
+
+          for(let vote of caption.votes.values()) {
+            votes[vote] = (votes[vote]|0) + 1;
+          }
+
+          if( (votes[caption.image] === game.users.length-1)
+            ||(votes[caption.image] === 0)) {
+            // every one voted for dealer OR no one did
+            scores[uname] = 0;
+            for(let user of caption.pcards.keys()) {
+              scores[user] = 2;
+              if(game.scoring !== 'rus') {
+                scores[user] += (votes[caption.pcards.get(user)]|0);
+              }
+            }
+          } else {
+            scores[uname] = 3;
+            for(let user of caption.pcards.keys()) {
+              let bonus = votes[caption.pcards.get(user)]|0;
+              if(caption.votes.get(user) === caption.image) {
+                let truncate = ((game.scoring === 'rus') && (bonus > 3));
+                scores[user] = 3 + (truncate ? 3 : bonus);
+              } else if(game.scoring === 'v2') {
+                scores[user] = (scores[user]|0) + bonus;
+              }
+            }
+          }
+          for(user in scores) {
+            totalscores[user] = (totalscores[user]|0) + scores[user];
+          }
+          console.log(caption.pcards, caption.votes, votes, scores);
+          caption.scores = scores;
+        }
+        game.scores = totalscores;
       case 'end':
         game.stage = 'end';
         break;
@@ -408,7 +452,9 @@ var GameController = {
       }
       let captions = [];
       let selected = {};
-      let edit = 'edit' in req.query;
+      let hands  = [];
+      let scores = [];
+      let edit   = 'edit' in req.query;
 
       switch(game.stage) {
         case 'join':
@@ -484,6 +530,7 @@ var GameController = {
               title:    'Choose Cards',
               action:   '/guess/'+code,
               quotes:   shuffle(captions),
+              enddate:  game.deadline,
               cards:    game.hands.get(uname),
               uname:    uname,
             });
@@ -529,33 +576,63 @@ var GameController = {
               gamename: game.name,
               title:   'Voting',
               action:  '/vote/'+code,
+              enddate:  game.deadline,
               quotes:  shuffle(captions),
               uname:   uname,
             });
           }
           break;
         case 'end':
-          game.captions.forEach((value, key) => {
+          game.captions.forEach((caption, key) => {
             let cname = game.users.find(u=>u.username === key).name;
             let cards = [];
             let votes = {};
-            for(let entry of value.pcards.entries()) {
+
+            for(let entry of caption.pcards.entries()) {
               let name = game.users.find(u=>u.username === entry[0]).name;
-              cards.push({card:entry[1],cname:name});
+              let vote = caption.lookup.get(caption.votes.get(entry[0]));
+              cards.push({
+                card:  entry[1],
+                uname: entry[0],
+                cname: name,
+                vote:  game.users.find(u=>u.username === entry[0]).name,
+              });
             }
-            for(let card of value.votes.values()) {
+            for(let card of caption.votes.values()) {
               if(card in votes) ++votes[card];
               else                votes[card] = 1;
             }
             captions.push({
-              cname: cname,
-              quote: value.quote,
-              image: value.image,
-              votes: votes,
-              cards: cards,
+              uname:   key,
+              cname:   cname,
+              quote:   caption.quote,
+              explain: caption.explain,
+              image:   caption.image,
+              votes:   votes,
+              scores:  scores,
+              cards:   cards,
             });
           });
-          res.render('results', {gamename: game.name, captions: captions});
+          game.hands.forEach((hand, key) => {
+            hands.push({
+              cname: game.users.find(u=>u.username === key).name,
+              uname: key,
+              cards: hand,
+            });
+          });
+          for(let user of game.users) {
+            scores.push({
+              cname: user.name,
+              uname: user.username,
+              score: game.scores.get(user.username),
+            });
+          }
+          res.render('results', {
+            gamename: game.name,
+            captions: captions,
+            hands:    hands,
+            scores:   scores,
+          });
           break;
       }
     });
