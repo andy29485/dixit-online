@@ -44,7 +44,7 @@ var AuthController = {
       err = true;
     }
     if (err) {
-      res.redirect('/?register');
+      res.redirect('/#register');
       return;
     }
     User.create({
@@ -55,7 +55,7 @@ var AuthController = {
       if (err) {
         console.log(err);
         req.flash('regerror', 'username already exists');
-        res.redirect('/?register');
+        res.redirect('/#register');
         return;
       }
 

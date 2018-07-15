@@ -1,29 +1,26 @@
-doctype html
-html
-  head
-    title Dixit Online - Guess Cards
-    link(href='/css/main.css', rel='stylesheet')
-    //link(href='/css/cards.css', rel='stylesheet')
-  body
-    h1 #{gamename}
-    h2 Results
-    a(href="/logout") Logout
-    a(href="/profile") Profile
-    
-    table(style="width:100%")
-      tr
-        th
-        th Dealer's Name
-        th Dealer's Caption
-        th(colspan=2) Dealer's Card
-        th(colspan=2*captions[0].cards.length) Other Cards
-      tr
-        th(colspan=3)
-        th votes
-        th card
-        for card in captions[0].cards
+extends layout
+
+prepend title
+  - let section = "Results";
+
+block content
+  div.table-responsive
+    table(class="table table-striped table-bordered")
+      thead
+        tr
+          th Round
+          th Dealer's Name
+          th Dealer's Caption
+          th(colspan=2, ) Dealer's Card
+          th(colspan=3*captions[0].cards.length, ) Other Cards
+        tr
+          th(colspan=3)
           th votes
           th card
+          for card in captions[0].cards
+            th votes
+            th card
+            th name
       - let index = 0
       each caption in captions
         tr(class="wrap")
@@ -31,12 +28,10 @@ html
           td #{caption.cname}
           td #{caption.quote}
           td(align="right") #{caption.votes[caption.image] || 0}
-          td(class="box")
-            div(class="boxInner")
-              img(src=caption.image)
+          td
+            img(class="rounded gamecard" src=caption.image)
           for card in caption.cards
             td(align="right") #{caption.votes[card.card] || 0}
-            td(class="box")
-              div(class="boxInner")
-                img(src=card.card)
-                | #{card.cname}
+            td
+              img(class="rounded gamecard" src=card.card)
+            td #{card.cname}

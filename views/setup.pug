@@ -1,36 +1,38 @@
-doctype html
+extends layout
 
-- let admin = (username === players[0].username);
+prepend title
+  - let admin = (username === players[0].username);
+  - let section = "Game Setup";
 
-html
-  head
-    title Dixit Online - Game Setup
-    link(href='/css/main.css', rel='stylesheet')
-  body
-    h1 #{gamename}
-    h2 Game Setup
-    a(href="/logout") Logout
-    a(href="/profile") Profile
-    
+block content
+  div
     form(action="/next/"+gameid, method="POST")
-      table
+      table(class="table table-striped table-bordered")
         - let index = 0
-        th(colspan=3) Players in game:
+        thead
+          tr
+            th(colspan=(admin ? 3 : 2)) Players in game:
+          tr
+            th(style="width: 4%") #
+            if admin
+              th(style="width: 6%") Include
+            th Name
         each player in players
           tr
-            td #{++index}
+            td(style="text-align:center") #{++index}
             if admin
               if index !== 1
-                td
+                td(style="text-align:center")
                   input(
                     type="checkbox",
                     name="players[]",
-                    value=player.username
+                    value=player.username,
                     checked
                   )
               else
                 td
-            td #{player.name} #{index===1 ? '(Admin)' : ''}
+            td(style="text-align:center")
+              | #{player.name} #{index===1 ? '(Admin)' : ''}
       if (new Date()) < enddate
         if !admin
           if players.map(p => p.username).includes(username)
@@ -56,6 +58,7 @@ html
         div
           | Joining Deadline Reached, new users can't join game
           button(
+            class="btn btn-primary",
             formaction="/join/"+gameid,
             type='submit',
             formmethod="POST",
@@ -73,6 +76,7 @@ html
       if admin
         - let can_start = players.length >= 3;
         button(
+          class=(can_start ? "btn btn-primary" : "btn btn-disabled"),
           type='submit',
           disabled=!can_start,
           title=(can_start ? false : 'Not enough people'),

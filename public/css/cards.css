@@ -1,76 +1,53 @@
+.card {
+  border: none;
+  margin: 0 auto; /* Added */
+  float: none; /* Added */
+  margin-bottom: 10px; /* Added */
+}
 
-.wrap {
-  overflow: hidden;
-  margin: 10px;
+img.gamecard {
+  /* IMAGE STYLES */
+  border: 3px solid #000;
+  margin: 0 auto;
 }
-.box {
-  float: left;
-  position: relative;
-  width: 20%;
-  padding-bottom: 20%;
-}
-.boxInner {
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  top: 10px;
-  bottom: 10px;
-  overflow: hidden;
-}
-.boxInner > img {
-  width:  68%;
-  height: 94%;
-  border-radius: 5px;
-  background: #000;
-  padding: 2px;
-}
-.boxInner {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+
+.card-deck {
   margin-bottom: 10px;
-  color: #5AF;
-  text-align: center;
 }
 
-.wrap > label.box > input { /* HIDE RADIO */
-  visibility: hidden; /* Makes input not-clickable */
-  position: absolute; /* Remove input from document flow */
-}
-.wrap > label.box > input + img{ /* IMAGE STYLES */
-  cursor:pointer;
-  border:2px solid transparent;
-}
-.wrap > label.box > input:checked + .boxInner > img{ /* (RADIO CHECKED) IMAGE STYLES */
-  border:5px solid #f00;
+.card-deck > div > .card > input + img.gamecard:hover {
+  cursor: pointer;
+  opacity: 0.45;
 }
 
-@media only screen and (max-width : 480px) {
-  /* Smartphone view: 1 tile */
-  .box {
-    width: 100%;
-    padding-bottom: 100%;
-  }
+.card-deck > div > .card > input {
+  /* HIDE RADIO */
+  visibility: hidden;   /* Makes input not-clickable */
+  position:   absolute; /* Remove input from document flow */
 }
-@media only screen and (max-width : 650px) and (min-width : 481px) {
-  /* Tablet view: 2 tiles */
+
+.card-deck > div > .card > input:checked + img {
+  /* (RADIO CHECKED) IMAGE STYLES */
+  box-shadow: 0 0 0 3px #f00;
+}
+
+/*
+@media (min-width: @screen-sm-min) {
   .box {
     width: 50%;
     padding-bottom: 50%;
   }
 }
-@media only screen and (max-width : 1050px) and (min-width : 651px) {
-  /* Small desktop / ipad view: 3 tiles */
+@media (min-width: @screen-md-min) {
   .box {
     width: 33.3%;
     padding-bottom: 33.3%;
   }
 }
-@media only screen and (max-width : 1290px) and (min-width : 1051px) {
-  /* Medium desktop: 4 tiles */
+@media (min-width: @screen-lg-min) {
   .box {
     width: 25%;
     padding-bottom: 25%;
   }
 }
+*/

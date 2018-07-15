@@ -1,6 +1,9 @@
-body {
-  margin: 0;
-  padding: 0;
-  background: #48D;
-  font: 18px 'Lucida Sans',sans-serif;
+th {
+  text-align: center;
+  background: #999;
+}
+
+a.disabled {
+  color: gray;
+  pointer-events: none;
 }

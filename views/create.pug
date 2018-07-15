@@ -1,14 +1,11 @@
-doctype html
-- var dur = 2;
-html
-  head
-    title Dixit Online - Create
-    link(href='/css/main.css', rel='stylesheet')
-  body
-    h1 Create New Game
-    a(href="/logout") Logout
-    a(href="/profile") Profile
-    
+extends layout
+
+prepend title
+  - let gamename = "Create New Game";
+  - var dur = 2;
+  
+block content
+  div  
     .error #{errmessage}
     form(action="/create", method="POST")
       table
@@ -33,12 +30,16 @@ html
           td
             label Decks to Use:
           td
-            ul(required)
-              for deck in decks
-                li(style="display: inline")
-                  label
-                    input(type="checkbox",name="decks[]",value=deck,checked,required)
-                    | #{deck}
+            for deck in decks
+              label
+                input.checkbox-inline(
+                  type="checkbox",
+                  name="decks[]",
+                  value=deck,
+                  checked,
+                  required
+                )
+                | #{deck}
         tr
           td
             label Max Players (0 for no limit):
@@ -46,6 +47,6 @@ html
             input(type="number", step="1", pattern="\d+",
               name="max", value=0, min=0
             )
-      input(type="submit", value="Create Game")
+      input(type="submit", class="btn btn-primary", value="Create Game")
             
   

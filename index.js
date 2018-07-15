@@ -43,8 +43,12 @@ app.disable('x-powered-by');
 app.set('port', process.env.PORT || 3000);
 
 app.get('/', function(req, res) {
+  if(req.user) {
+    res.redirect('/profile');
+    return;
+  }
+
   res.render('index', {
-    register:    'register' in req.query,
     regmessage:   req.flash('regerror'),
     loginmessage: req.flash('error'),
   });

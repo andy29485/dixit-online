@@ -1,0 +1,39 @@
+extends ../node_modules/pug-bootstrap/_bootstrap
+
+block head
+  block title
+    title Dixit Online
+      if section
+        |
+        | - #{section}
+  link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css')
+  link(rel='stylesheet', href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
+
+  script(src='https://code.jquery.com/jquery-3.1.1.slim.min.js')
+  script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.bundle.min.js')
+  
+  link(rel='stylesheet', href='/css/main.css')
+  link(href='/css/cards.css', rel='stylesheet')
+    
+  meta(name="viewport", content="width=device-width,initial-scale=1.0")
+
+block body
+  nav(class="navbar navbar-default navbar-expand-lg navbar-light bg-light", role="navigation")
+    div.container-fluid
+      div.navbar-header
+        h4
+          b.navbar-band #{gamename}
+            if section
+              |
+              | (#{section})
+      span(class="nav navbar-nav btn-group")
+        a.btn(href="/logout")
+          span(class="fa fa-sign-out")
+          |
+          | Logout
+        a.btn(href="/profile")
+          span(class="fa fa-user")
+          |
+          | Profile
+  div.container
+    block content

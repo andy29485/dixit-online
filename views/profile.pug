@@ -1,12 +1,10 @@
-doctype html
-html
-  head
-    title Dixit Online - #{user.name}'s Profile
-    link(href='/css/main.css', rel='stylesheet')
-  body
-    h1 #{user.name}'s Profile
-    a(href="/logout") Logout
+extends layout
 
+prepend title
+  - let section = user.name+"'s Profile";
+
+block content
+  div
     if games && Object.keys(games).length > 0
       - let gamesarray = games
       h3 Your Active Games
@@ -43,4 +41,4 @@ html
       h3 Archived Games - None
 
     div
-      a(href="/create") Create Game
+      a(class="btn btn-primary" href="/create") Create New Game

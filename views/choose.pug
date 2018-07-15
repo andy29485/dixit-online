@@ -1,16 +1,12 @@
-doctype html
-html
-  head
-    title Dixit Online - Choose Cards
-    link(href='/css/main.css', rel='stylesheet')
-  body
-    h1 #{gamename}
-    h2 Choose Cards
-    a(href="/logout") Logout
-    a(href="/profile") Profile
-    
+extends layout
+
+prepend title
+  - let section = "Choose Cards";
+  
+block content
+  div  
     form(action="/caption/"+code, method="POST")
-      include cards.pug
+      include cards
       input(
         type="text",
         name="quote",
@@ -18,7 +14,7 @@ html
         placeholder="Caption",
         required
       )
-      input(type="submit", value="Submit")
+      input(type="submit", class="btn btn-primary", value="Submit")
     div
       | Stage Ends
       |

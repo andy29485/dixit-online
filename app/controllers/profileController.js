@@ -73,7 +73,9 @@ var ProfileController = {
     function(err, user) {
       if (err) {return console.log('search user: '+err);}
 
-      Game.find({users: ObjectID(user._id), stage: {'$ne': 'end'}})
+      let query = {users: ObjectID(user._id), stage: {'$ne': 'end'}};
+
+      Game.find(query)
           .limit(perPage)
           .skip(perPage * pageNum)
           .sort({name: 'asc'})
@@ -89,7 +91,7 @@ var ProfileController = {
             user:  user,
             games: games.map(ProfileController.info),
             page:  pageNum+1,
-            count: count+1,
+            count: Math.floor(count/perPage)+1,
             path:  'active',
             title: 'Your Active',
           });
@@ -130,7 +132,7 @@ var ProfileController = {
             user:    user,
             games:   games.map(ProfileController.info),
             page:    pageNum+1,
-            count:   count+1,
+            count:   Math.floor(count/perPage)+1,
             path:    'search',
             title:   'Joinable',
             timetag: 'Stage End Date',
@@ -168,7 +170,7 @@ var ProfileController = {
             user:    user,
             games:   games.map(ProfileController.info),
             page:    pageNum+1,
-            count:   count+1,
+            count:   Math.floor(count/perPage)+1,
             path:    'archive',
             title:   'Your Archived',
             timetag: 'Game End Date',
