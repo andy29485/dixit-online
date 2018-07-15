@@ -18,16 +18,28 @@ var ProfileController = {
         end:    'Ended',
       }[g.stage],
       admin:  g.users[0].name,
+      adminu: g.users[0].username,
       max:    g.max_players,
       joined: g.users.length,
       date:   g.deadline,
     };
   },
 
+  settings_get: function(req, res) {
+    // TODO
+  },
+
+  settings_post: function(req, res) {
+    // TODO
+  },
+
   profile_get: function(req, res) {
     User.findOne({username: req.params.username||req.user.username},
     function(err, user) {
-      if (err){console.log('profile get err: '+err);}
+      if (err || !user) {
+        console.log('profile get err: '+err);
+        return res.status(404).send();
+      }
       Game.find({users: ObjectID(user._id), stage: {'$ne': 'end'}})
           .limit(6)
           .sort({name: 'asc'})
@@ -56,6 +68,7 @@ var ProfileController = {
 
             res.render('profile', {
               user:     user,
+              uname:    req.user.username,
               games:    active  .map(ProfileController.info),
               other:    other   .map(ProfileController.info),
               archived: archived.map(ProfileController.info),
@@ -71,7 +84,7 @@ var ProfileController = {
 
     User.findOne({username: req.user.username},
     function(err, user) {
-      if (err) {return console.log('search user: '+err);}
+      if (err) {console.log('search user: '+err); return res.send(404);}
 
       let query = {users: ObjectID(user._id), stage: {'$ne': 'end'}};
 
@@ -81,11 +94,11 @@ var ProfileController = {
           .sort({name: 'asc'})
           .populate('users')
           .exec(function(err, games) {
-        if (err) {return console.log('search games: '+err);}
+        if (err) {console.log('search games: '+err); return res.send(404);}
         if (!games) { games = []; }
 
         Game.count(query, function(err, count) {
-          if (err) {return console.log('search count: '+err);}
+          if (err) {console.log('search count: '+err); return res.send(404);}
 
           res.render('search', {
             user:  user,
@@ -105,7 +118,7 @@ var ProfileController = {
 
     User.findOne({username: req.user.username},
     function(err, user) {
-      if (err) {return console.log('search user: '+err);}
+      if (err) {console.log('search user: '+err); return res.send(404);}
 
       let query = {
         users: {'$nin':[ObjectID(user._id)]},
@@ -122,11 +135,11 @@ var ProfileController = {
           .sort({name: 'asc'})
           .populate('users')
           .exec(function(err, games) {
-        if (err) {return console.log('search games: '+err);}
+        if (err) {console.log('search games: '+err); return res.send(404);}
         if (!games) { games = []; }
 
         Game.count(query, function(err, count) {
-          if (err) {return console.log('search count: '+err);}
+          if (err) {console.log('search count: '+err); return res.send(404);}
 
           res.render('search', {
             user:    user,
@@ -147,7 +160,7 @@ var ProfileController = {
 
     User.findOne({username: req.user.username},
     function(err, user) {
-      if (err) {return console.log('search user: '+err);}
+      if (err) {console.log('search user: '+err); return res.send(404);}
 
       let query = {
         users: ObjectID(user._id),
@@ -160,11 +173,11 @@ var ProfileController = {
           .sort({name: 'asc'})
           .populate('users')
           .exec(function(err, games) {
-        if (err) {return console.log('search games: '+err);}
+        if (err) {console.log('search games: '+err); return res.send(404);}
         if (!games) { games = []; }
 
         Game.count(query, function(err, count) {
-          if (err) {return console.log('search count: '+err);}
+          if (err) {console.log('search count: '+err); return res.send(404);}
 
           res.render('search', {
             user:    user,
@@ -177,6 +190,27 @@ var ProfileController = {
           });
         });
       });
+    });
+  },
+
+  delete: function(req, res) {
+    User.findOne({username: req.user.username},
+    function(err, user) {
+      if (err) {console.log('search user: '+err); return res.send(404);}
+
+      let query = {
+        'users.0': ObjectID(user._id),
+        'stage':   {'$ne': 'end'},
+        'code':    req.params.id,
+      };
+
+      Game.find(query)
+          .remove()
+          .exec(function(err) {
+        if(err) {console.log(err); return res.send(404);}
+        return res.redirect('back');
+      });
+
     });
   },
 };

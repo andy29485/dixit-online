@@ -1,7 +1,10 @@
 extends layout
 
 prepend title
-  - let section = user.name+"'s Profile";
+  - let gamename   = user.name+"'s Profile";
+  - let maxdisplay = 6;
+  unless uname
+    - let uname = user.username;
 
 block content
   div
@@ -12,7 +15,7 @@ block content
       include gamestable
 
       if Object.keys(games).length >= maxdisplay
-        a(href='/active') (more)
+        a(class="btn btn-primary" href='/active') more
     else
       h3 Active Games - None
 
@@ -24,7 +27,7 @@ block content
       include gamestable
       
       if Object.keys(other).length >= maxdisplay
-        a(href='/search') (more)
+        a(class="btn btn-primary" href='/search') more
     else
       h3 Joinable Games - None
 
@@ -36,7 +39,7 @@ block content
       include gamestable
       
       if Object.keys(archived).length >= maxdisplay
-        a(href='/archive') (more)
+        a(class="btn btn-primary" href='/archive') more
     else
       h3 Archived Games - None
 

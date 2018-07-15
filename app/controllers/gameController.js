@@ -478,6 +478,7 @@ var GameController = {
               enddate:  game.deadline,
               selected: (cap || new Map()).get('image'),
               caption:  (cap || new Map()).get('quote'),
+              explain:  (cap || new Map()).get('explain'),
             });
           }
           else {

@@ -2,9 +2,11 @@ extends layout
 
 prepend title
   unless path
-    - let path = 'search'
+    - let path = 'search';
   unless title
-    - let title = 'Joinable'
+    - let title = 'Joinable';
+  unless uname
+    - let uname = user.username;
   - gamename = title+' Games';
 
 mixin pages

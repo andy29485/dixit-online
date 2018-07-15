@@ -24,6 +24,7 @@ block content
               if index !== 1
                 td(style="text-align:center")
                   input(
+                    class="checkbox",
                     type="checkbox",
                     name="players[]",
                     value=player.username,
@@ -37,6 +38,7 @@ block content
         if !admin
           if players.map(p => p.username).includes(username)
             button(
+              class="btn btn-primary",
               formaction="/leave/"+gameid,
               type='submit',
               formmethod="POST",
@@ -44,6 +46,7 @@ block content
           else
             - let can_join = players.length<maxplayers || maxplayers===0;
             button(
+              class="btn btn-primary",
               formaction="/join/"+gameid,
               type='submit',
               formmethod="POST",

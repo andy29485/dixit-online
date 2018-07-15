@@ -9,11 +9,13 @@ div.table-responsive
       th Admin
       th Players in game / Limit
       th #{timetag}
+      th Delete
       
-    - let index = 0
+    - let index = 1
     for game in gamesarray
       if !maxdisplay || index < maxdisplay
         - ++index
+        - let admin = (game.adminu === uname);
         tr
           td
             a(href='/game/'+game.code) #{game.name}
@@ -24,7 +26,17 @@ div.table-responsive
             | /
             |
             | #{game.max===0 ? 'No Limit' : +game.max}
+          td #{game.date.toISOString().replace(/[A-Z].*/, '')}
           td
-            | #{game.date.toISOString().replace(/[A-Z]/g, ' ')}
+            form(action='/delete/'+game.code, method='POST')
+              button(
+                class="btn btn-danger",
+                type="submit",
+                disabled=!admin,
+                title=(admin 
+                      ? 'Delete the game and all its records'
+                      : 'You are not the admin for this game'
+                ),
+              ) Delete
       else
         - break

@@ -5,10 +5,10 @@ form(action="/login", method="POST")
       td(style="text-align:left")
         label Username:
       td
-        input(type="text", name="username", placeholder="username" autofocus)
+        input(type="text" name="username" required placeholder="username" autofocus)
     tr
       td(style="text-align:left")
         label Password:
       td
-        input(type="password", name="password")
+        input(type="password" name="password" required)
   input(type="submit", value="Submit")

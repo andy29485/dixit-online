@@ -1,12 +1,14 @@
 var mongoose              = require('mongoose');
 var PassportLocalStrategy = require('passport-local').Strategy;
 var bcrypt                = require('bcrypt-nodejs');
+var lang                  = require('../../configs/lang');
 
 var schema = new mongoose.Schema({
   name:     {type:String,required:true,trim:true},
-  email:    {type:String,required:true,trim:true,unique:true},
+  email:    {type:String              ,trim:true,unique:true},
   username: {type:String,required:true,trim:true,lowercase:true,unique:true},
   password: {type:String,required:true},
+  lang:     {type:String,default:'en',enum:Object.keys(lang)},
   created:  {type:Date,  default:Date.now},
 });
 

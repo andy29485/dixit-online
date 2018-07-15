@@ -69,6 +69,8 @@ app.get('/archive/:page', LoggedIn('/'), profile.archive);
 app.get('/active',        LoggedIn('/'), profile.active);
 app.get('/active/:page',  LoggedIn('/'), profile.active);
 
+app.post('/delete/:id',  LoggedIn('/'), profile.delete);
+
 app.post('/create',      LoggedIn('/'), game.create_post);
 app.get( '/create',      LoggedIn('/'), game.create_get);
 app.get( '/game/:id',    LoggedIn('/'), game.game);
