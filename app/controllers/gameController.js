@@ -1,6 +1,7 @@
 var passport = require('passport');
 var Game     = require('../models/Game.js');
 var User     = require('../models/User.js');
+var Email    = require('../models/Email.js');
 var Shuffle  = require('shuffle');
 var fs       = require('fs');
 

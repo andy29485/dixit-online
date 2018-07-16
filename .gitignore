@@ -1,2 +1,3 @@
 node_modules/
 public/decks/
+configs/email-auth.js

@@ -82,6 +82,9 @@ app.get( '/logout',   auth.logout_get);
 app.get('/profile',           LoggedIn('/'), profile.profile_get);
 app.get('/profile/:username', LoggedIn('/'), profile.profile_get);
 
+app.get ('/settings', LoggedIn('/'), profile.settings_get);
+app.post('/settings', LoggedIn('/'), profile.settings_post);
+
 app.get('/search',        LoggedIn('/'), profile.search);
 app.get('/search/:page',  LoggedIn('/'), profile.search);
 app.get('/archive',       LoggedIn('/'), profile.archive);

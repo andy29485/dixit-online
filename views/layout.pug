@@ -20,7 +20,10 @@ block head
   meta(name="viewport", content="width=device-width,initial-scale=1.0")
 
 block body
-  nav(class="navbar navbar-default navbar-expand-lg navbar-light bg-light", role="navigation")
+  nav(
+    class="navbar navbar-default navbar-expand-lg navbar-light bg-light",
+    role="navigation"
+  )
     div.container-fluid
       div.navbar-header
         h4
@@ -29,14 +32,20 @@ block body
               |
               | (#{section})
       span(class="nav navbar-nav btn-group")
-        a.btn(href="/logout")
-          span(class="fa fa-sign-out")
-          |
-          | #{t('logout')}
-        a.btn(href="/profile")
-          span(class="fa fa-user")
-          |
-          | #{t('profile')}
+        unless ignore_logout
+          a.btn(href="/logout")
+            span(class="fa fa-sign-out")
+            |
+            | #{t('logout')}
+        unless ignore_profile
+          a.btn(href="/settings")
+            span(class="fa fa-cog")
+            |
+            | #{t('settings')}
+          a.btn(href="/profile")
+            span(class="fa fa-user")
+            |
+            | #{t('profile')}
   
   block content-outer
     div.container

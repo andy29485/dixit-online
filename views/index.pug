@@ -1,14 +1,9 @@
 extends layout
 
 prepend title
-  - let section = "";
-  script(type="text/javascript").
-    $(document).on('click','.nav-link.active', function(){
-      var href = $(this).attr('href').substring(1);
-      //alert(href);
-      $(this).removeClass('active');
-      $('.tab-pane[id="'+ href +'"]').removeClass('active');
-    })
+  - let section  = "";
+  - let gamename = t('title');
+  - let ignore_logout = ignore_profile = true;
 
 block content
   ul(class="nav nav-tabs"  role="tablist")

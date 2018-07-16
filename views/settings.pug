@@ -1,0 +1,65 @@
+extends layout
+
+prepend title
+  - let gamename   = t('Settings');
+  - let maxdisplay = 6;
+  unless uname
+    - let uname = user.username;
+
+block content
+  if badsetmessage.length
+    div(class="alert alert-danger")
+      a(href="#" class="close" data-dismiss="alert") &times;
+      strong #{t('error')}
+      ul
+        each msg in badsetmessage
+          li #{msg}
+  
+  if goodsetmessage.length
+    div(class="alert alert-success")
+      a(href="#" class="close" data-dismiss="alert") &times;
+      strong #{t('success')}
+      ul
+        each msg in goodsetmessage
+          li #{msg}
+      
+  form(action="/settings", method="POST")
+    table
+      tr
+        td(style="text-align:left")
+          label #{t('name')}:
+        td
+          input.form-control(type="text" name="name", placeholder=user.name)
+      tr
+        td(style="text-align:left")
+          label #{t('language')}:
+        td
+          select.form-control(name="lang")
+            option(value="en" selected=('en'==user.lang)) English
+            option(value="ru" selected=('ru'==user.lang)) Русский
+      tr
+        td(style="text-align:left")
+          label #{t('email')}:
+        td
+          input.form-control(
+            type="email",
+            name="email",
+            placeholder=(user.email||t('ex_email'))
+          )
+      
+      tr
+        td(style="text-align:left")
+          label #{t('old_pass')}:
+        td
+          input.form-control(type="password", name="oldpass")
+      tr
+        td(style="text-align:left")
+          label #{t('password')}:
+        td
+          input.form-control(type="password", name="password")
+      tr
+        td(style="text-align:left")
+          label #{t('conf_pass')}:
+        td
+          input.form-control(type="password", name="password2")
+    button(type="submit", class="btn btn-primary") #{t('submit_button')}

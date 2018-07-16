@@ -17,19 +17,28 @@ form(action="/register", method="POST")
       td(style="text-align:left")
         label #{t('language')}:
       td
-        select.form-control
+        select.form-control(name="lang")
           option(value="en") English
           option(value="ru") Русский
     tr
       td(style="text-align:left")
         label #{t('username')}:
       td
-        input.form-control(type="text", name="username", placeholder=t('ex_uname') required)
+        input.form-control(
+          type="text",
+          name="username",
+          placeholder=t('ex_uname')
+          required
+        )
     tr
       td(style="text-align:left")
         label #{t('email')}:
       td
-        input.form-control(type="email", name="email", placeholder=t('ex_email'))
+        input.form-control(
+          type="email",
+          name="email",
+          placeholder=t('ex_email')
+        )
     tr
       td(style="text-align:left")
         label #{t('password')}:

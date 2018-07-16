@@ -20,11 +20,60 @@ var ProfileController = {
   },
 
   settings_get: function(req, res) {
-    // TODO
+    User.findOne({username: req.user.username}, function(err, user) {
+      res.render('settings', {
+        user: user,
+        badsetmessage:  req.flash('badsetmessage'),
+        goodsetmessage: req.flash('goodsetmessage'),
+      });
+    });
   },
 
   settings_post: function(req, res) {
-    // TODO
+    User.findOne({username: req.user.username}, function(err, user) {
+      if(req.body.name &&  req.body.name !== user.name) {
+        req.flash('goodsetmessage', req.t('name_updated'));
+        user.name = req.body.name;
+      }
+
+      if(req.body.lang && req.body.lang !== user.lang) {
+        req.flash('goodsetmessage', req.t('lang_updated'));
+        user.lang = req.body.lang;
+      }
+
+      // User wishes to change their email
+      if(req.body.email && req.body.email !== user.email) {
+        req.flash('goodsetmessage', req.t('email_updated'));
+        user.email = req.body.email;
+      }
+
+      // User wishes to change the password
+      if(req.body.oldpass || req.body.password || req.body.password2) {
+        if(!req.body.oldpass) {
+          req.flash('badsetmessage', req.t('password_missing'));
+        }
+        else if(!user.validPassword(req.body.oldpass)) {
+          req.flash('badsetmessage', req.t('password_incorect'));
+        }
+        else if(req.body.password !== req.body.password2) {
+          req.flash('badsetmessage', req.t('pass_missmatch'));
+        }
+        else {
+          req.flash('goodsetmessage', req.t('password_updated'));
+          user.password = User.generateHash(req.body.password);
+        }
+      }
+
+      user.save(function(err) {
+        if (err) {
+          console.log('settings save fail: '+err);
+          req.flash('badsetmessage');
+          req.flash('badsetmessage', req.t('settings_save_error'));
+        }
+      });
+
+      res.redirect('/settings');
+    });
   },
 
   profile_get: function(req, res) {
