@@ -1,15 +1,15 @@
 unless timetag
-  - let timetag = 'Sign Up Before'
+  - let timetag = lang.end_date_join
 
 div.table-responsive
   table(class="table table-striped table-bordered")
     tr
-      th Game Name
-      th Stage
-      th Admin
-      th Players in game / Limit
+      th #{lang.game_name}
+      th #{lang.stage}
+      th #{lang.admin}
+      th #{lang.players_and_limit}
       th #{timetag}
-      th Delete
+      th #{lang.delete}
       
     - let index = 1
     for game in gamesarray
@@ -25,7 +25,7 @@ div.table-responsive
             |
             | /
             |
-            | #{game.max===0 ? 'No Limit' : +game.max}
+            | #{game.max===0 ? lang.no_limit : game.max}
           td #{game.date.toISOString().replace(/[A-Z].*/, '')}
           td
             form(action='/delete/'+game.code, method='POST')
@@ -34,9 +34,9 @@ div.table-responsive
                 type="submit",
                 disabled=!admin,
                 title=(admin 
-                      ? 'Delete the game and all its records'
-                      : 'You are not the admin for this game'
+                      ? lang.delete_explain
+                      : lang.delete_not_admin
                 ),
-              ) Delete
+              ) #{lang.delete}
       else
         - break

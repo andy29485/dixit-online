@@ -2,35 +2,35 @@ extends layout
 
 prepend title
   - let waiting = 0;
-  - let section = "Waiting";
+  - let section = lang.stages.wait;
 
 block content
-  - let admin = uname === players[0].uname;
+  - let admin = (uname === players[0].uname);
   div.table-responsive
     table(class="table table-striped table-bordered")
       - let index = 0
       tr
-        th(colspan=3) Waiting
+        th(colspan=3) #{lang.stages.wait}
       tr
-        th(style="width:3%") #
-        th                   Name
-        th                   Status
+        th(style="width:3%") #{lang.header_number}
+        th                   #{lang.header_name}
+        th                   #{lang.header_status}
       each player in players
-        if player.stat === 'Waiting'
+        if !player.stat
           - ++waiting;
         tr
           td #{++index}
           td #{player.name}
-          td #{player.stat}
+          td #{player.stat ? lang.status_done : lang.status_waiting}
     div
-      | Stage Ends
+      | #{lang.end_date_stage}:
       |
       b #{enddate.toISOString().replace(/[A-Z].*/, '')}
     div
       if admin && waiting === 0
         form.btn-group(action="/next/"+gameid, method="POST")
-          a(href="?edit", class="btn btn-primary") Edit
-          button(type='submit', class="btn btn-success") Next
+          a(href="?edit", class="btn btn-primary") #{lang.edit_button}
+          button(type='submit', class="btn btn-success") #{lang.next_button}
       else
-        a(href="?edit", class="btn btn-primary") Edit
+        a(href="?edit", class="btn btn-primary") #{lang.edit_button}
         

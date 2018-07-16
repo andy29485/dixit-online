@@ -1,7 +1,7 @@
 extends layout
 
 prepend title
-  - let gamename   = user.name+"'s Profile";
+  - let gamename   = user.name+lang.profile_head;
   - let maxdisplay = 6;
   unless uname
     - let uname = user.username;
@@ -10,38 +10,38 @@ block content
   div
     if games && Object.keys(games).length > 0
       - let gamesarray = games
-      h3 Active Games
-      - let timetag = 'Stage End Date'
+      - let timetag = lang.end_date_stage
+      h3 #{lang.active_games}
       include gamestable
 
       if Object.keys(games).length >= maxdisplay
-        a(class="btn btn-primary" href='/active') more
+        a(class="btn btn-primary" href='/active') #{lang.more_results}
     else
-      h3 Active Games - None
+      h3 #{lang.active_games} - #{lang.none_found}
 
     if other && Object.keys(other).length > 0
       - let maxdisplay = 5;
       - let gamesarray = other
-      - let timetag = 'Sign Up Before'
-      h3 Joinable Games
+      - let timetag = lang.end_date_join
+      h3 #{lang.joinable_games}
       include gamestable
       
       if Object.keys(other).length >= maxdisplay
-        a(class="btn btn-primary" href='/search') more
+        a(class="btn btn-primary" href='/search') #{lang.more_results}
     else
-      h3 Joinable Games - None
+      h3 #{lang.joinable_games} - #{lang.none_found}
 
     if archived && Object.keys(archived).length > 0
       - let maxdisplay = 5;
       - let gamesarray = archived
-      - let timetag = 'Game End Date'
-      h3 Archived Games
+      - let timetag = lang.end_date_end
+      h3 #{lang.archived_games}
       include gamestable
       
       if Object.keys(archived).length >= maxdisplay
-        a(class="btn btn-primary" href='/archive') more
+        a(class="btn btn-primary" href='/archive') #{lang.more_results}
     else
-      h3 Archived Games - None
+      h3 #{lang.archived_games} - #{lang.none_found}
 
     div
-      a(class="btn btn-primary" href="/create") Create New Game
+      a(class="btn btn-primary" href="/create") #{lang.create_new}

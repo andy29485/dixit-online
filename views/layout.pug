@@ -2,7 +2,7 @@ extends ../node_modules/pug-bootstrap/_bootstrap
 
 block head
   block title
-    title Dixit Online
+    title #{lang.title}
       if section
         |
         | - #{section}
@@ -31,11 +31,11 @@ block body
         a.btn(href="/logout")
           span(class="fa fa-sign-out")
           |
-          | Logout
+          | #{lang.logout}
         a.btn(href="/profile")
           span(class="fa fa-user")
           |
-          | Profile
+          | #{lang.profile}
   block content-outer
     div.container
       block content

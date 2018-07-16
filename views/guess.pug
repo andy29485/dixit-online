@@ -18,9 +18,9 @@ block content
           - cards = caption.cards
         include cards
       - ++index
-    input(type="submit", class="btn btn-primary", value="Submit")
+    button(type="submit", class="btn btn-primary") #{lang.submit_button}
   
   div
-    | Stage Ends
+    | #{lang.end_date_stage}:
     |
     b #{enddate.toISOString().replace(/[A-Z].*/, '')}

@@ -102,8 +102,8 @@ var ProfileController = {
             page:    pageNum+1,
             count:   Math.floor(count/perPage)+1,
             path:    'active',
-            title:   'Active',
-            timetag: 'Stage End Date',
+            title:   lang[user.lang].active_games,
+            timetag: lang[user.lang].end_date_stage,
           });
         });
       });
@@ -145,8 +145,8 @@ var ProfileController = {
             page:    pageNum+1,
             count:   Math.floor(count/perPage)+1,
             path:    'search',
-            title:   'Joinable',
-            timetag: 'Sign Up Before',
+            title:   lang[user.lang].joinable_games,
+            timetag: lang[user.lang].end_date_join,
           });
         });
       });
@@ -184,8 +184,8 @@ var ProfileController = {
             page:    pageNum+1,
             count:   Math.floor(count/perPage)+1,
             path:    'archive',
-            title:   'Archived',
-            timetag: 'Game End Date',
+            title:   lang[user.lang].archived_games,
+            timetag: lang[user.lang].end_date_end,
           });
         });
       });

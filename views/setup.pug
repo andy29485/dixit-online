@@ -2,7 +2,7 @@ extends layout
 
 prepend title
   - let admin = (username === players[0].username);
-  - let section = "Game Setup";
+  - let section = lang.stages.join;
 
 block content
   div
@@ -11,12 +11,12 @@ block content
         - let index = 0
         thead
           tr
-            th(colspan=(admin ? 3 : 2)) Players in game:
+            th(colspan=(admin ? 3 : 2)) #{lang.header_players_list}
           tr
-            th(style="width: 4%") #
+            th(style="width: 4%") #{lang.header_number}
             if admin
-              th(style="width: 6%") Include
-            th Name
+              th(style="width: 6%") #{lang.header_include_player}
+            th #{lang.header_name}
         each player in players
           tr
             td(style="text-align:center") #{++index}
@@ -33,7 +33,7 @@ block content
               else
                 td
             td(style="text-align:center")
-              | #{player.name} #{index===1 ? '(Admin)' : ''}
+              | #{player.name} #{index===1 ? lang.admin_tag : ''}
       if (new Date()) < enddate
         if !admin
           if players.map(p => p.username).includes(username)
@@ -42,7 +42,7 @@ block content
               formaction="/leave/"+gameid,
               type='submit',
               formmethod="POST",
-            ) Leave Game
+            ) #{lang.leave_button}
           else
             - let can_join = players.length<maxplayers || maxplayers===0;
             button(
@@ -51,29 +51,29 @@ block content
               type='submit',
               formmethod="POST",
               disabled=!can_join,
-              title=(can_join ? false : 'Player limit reached'),
-            ) Join Game
+              title=(can_join ? false : lang.game_full),
+            ) #{lang.join_button}
         div
-          | Registration Closes
+          | #{lang.end_date_join_alt}
           |
           b #{enddate.toISOString().replace(/[A-Z].*/, '')}
       else if admin
         div
-          | Joining Deadline Reached, new users can't join game
+          | #{lang.game_full_long}
           button(
             class="btn btn-primary",
             formaction="/join/"+gameid,
             type='submit',
             formmethod="POST",
-            title="Deadline Reached, click to extend",
-          ) Extend Deadline
+            title=lang.deadline_reached,
+          ) #{lang.deadline_button}
       else
         div
-          | Registration Closed (
+          | #{lang.end_date_join_alt} (
           b #{enddate.toISOString().replace(/[A-Z].*/, '')}
           | )
       div
-        | Max players
+        | #{lang.max_players}
         |
         b #{maxplayers === 0 ? "None" : maxplayers}
       if admin
@@ -82,5 +82,5 @@ block content
           class=(can_start ? "btn btn-primary" : "btn btn-disabled"),
           type='submit',
           disabled=!can_start,
-          title=(can_start ? false : 'Not enough people'),
-        ) End Setup
+          title=(can_start ? false : lang.lacking_players),
+        ) #{lang.start_button}

@@ -11,6 +11,7 @@ var profile      = require('./app/controllers/profileController.js');
 var flash        = require('connect-flash');
 var mongoose     = require('mongoose');
 var MongoStore   = require('connect-mongo')(session);
+var lang         = require('./configs/lang');
 
 var app = express();
 
@@ -49,6 +50,7 @@ app.get('/', function(req, res) {
   }
 
   res.render('index', {
+    lang: lang['en'],
     regmessage:   req.flash('regerror'),
     loginmessage: req.flash('error'),
   });

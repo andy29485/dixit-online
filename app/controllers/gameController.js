@@ -504,9 +504,7 @@ var GameController = {
               players:  game.users.map(u => {return {
                 name:  u.name,
                 uname: u.username,
-                stat:  game.captions.get(u.username)
-                       ? 'Done'
-                       : 'Waiting',
+                stat:  !!game.captions.get(u.username),
               };}),
             });
           }
@@ -534,9 +532,7 @@ var GameController = {
               players:  game.users.map(u => {return {
                 name:  u.name,
                 uname: u.username,
-                stat:  (selected[u.username]||0) == game.users.length-1
-                       ? 'Done'
-                       : 'Waiting',
+                stat:  (selected[u.username]||0) === game.users.length-1,
               };}),
             });
           }
@@ -544,7 +540,7 @@ var GameController = {
             res.render('guess', {
               gamename: game.name,
               lang:     lang[user.lang],
-              title:    'Choose Cards',
+              title:    lang[user.lang].stages.choice,
               action:   '/guess/'+code,
               quotes:   shuffle(captions),
               enddate:  game.deadline,
@@ -583,9 +579,7 @@ var GameController = {
               players:  game.users.map(u => {return {
                 name:  u.name,
                 uname: u.username,
-                stat:  (selected[u.username]||0) == game.users.length-1
-                       ? 'Done'
-                       : 'Waiting',
+                stat:  (selected[u.username]||0) === game.users.length-1,
               };}),
             });
           }
@@ -593,7 +587,7 @@ var GameController = {
             res.render('guess', {
               gamename: game.name,
               lang:     lang[user.lang],
-              title:   'Voting',
+              title:    lang[user.lang].stages.vote,
               action:  '/vote/'+code,
               enddate:  game.deadline,
               quotes:  shuffle(captions),
