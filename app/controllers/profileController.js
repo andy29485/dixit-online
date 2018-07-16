@@ -2,21 +2,16 @@ var passport = require('passport');
 var User     = require('../models/User.js');
 var Game     = require('../models/Game.js');
 var ObjectID = require('mongoose').mongo.ObjectID;
+var lang     = require('../../configs/lang');
 
 const perPage = 20;
 
 var ProfileController = {
-  info: function(g) {
+  info: function(g, l) {
     return {
       name:   g.name,
       code:   g.code,
-      stage:  {
-        join:   'Joining',
-        capt:   'Captioning',
-        choice: 'Choosing Cards',
-        vote:   'Voting',
-        end:    'Ended',
-      }[g.stage],
+      stage:  lang[l].stages[g.stage],
       admin:  g.users[0].name,
       adminu: g.users[0].username,
       max:    g.max_players,
@@ -65,13 +60,13 @@ var ProfileController = {
               .populate('users')
               .exec(function(err, archived) {
             if (!archived) { archived = []; }
-
             res.render('profile', {
               user:     user,
+              lang:     lang[user.lang],
               uname:    req.user.username,
-              games:    active  .map(ProfileController.info),
-              other:    other   .map(ProfileController.info),
-              archived: archived.map(ProfileController.info),
+              games:    active  .map(g=>ProfileController.info(g,user.lang)),
+              other:    other   .map(g=>ProfileController.info(g,user.lang)),
+              archived: archived.map(g=>ProfileController.info(g,user.lang)),
             });
           });
         });
@@ -101,12 +96,14 @@ var ProfileController = {
           if (err) {console.log('search count: '+err); return res.send(404);}
 
           res.render('search', {
-            user:  user,
-            games: games.map(ProfileController.info),
-            page:  pageNum+1,
-            count: Math.floor(count/perPage)+1,
-            path:  'active',
-            title: 'Your Active',
+            user:    user,
+            lang:    lang[user.lang],
+            games:   games.map(g=>ProfileController.info(g,user.lang)),
+            page:    pageNum+1,
+            count:   Math.floor(count/perPage)+1,
+            path:    'active',
+            title:   'Active',
+            timetag: 'Stage End Date',
           });
         });
       });
@@ -143,12 +140,13 @@ var ProfileController = {
 
           res.render('search', {
             user:    user,
-            games:   games.map(ProfileController.info),
+            lang:    lang[user.lang],
+            games:   games.map(g=>ProfileController.info(g,user.lang)),
             page:    pageNum+1,
             count:   Math.floor(count/perPage)+1,
             path:    'search',
             title:   'Joinable',
-            timetag: 'Stage End Date',
+            timetag: 'Sign Up Before',
           });
         });
       });
@@ -181,11 +179,12 @@ var ProfileController = {
 
           res.render('search', {
             user:    user,
-            games:   games.map(ProfileController.info),
+            lang:    lang[user.lang],
+            games:   games.map(g=>ProfileController.info(g,user.lang)),
             page:    pageNum+1,
             count:   Math.floor(count/perPage)+1,
             path:    'archive',
-            title:   'Your Archived',
+            title:   'Archived',
             timetag: 'Game End Date',
           });
         });

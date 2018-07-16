@@ -35,6 +35,7 @@ schema.statics.localStrategy = new PassportLocalStrategy({
       // Don't save password in session
       return done(null, {
         _id:      user._id,
+        lang:     user.lang,
         name:     user.name,
         username: user.username,
       });

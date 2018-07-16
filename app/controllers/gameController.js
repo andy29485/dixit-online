@@ -3,6 +3,7 @@ var Game     = require('../models/Game.js');
 var User     = require('../models/User.js');
 var Shuffle  = require('shuffle');
 var fs       = require('fs');
+var lang     = require('../../configs/lang');
 
 var deck_dir = '/decks';
 
@@ -31,6 +32,7 @@ var GameController = {
       // decks = decks.map(name => deck_dir+name);
       res.render('create', {
         errmessage: req.flash('game'),
+        lang:       lang[user.lang],
         decks:      decks,
       });
     });
@@ -174,11 +176,12 @@ var GameController = {
         image:   req.body.cardpicker,
         quote:   req.body.quote,
         explain: req.body.explain,
-        lookup:  {[req.body.cardpicker]: uname},
+        lookup:  {},
         votes:   {},
         pcards:  {},
         scores:  {},
       });
+      game.captions.get(uname).set(req.body.cardpicker, uname)
       game.captionIds.set(game.captions.get(uname).code, uname);
 
       game.save(function(err) {
@@ -209,7 +212,7 @@ var GameController = {
         let cname   = game.captionIds.get(id); // captioner's name
         let caption = game.captions.get(cname);
         caption.pcards.set(uname, req.body[key]);
-        caption.lookup.set(req.body[key], uname);
+        caption.lookup.set(req.body[key].replace(/\./g,'_'), uname);
       }
 
       game.save(function(err) {
@@ -282,11 +285,16 @@ var GameController = {
   },
 
   updateDeadline: function(game, save, next) {
-    game.deadline = new Date();
-    game.deadline.setDate(game.deadline.getDate() + game.duration);
-    game.deadline.setSeconds(0);
-    game.deadline.setMinutes(0);
-    game.deadline.setUTCHours(0);
+    if(game.stage === 'vote') {
+
+    }
+    else if(game.stage !== 'end') {
+      game.deadline = new Date();
+      game.deadline.setDate(game.deadline.getDate() + game.duration);
+      game.deadline.setSeconds(0);
+      game.deadline.setMinutes(0);
+      game.deadline.setUTCHours(0);
+    }
 
     if (save) {
       game.save(function(err) {
@@ -395,8 +403,8 @@ var GameController = {
         for(let entry of game.captions.entries()) {
           let uname   = entry[0];
           let caption = entry[1];
-          let votes   = {}; // card -> num votes
-          let scores  = {}; // user -> round score(int)
+          let votes   = new Object(); // card -> num votes
+          let scores  = new Object(); // user -> round score(int)
 
           for(let vote of caption.votes.values()) {
             votes[vote] = (votes[vote]|0) + 1;
@@ -427,9 +435,11 @@ var GameController = {
           for(user in scores) {
             totalscores[user] = (totalscores[user]|0) + scores[user];
           }
-          console.log(caption.pcards, caption.votes, votes, scores);
+          console.log(votes, scores);
           caption.scores = scores;
+          console.log(caption.scores);
         }
+        console.log(game.captions);
         game.scores = totalscores;
       case 'end':
         game.stage = 'end';
@@ -441,7 +451,8 @@ var GameController = {
 
   game: function(req, res) {
     let code = req.params.id.toLowerCase();
-    let uname = req.user.username;
+    let user  = req.user;
+    let uname = user.username;
     Game.findOne({code: code})
         .populate('users', ['name', 'username'])
         .exec(function(err, game) {
@@ -465,6 +476,7 @@ var GameController = {
             enddate:    game.deadline,
             maxplayers: game.max_players,
             gameid:     code,
+            lang:       lang[user.lang],
           });
           break;
         case 'capt':
@@ -476,6 +488,7 @@ var GameController = {
               code:     code,
               root:     deck_dir.replace(/\/?public\/?/, '/'),
               enddate:  game.deadline,
+              lang:     lang[user.lang],
               selected: (cap || new Map()).get('image'),
               caption:  (cap || new Map()).get('quote'),
               explain:  (cap || new Map()).get('explain'),
@@ -484,6 +497,7 @@ var GameController = {
           else {
             res.render('waiting', {
               gamename: game.name,
+              lang:     lang[user.lang],
               uname:    uname,
               gameid:   code,
               enddate:  game.deadline,
@@ -513,6 +527,7 @@ var GameController = {
           if((selected[uname]||0) == game.users.length-1 && !edit) {
             res.render('waiting', {
               gamename: game.name,
+              lang:     lang[user.lang],
               uname:    uname,
               gameid:   code,
               enddate:  game.deadline,
@@ -528,6 +543,7 @@ var GameController = {
           else {
             res.render('guess', {
               gamename: game.name,
+              lang:     lang[user.lang],
               title:    'Choose Cards',
               action:   '/guess/'+code,
               quotes:   shuffle(captions),
@@ -560,6 +576,7 @@ var GameController = {
           if((selected[uname]||0) == game.users.length-1&& !edit) {
             res.render('waiting', {
               gamename: game.name,
+              lang:     lang[user.lang],
               uname:    uname,
               gameid:   code,
               enddate:  game.deadline,
@@ -575,6 +592,7 @@ var GameController = {
           else {
             res.render('guess', {
               gamename: game.name,
+              lang:     lang[user.lang],
               title:   'Voting',
               action:  '/vote/'+code,
               enddate:  game.deadline,
@@ -588,20 +606,26 @@ var GameController = {
             let cname = game.users.find(u=>u.username === key).name;
             let cards = [];
             let votes = {};
+            let score = {};
 
             for(let entry of caption.pcards.entries()) {
               let name = game.users.find(u=>u.username === entry[0]).name;
-              let vote = caption.lookup.get(caption.votes.get(entry[0]));
+              let vote = caption.lookup.get(
+                caption.votes.get(entry[0]).replace(/\./g,'_')
+              );
               cards.push({
                 card:  entry[1],
                 uname: entry[0],
                 cname: name,
-                vote:  game.users.find(u=>u.username === entry[0]).name,
+                vote:  vote?game.users.find(u=>u.username === vote).name:cname,
               });
             }
             for(let card of caption.votes.values()) {
               if(card in votes) ++votes[card];
               else                votes[card] = 1;
+            }
+            for(let entry of caption.scores.entries()) {
+              score[entry[0]] = entry[1];
             }
             captions.push({
               uname:   key,
@@ -610,7 +634,7 @@ var GameController = {
               explain: caption.explain,
               image:   caption.image,
               votes:   votes,
-              scores:  scores,
+              scores:  score,
               cards:   cards,
             });
           });
@@ -630,6 +654,7 @@ var GameController = {
           }
           res.render('results', {
             gamename: game.name,
+            lang:     lang[user.lang],
             captions: captions,
             hands:    hands,
             scores:   scores,

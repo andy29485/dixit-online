@@ -17,7 +17,7 @@ div.table-responsive
         - ++index
         - let admin = (game.adminu === uname);
         tr
-          td
+          td(style="text-align:left")
             a(href='/game/'+game.code) #{game.name}
           td #{game.stage}
           td #{game.admin}

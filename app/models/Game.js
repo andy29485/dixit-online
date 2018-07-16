@@ -1,6 +1,7 @@
 var mongoose   = require('mongoose');
 var Hashids    = require('hashids');
 var userSchema = require('./User.js').prototype.schema;
+var NumberInt  = mongoose.mongo.NumberInt;
 
 var hashids8 = new Hashids('secret seed', 8, 'abcdefghijklmnopqrstuvwxyz');
 var randId8  = () => hashids8.encode(Date.now()%410338672);
@@ -32,7 +33,7 @@ var captionSchema = new mongoose.Schema({
   },
   scores: { // username -> round score (int)
     type: Map,
-    of:  [Number],
+    of:   NumberInt,
   },
 });
 
@@ -68,7 +69,7 @@ var gameSchema = new mongoose.Schema({
   },
   scores: { // username -> total score (int)
     type: Map,
-    of:  [Number],
+    of:   NumberInt,
   },
 });
 
