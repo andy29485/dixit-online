@@ -1,15 +1,15 @@
 unless timetag
-  - let timetag = lang.end_date_join
+  - let timetag = t('end_date_join')
 
 div.table-responsive
   table(class="table table-striped table-bordered")
     tr
-      th #{lang.game_name}
-      th #{lang.stage}
-      th #{lang.admin}
-      th #{lang.players_and_limit}
+      th #{t('game_name')}
+      th #{t('stage')}
+      th #{t('admin')}
+      th #{t('players_and_limit')}
       th #{timetag}
-      th #{lang.delete}
+      th #{t('delete')}
       
     - let index = 1
     for game in gamesarray
@@ -25,7 +25,7 @@ div.table-responsive
             |
             | /
             |
-            | #{game.max===0 ? lang.no_limit : game.max}
+            | #{game.max===0 ? t('no_limit') : game.max}
           td #{game.date.toISOString().replace(/[A-Z].*/, '')}
           td
             form(action='/delete/'+game.code, method='POST')
@@ -34,9 +34,9 @@ div.table-responsive
                 type="submit",
                 disabled=!admin,
                 title=(admin 
-                      ? lang.delete_explain
-                      : lang.delete_not_admin
+                      ? t('delete_explain')
+                      : t('delete_not_admin')
                 ),
-              ) #{lang.delete}
+              ) #{t('delete')}
       else
         - break

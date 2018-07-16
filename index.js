@@ -11,7 +11,7 @@ var profile      = require('./app/controllers/profileController.js');
 var flash        = require('connect-flash');
 var mongoose     = require('mongoose');
 var MongoStore   = require('connect-mongo')(session);
-var lang         = require('./configs/lang');
+var i18n         = require("i18n");
 
 var app = express();
 
@@ -38,6 +38,24 @@ app.use(express.static('public'));
 app.use(passport.initialize());
 app.use(passport.session());
 
+i18n.configure({
+    locales:       ['en', 'ru'],
+    directory:      __dirname + '/locales',
+    cookie:         'passport.user.lang',
+    queryParameter: 'lang',
+    autoReload:     true,
+    updateFiles:    false,
+    indent:         '  ',
+    extension:      '.js',
+    objectNotation: true,
+    api: {
+      '__': 't',
+      '__n': 'tn',
+    },
+     preserveLegacyCase: false,
+});
+app.use(i18n.init);
+
 var LoggedIn = require('connect-ensure-login').ensureLoggedIn;
 
 app.disable('x-powered-by');
@@ -50,7 +68,7 @@ app.get('/', function(req, res) {
   }
 
   res.render('index', {
-    lang: lang['en'],
+    register:    'register' in req.query,
     regmessage:   req.flash('regerror'),
     loginmessage: req.flash('error'),
   });

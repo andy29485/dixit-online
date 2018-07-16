@@ -3,7 +3,6 @@ var Game     = require('../models/Game.js');
 var User     = require('../models/User.js');
 var Shuffle  = require('shuffle');
 var fs       = require('fs');
-var lang     = require('../../configs/lang');
 
 var deck_dir = '/decks';
 
@@ -32,7 +31,6 @@ var GameController = {
       // decks = decks.map(name => deck_dir+name);
       res.render('create', {
         errmessage: req.flash('game'),
-        lang:       lang[user.lang],
         decks:      decks,
       });
     });
@@ -476,7 +474,6 @@ var GameController = {
             enddate:    game.deadline,
             maxplayers: game.max_players,
             gameid:     code,
-            lang:       lang[user.lang],
           });
           break;
         case 'capt':
@@ -488,7 +485,6 @@ var GameController = {
               code:     code,
               root:     deck_dir.replace(/\/?public\/?/, '/'),
               enddate:  game.deadline,
-              lang:     lang[user.lang],
               selected: (cap || new Map()).get('image'),
               caption:  (cap || new Map()).get('quote'),
               explain:  (cap || new Map()).get('explain'),
@@ -497,7 +493,6 @@ var GameController = {
           else {
             res.render('waiting', {
               gamename: game.name,
-              lang:     lang[user.lang],
               uname:    uname,
               gameid:   code,
               enddate:  game.deadline,
@@ -525,7 +520,6 @@ var GameController = {
           if((selected[uname]||0) == game.users.length-1 && !edit) {
             res.render('waiting', {
               gamename: game.name,
-              lang:     lang[user.lang],
               uname:    uname,
               gameid:   code,
               enddate:  game.deadline,
@@ -539,8 +533,7 @@ var GameController = {
           else {
             res.render('guess', {
               gamename: game.name,
-              lang:     lang[user.lang],
-              title:    lang[user.lang].stages.choice,
+              title:    req.t('stages.choice'),
               action:   '/guess/'+code,
               quotes:   shuffle(captions),
               enddate:  game.deadline,
@@ -572,7 +565,6 @@ var GameController = {
           if((selected[uname]||0) == game.users.length-1&& !edit) {
             res.render('waiting', {
               gamename: game.name,
-              lang:     lang[user.lang],
               uname:    uname,
               gameid:   code,
               enddate:  game.deadline,
@@ -586,8 +578,7 @@ var GameController = {
           else {
             res.render('guess', {
               gamename: game.name,
-              lang:     lang[user.lang],
-              title:    lang[user.lang].stages.vote,
+              title:    req.t('stages.vote'),
               action:  '/vote/'+code,
               enddate:  game.deadline,
               quotes:  shuffle(captions),
@@ -648,7 +639,6 @@ var GameController = {
           }
           res.render('results', {
             gamename: game.name,
-            lang:     lang[user.lang],
             captions: captions,
             hands:    hands,
             scores:   scores,

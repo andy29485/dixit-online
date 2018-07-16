@@ -14,7 +14,7 @@ mixin pages
     nav(aria-label="Page navigation")
       ul.pagination
         li.page-item
-          a.page-link(href='/'+path+'/1') #{lang.first_page}
+          a.page-link(href='/'+path+'/1') #{t('first_page')}
         - for(let i=Math.max(2,page-3); i<Math.min(page+4,count); ++i) {
           li.page-item
             if page === i
@@ -23,7 +23,7 @@ mixin pages
               a.page-link(href='/'+path+'/'+i) #{i}
         - }
         li.page-item
-          a.page-link(href='/'+path+'/'+(count)) #{lang.last_page}
+          a.page-link(href='/'+path+'/'+(count)) #{t('last_page')}
 
 block content
   div.content
@@ -33,10 +33,10 @@ block content
       - let gamesarray = games
       include gamestable
     else
-      h3 #{lang.none_found}
+      h3 #{t('none_found')}
 
     +pages
     
     div
-      a(class="btn btn-primary" href="/create") #{lang.create_new}
+      a(class="btn btn-primary" href="/create") #{t('create_new')}
       

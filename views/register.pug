@@ -1,30 +1,43 @@
-.error #{regmessage}
+if regmessage.length
+  div(class="alert alert-danger")
+    a(href="#" class="close" data-dismiss="alert") &times;
+    strong #{t('error')}
+    ul
+      each msg in regmessage
+        li #{msg}
+    
 form(action="/register", method="POST")
   table
     tr
       td(style="text-align:left")
-        label Name:
+        label #{t('name')}:
       td
-        input(type="text" name="name" required)
+        input.form-control(type="text" name="name" required)
     tr
       td(style="text-align:left")
-        label Username:
+        label #{t('language')}:
       td
-        input(type="text", name="username", placeholder="username" required)
+        select.form-control
+          option(value="en") English
+          option(value="ru") Русский
     tr
       td(style="text-align:left")
-        label Email:
+        label #{t('username')}:
       td
-        input(type="email", name="email", placeholder="email@example.com")
+        input.form-control(type="text", name="username", placeholder=t('ex_uname') required)
     tr
       td(style="text-align:left")
-        label Password:
+        label #{t('email')}:
       td
-        input(type="password", name="password" required)
+        input.form-control(type="email", name="email", placeholder=t('ex_email'))
     tr
       td(style="text-align:left")
-        label Confirm Password:
+        label #{t('password')}:
       td
-        input(type="password", name="password2" required)
-    //span(class="flag-icon flag-icon-ru")
-  input(type="submit", value="Submit")
+        input.form-control(type="password", name="password" required)
+    tr
+      td(style="text-align:left")
+        label #{t('conf_pass')}:
+      td
+        input.form-control(type="password", name="password2" required)
+  button(type="submit", class="btn btn-primary") #{t('submit_button')}

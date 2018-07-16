@@ -1,7 +1,7 @@
 extends layout
 
 prepend title
-  - let section = lang.stages.choice;
+  - let section = t('stages.choice');
   
 block content
   div  
@@ -9,27 +9,27 @@ block content
       - let required = 1;
       include cards
       div.form-group
-        lable(for="quote") #{lang.caption}:
+        lable(for="quote") #{t('caption')}:
         input(
           id="quote",
           type="text",
           name="quote",
           value=caption,
           class="form-control",
-          placeholder=lang.caption,
+          placeholder=t('caption'),
           required
         )
       div.form-group
-        label(for="explain") #{lang.explanation}:
+        label(for="explain") #{t('explanation')}:
         textarea(
           id="explain",
           name="explain",
           class="form-control",
-          placeholder=lang.explanation,
+          placeholder=t('explanation'),
           required
         ) #{explain}
-      button(type="submit", class="btn btn-primary") #{lang.submit_button}
+      button(type="submit", class="btn btn-primary") #{t('submit_button')}
     div
-      | #{lang.end_date_stage}:
+      | #{t('end_date_stage')}:
       |
       b #{enddate.toISOString().replace(/[A-Z].*/, '')}

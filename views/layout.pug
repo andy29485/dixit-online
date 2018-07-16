@@ -2,10 +2,11 @@ extends ../node_modules/pug-bootstrap/_bootstrap
 
 block head
   block title
-    title #{lang.title}
+    title #{t('title')}
       if section
         |
         | - #{section}
+  meta(charset="utf-8")
   link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css')
   link(rel='stylesheet', href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")
 
@@ -31,11 +32,12 @@ block body
         a.btn(href="/logout")
           span(class="fa fa-sign-out")
           |
-          | #{lang.logout}
+          | #{t('logout')}
         a.btn(href="/profile")
           span(class="fa fa-user")
           |
-          | #{lang.profile}
+          | #{t('profile')}
+  
   block content-outer
     div.container
       block content

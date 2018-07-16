@@ -1,14 +1,13 @@
 var mongoose              = require('mongoose');
 var PassportLocalStrategy = require('passport-local').Strategy;
 var bcrypt                = require('bcrypt-nodejs');
-var lang                  = require('../../configs/lang');
 
 var schema = new mongoose.Schema({
   name:     {type:String,required:true,trim:true},
   email:    {type:String              ,trim:true,unique:true},
   username: {type:String,required:true,trim:true,lowercase:true,unique:true},
   password: {type:String,required:true},
-  lang:     {type:String,default:'en',enum:Object.keys(lang)},
+  lang:     {type:String,default:'en'},
   created:  {type:Date,  default:Date.now},
 });
 
@@ -26,10 +25,10 @@ schema.statics.localStrategy = new PassportLocalStrategy({
       if (err) { return done(err); }
 
       if (!user){
-        return done(null, false, { loginmessage: 'User not found.'} );
+        return done(null, false, { message: 'uname_not_found'} );
       }
       if (!user.validPassword(password)){
-        return done(null, false, { loginmessage: 'Incorrect password.'} );
+        return done(null, false, { message: 'incorrect_pass'} );
       }
 
       // Don't save password in session

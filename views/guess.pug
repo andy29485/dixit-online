@@ -18,9 +18,9 @@ block content
           - cards = caption.cards
         include cards
       - ++index
-    button(type="submit", class="btn btn-primary") #{lang.submit_button}
+    button(type="submit", class="btn btn-primary") #{t('submit_button')}
   
   div
-    | #{lang.end_date_stage}:
+    | #{t('end_date_stage')}:
     |
     b #{enddate.toISOString().replace(/[A-Z].*/, '')}

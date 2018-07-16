@@ -32,19 +32,19 @@ var AuthController = {
   register: function(req, res) {
     err = false;
     if (req.body.password != req.body.password2) {
-      req.flash('regerror', 'Passwords do not match.');
+      req.flash('regerror', req.t('pass_missmatch'));
       err = true;
     }
     if (req.body.password.length < 4) {
-      req.flash('regerror', 'Passwords must be at least 4 chars');
+      req.flash('regerror', req.t('pass_short', 4));
       err = true;
     }
     if (req.body.username.length < 3) {
-      req.flash('regerror', 'Username must be at least 3 characters');
+      req.flash('regerror', req.t('uname_short', 3));
       err = true;
     }
     if (err) {
-      res.redirect('/#register');
+      res.redirect('/?register');
       return;
     }
     User.create({
@@ -55,8 +55,8 @@ var AuthController = {
     }, function(err){
       if (err) {
         console.log(err);
-        req.flash('regerror', 'username already exists');
-        res.redirect('/#register');
+        req.flash('regerror', req.t('uname_exist'));
+        res.redirect('/?register');
         return;
       }
 

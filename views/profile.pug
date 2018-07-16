@@ -1,7 +1,7 @@
 extends layout
 
 prepend title
-  - let gamename   = user.name+lang.profile_head;
+  - let gamename   = t('profile_head', user.name);
   - let maxdisplay = 6;
   unless uname
     - let uname = user.username;
@@ -10,38 +10,38 @@ block content
   div
     if games && Object.keys(games).length > 0
       - let gamesarray = games
-      - let timetag = lang.end_date_stage
-      h3 #{lang.active_games}
+      - let timetag = t('end_date_stage')
+      h3 #{t('active_games')}
       include gamestable
 
       if Object.keys(games).length >= maxdisplay
-        a(class="btn btn-primary" href='/active') #{lang.more_results}
+        a(class="btn btn-primary" href='/active') #{t('more_results')}
     else
-      h3 #{lang.active_games} - #{lang.none_found}
+      h3 #{t('active_games')} - #{t('none_found')}
 
     if other && Object.keys(other).length > 0
       - let maxdisplay = 5;
       - let gamesarray = other
-      - let timetag = lang.end_date_join
-      h3 #{lang.joinable_games}
+      - let timetag = t('end_date_join')
+      h3 #{t('joinable_games')}
       include gamestable
       
       if Object.keys(other).length >= maxdisplay
-        a(class="btn btn-primary" href='/search') #{lang.more_results}
+        a(class="btn btn-primary" href='/search') #{t('more_results')}
     else
-      h3 #{lang.joinable_games} - #{lang.none_found}
+      h3 #{t('joinable_games')} - #{t('none_found')}
 
     if archived && Object.keys(archived).length > 0
       - let maxdisplay = 5;
       - let gamesarray = archived
-      - let timetag = lang.end_date_end
-      h3 #{lang.archived_games}
+      - let timetag = t('end_date_end')
+      h3 #{t('archived_games')}
       include gamestable
       
       if Object.keys(archived).length >= maxdisplay
-        a(class="btn btn-primary" href='/archive') #{lang.more_results}
+        a(class="btn btn-primary" href='/archive') #{t('more_results')}
     else
-      h3 #{lang.archived_games} - #{lang.none_found}
+      h3 #{t('archived_games')} - #{t('none_found')}
 
     div
-      a(class="btn btn-primary" href="/create") #{lang.create_new}
+      a(class="btn btn-primary" href="/create") #{t('create_new')}

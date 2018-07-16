@@ -13,11 +13,13 @@ prepend title
 block content
   ul(class="nav nav-tabs"  role="tablist")
     li.nav-item
-      a(class="nav-link active" data-toggle="tab", href="#signin") Sign In
+      a(class="nav-link "+(register?"":"active"),data-toggle="tab",href="#signin") 
+        | #{t('sign_in')}
     li.nav-item
-      a(class="nav-link" data-toggle="tab", href="#signup") Sign Up
+      a(class="nav-link "+(register?"active":""),data-toggle="tab",href="#signup")
+        | #{t('sign_up')} 
   div.tab-content
-    div(id="signin", class="tab-pane fade in active show")
+    div(id="signin", class="tab-pane fade "+(register?"":"in active show"))
       include login
-    div(id="signup", class="tab-pane fade")
+    div(id="signup", class="tab-pane fade "+(register?"in active show":""))
       include register

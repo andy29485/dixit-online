@@ -1,7 +1,7 @@
 extends layout
 
 prepend title
-  - let section = lang.stages.end;
+  - let section = t('stages.end');
   style.
     body {
       padding-right: 0 !important;
@@ -20,7 +20,7 @@ block content-outer
       div(class="modal-dialog modal-lg")
         div.modal-content
           div.modal-header
-            h4.modal-title #{hand.cname}'s Hand
+            h4.modal-title #{t('hand_ownership', hand.cname)}
             button.close(
               type="button",
               data-dismiss="modal",
@@ -38,10 +38,10 @@ block content-outer
     table(class="table table-striped table-bordered table-sm")
       thead
         tr
-          th(colspan=2) Total Scores
+          th(colspan=2) #{t('total_scores')}
         tr
-          th Player
-          th Score
+          th #{t('player')}
+          th #{t('score')}
       for score in scores
         tr
           td
@@ -53,19 +53,19 @@ block content-outer
     table(class="table table-striped table-bordered")
       thead
         tr
-          th Round
-          th Dealer's Name
-          th Dealer's Caption
-          th(colspan=2, ) Dealer's Card
-          th(colspan=3*captions[0].cards.length) Other Cards
+          th #{t('round')}
+          th #{t('dealer_name')}
+          th #{t('dealer_caption')}
+          th(colspan=2, ) #{t('dealer_card')}
+          th(colspan=3*captions[0].cards.length) #{t('other_cards')}
         tr
           th(colspan=3)
-          th votes / score
-          th card
+          th #{t('votes_score')}
+          th #{t('player_card')}
           for card in captions[0].cards
-            th votes / score
-            th card
-            th name
+            th #{t('votes_score')}
+            th #{t('player_card')}
+            th #{t('player_name')}
       - let index = 0
       each caption in captions
         tr(class="wrap")
@@ -75,7 +75,7 @@ block content-outer
           td
             span #{caption.quote}
             hr
-            p #{caption.explain || "<No Explaination>"}
+            p #{caption.explain || t('no_explain')}
           td(align="right")
             span #{caption.votes[caption.image] || 0}
             hr
@@ -86,7 +86,7 @@ block content-outer
               src=caption.image,
               data-toggle="modal",
               data-target="#hand_"+caption.uname,
-              title=caption.cname + "'s Hand",
+              title=t('hand_ownership', caption.cname),
             )
           for card in caption.cards
             td(align="right")
@@ -99,10 +99,10 @@ block content-outer
                 src=card.card,
                 data-toggle="modal",
                 data-target="#hand_"+card.uname,
-                title=card.cname + "'s Hand",
+                title=t('hand_ownership', card.cname),
               )
               td
                 a(href="/profile/"+card.uname) #{card.cname}
                 hr
-                div Voted for: #{card.vote||'<No One>'}
+                div #{t('voted_for', card.vote||t('no_one'))}
                   

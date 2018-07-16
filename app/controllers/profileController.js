@@ -2,16 +2,15 @@ var passport = require('passport');
 var User     = require('../models/User.js');
 var Game     = require('../models/Game.js');
 var ObjectID = require('mongoose').mongo.ObjectID;
-var lang     = require('../../configs/lang');
 
 const perPage = 20;
 
 var ProfileController = {
-  info: function(g, l) {
+  info: function(g, t) {
     return {
       name:   g.name,
       code:   g.code,
-      stage:  lang[l].stages[g.stage],
+      stage:  t('stages')[g.stage],
       admin:  g.users[0].name,
       adminu: g.users[0].username,
       max:    g.max_players,
@@ -35,6 +34,9 @@ var ProfileController = {
         console.log('profile get err: '+err);
         return res.status(404).send();
       }
+
+      req.session.lang = req.user.lang;
+
       Game.find({users: ObjectID(user._id), stage: {'$ne': 'end'}})
           .limit(6)
           .sort({name: 'asc'})
@@ -62,11 +64,10 @@ var ProfileController = {
             if (!archived) { archived = []; }
             res.render('profile', {
               user:     user,
-              lang:     lang[user.lang],
               uname:    req.user.username,
-              games:    active  .map(g=>ProfileController.info(g,user.lang)),
-              other:    other   .map(g=>ProfileController.info(g,user.lang)),
-              archived: archived.map(g=>ProfileController.info(g,user.lang)),
+              games:    active  .map(g=>ProfileController.info(g, req.t)),
+              other:    other   .map(g=>ProfileController.info(g, req.t)),
+              archived: archived.map(g=>ProfileController.info(g, req.t)),
             });
           });
         });
@@ -97,13 +98,12 @@ var ProfileController = {
 
           res.render('search', {
             user:    user,
-            lang:    lang[user.lang],
-            games:   games.map(g=>ProfileController.info(g,user.lang)),
+            games:   games.map(g=>ProfileController.info(g, req.t)),
             page:    pageNum+1,
             count:   Math.floor(count/perPage)+1,
             path:    'active',
-            title:   lang[user.lang].active_games,
-            timetag: lang[user.lang].end_date_stage,
+            title:   req.t('active_games'),
+            timetag: req.t('end_date_stage'),
           });
         });
       });
@@ -140,13 +140,12 @@ var ProfileController = {
 
           res.render('search', {
             user:    user,
-            lang:    lang[user.lang],
-            games:   games.map(g=>ProfileController.info(g,user.lang)),
+            games:   games.map(g=>ProfileController.info(g, req.t)),
             page:    pageNum+1,
             count:   Math.floor(count/perPage)+1,
             path:    'search',
-            title:   lang[user.lang].joinable_games,
-            timetag: lang[user.lang].end_date_join,
+            title:   req.t('joinable_games'),
+            timetag: req.t('end_date_join'),
           });
         });
       });
@@ -179,13 +178,12 @@ var ProfileController = {
 
           res.render('search', {
             user:    user,
-            lang:    lang[user.lang],
-            games:   games.map(g=>ProfileController.info(g,user.lang)),
+            games:   games.map(g=>ProfileController.info(g, req.t)),
             page:    pageNum+1,
             count:   Math.floor(count/perPage)+1,
             path:    'archive',
-            title:   lang[user.lang].archived_games,
-            timetag: lang[user.lang].end_date_end,
+            title:   req.t('archived_games'),
+            timetag: req.t('end_date_end'),
           });
         });
       });

@@ -11,24 +11,24 @@ block content
       table
         tr
           td
-            label Game Name:
+            label #{t('game_name')}:
           td
-            input(type="text", name="name", placeholder="Name", required)
+            input(type="text" name="name" placeholder=t('game_name') required)
         tr
           td
-            label Stage Duration:
+            label #{t('stage_duration')}:
           td
             input(
               type="number", step="1", pattern="\d+", min=1, max=14,
               name="dur", value=dur,
-              title="Interval between stages (Joining game, captioning, and voting)"
+              title=t('duration_exp')
             )
             label(for="dur")
             | 
-            | days.
+            | #{t('duration_days')}
         tr
           td
-            label Decks to Use:
+            label #{t('decks_to_use')}:
           td
             for deck in decks
               label
@@ -42,24 +42,24 @@ block content
                 | #{deck}
         tr
           td
-            label Scoring Method:
+            label #{t('scoring_method')}:
           td
             label.radio-inline
               input(type="radio", name="scoring", value="orig")
-              a(target="_blank", href="https://en.wikipedia.org/wiki/Dixit_(card_game)#Original_Scoring") Original
+              a(target="_blank", href="https://en.wikipedia.org/wiki/Dixit_(card_game)#Original_Scoring") #{t('scoring.orig')}
             label.radio-inline
               input(type="radio", name="scoring", value="v2" checked)
-              a(target="_blank", href="https://en.wikipedia.org/wiki/Dixit_(card_game)#Updated_Scoring") Updated
+              a(target="_blank", href="https://en.wikipedia.org/wiki/Dixit_(card_game)#Updated_Scoring") #{t('scoring.updated')}
             label.radio-inline
               input(type="radio", name="scoring", value="rus")
-              a(target="_blank", href="https://ru.wikipedia.org/wiki/Dixit_(%D0%B8%D0%B3%D1%80%D0%B0)#%D0%9D%D0%B0%D1%87%D0%B8%D1%81%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BE%D1%87%D0%BA%D0%BE%D0%B2") Russian
+              a(target="_blank", href="https://ru.wikipedia.org/wiki/Dixit_(%D0%B8%D0%B3%D1%80%D0%B0)#%D0%9D%D0%B0%D1%87%D0%B8%D1%81%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BE%D1%87%D0%BA%D0%BE%D0%B2") #{t('scoring.russian')}
         tr
           td
-            label Max Players (0 for no limit):
+            label #{t('max_players')} #{t('no_lim_0')}:
           td
             input(type="number", step="1", pattern="\d+",
               name="max", value=0, min=0
             )
-      input(type="submit", class="btn btn-primary", value="Create Game")
+      button(type="submit", class="btn btn-primary") #{t('create_new')}
             
   

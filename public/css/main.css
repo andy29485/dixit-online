@@ -8,6 +8,4 @@ a.disabled {
   color: gray;
   pointer-events: none;
 }
-.flag-icon {
-  border-radius: 2px;
-}
+
