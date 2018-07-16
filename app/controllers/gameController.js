@@ -308,11 +308,31 @@ var GameController = {
     }
   },
 
+  sendMail: function(game, t) {
+    let usergroups = {};
+    for(let user of game.users) {
+      if(!usergroups[user.lang]) {
+        usergroups[user.lang]=[user]
+      }
+      else {
+        usergroups[user.lang].push(user);
+      }
+    }
+
+    for(let lang of Object.keys(usergroups)) {
+      Email(usergroups[lang], {
+        lang: lang,
+        game: game,
+        t:    t,
+      });
+    }
+  },
+
   next: function(req, res) {
     let code    = req.params.id.toLowerCase();
     let uname   = req.user.username;
     Game.findOne({code: code})
-        .populate('users', ['name', 'username'])
+        .populate('users', ['name', 'username', 'email', 'lang'])
         .exec(function(err, game) {
       if(err) {console.log('find game by id: '+err);}
       if(!game) {
@@ -334,11 +354,11 @@ var GameController = {
         }
         game.users = players;
       }
-      GameController.nextStage(game, res.redirect('/game/'+code));
+      GameController.nextStage(game, req.t, res.redirect('/game/'+code));
     });
   },
 
-  nextStage: function(game, next) {
+  nextStage: function(game, t, next) {
     // cards to replenish hand
     let deck = GameController.buildDeck(game);
 
@@ -440,11 +460,13 @@ var GameController = {
         }
         console.log(game.captions);
         game.scores = totalscores;
-      case 'end':
         game.stage = 'end';
-        break;
+        break
+      case 'end':
+        return;
     }
 
+    GameController.sendMail(game, t);
     return GameController.updateDeadline(game, true, next);
   },
 
@@ -453,7 +475,7 @@ var GameController = {
     let user  = req.user;
     let uname = user.username;
     Game.findOne({code: code})
-        .populate('users', ['name', 'username'])
+        .populate('users', ['name', 'username', 'email', 'lang'])
         .exec(function(err, game) {
       if(err || !game) {
         req.flash('game', 'Game does not exist');

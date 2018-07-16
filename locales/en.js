@@ -119,5 +119,14 @@
     "choice": "Choosing Cards",
     "vote":   "Voting",
     "end":    "Ended"
-  }
+  },
+
+  "email_messages": {
+    "capt":   "The game has started, please chose a card and caption it:",
+    "choice": "The game advances, please choose cards to throw in:",
+    "vote":   "The game is nearing the end, please choose the cards that fit the caption best:",
+    "end":    "The game has ended, you can view the results here:"
+  },
+
+  "subject": "%s has Advanced a Stage"
 }

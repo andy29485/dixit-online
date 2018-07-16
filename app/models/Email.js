@@ -1,7 +1,10 @@
+var pug        = require('pug');
 var nodemailer = require('nodemailer');
 var account    = require('../../configs/email-auth.js');
 
-exports = module.exports = function(users, subject, message) {
+const compiledFunction = pug.compileFile(__dirname+'/../../views/email.pug');
+
+exports = module.exports = function(users, options) {
   // create reusable transporter object using the default SMTP transport
   let transporter = nodemailer.createTransport({
     service: account.service,
@@ -17,11 +20,9 @@ exports = module.exports = function(users, subject, message) {
   let mailOptions = {
     from:    '"'+account.name+'" <'+account.address+'>',
     bcc:     bcc,
-    subject: subject,
-    html:    message
+    subject: options.t('subject', options.game.name),
+    html:    compiledFunction(options),
   };
-
-  console.log(mailOptions);
 
   if(bcc) {
     // send mail with defined transport object
