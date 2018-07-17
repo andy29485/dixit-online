@@ -1,17 +1,39 @@
-// include cards.pug {cards:['file.png']}
+//- include cards.pug {cards:['file.png']}
+//- if center===true, cards will be centered
+//- if no_input===true, cards will to highlight
 unless cardpicker
   - cardpicker='cardpicker'
 unless selected
   - selected=""
 
-div.card-deck.row
+div.row
+  - let size   = cards.length;
+  - let index  = 0;
+  - let widths = {'-':6, '-sm-':4, '-md-':3, '-lg-':3, '-xl-':2};
+  - let classes = "center-box";
+  - let offsets = {};
+  each width,label in widths
+    - classes += ' col'+label+width;
+    - offset = Math.floor((12 - (width*size%12))/2)
+    - oindex = size-(size%Math.floor(12/width))
+    if offset
+      - offsets[oindex] = (offsets[oindex]||'') + ' offset'+label+offset;
+  
+  //- Don't apply offset if not at that exact width
+  each offset,oindex in offsets
+    each width,label in widths
+      if (offset||'').indexOf(label) === -1
+        - offset = offset + ' offset'+label+'0'
+    - offsets[oindex] = offset
+      
   for card in cards
-    // div(class="box")
-    div.col-5.col-sm-4.col-md-3.col-lg-3.col-xl-2.center-box
+    div(class=classes+(center ? (offsets[index]||'') : ''))
       label.card
         - let c = (selected === card);
-        if required
-          input(type="radio",name=cardpicker,checked=c,value=card,required)
-        else
-          input(type="radio",name=cardpicker,checked=c,value=card)
+        unless no_input
+          if required
+            input(type="radio",name=cardpicker,checked=c,value=card,required)
+          else
+            input(type="radio",name=cardpicker,checked=c,value=card)
         img(src=card, class="card-img rounded gamecard")
+    - ++index

@@ -28,22 +28,23 @@ block content-outer
             )
               span(aria-hidden="true") &times;
           div.modal-body
-            div.card-deck.row
-              for card in hand.cards
-                div.col-5.col-sm-4.col-md-3.col-lg-3.col-xl-2.center-box
-                  div.card
-                    img(src=card, class="card-img rounded gamecard")
+            - let center = no_input = true;
+            - let cards  = hand.cards;
+            include cards
 
   div(class="table-responsive col-sm-4 col-md-4 col-lg-3 col-xl-2")
     table(class="table table-striped table-bordered table-sm")
       thead
         tr
-          th(colspan=2) #{t('total_scores')}
+          th(colspan=3) #{t('total_scores')}
         tr
+          th #{t('header_number')}
           th #{t('player')}
           th #{t('score')}
-      for score in scores
+      - let i = 0
+      for score in scores.sort((a,b) => b.score - a.score)
         tr
+          td #{++i}
           td
             a(href="/profile/"+score.uname) #{score.cname}
           td
@@ -82,7 +83,7 @@ block content-outer
             span #{caption.scores[caption.uname] || 0}
           td
             img(
-              class="rounded gamecard",
+              class="rounded gamecard clickable-card",
               src=caption.image,
               data-toggle="modal",
               data-target="#hand_"+caption.uname,
@@ -95,7 +96,7 @@ block content-outer
               span #{caption.scores[card.uname] || 0}
             td
               img(
-                class="rounded gamecard",
+                class="rounded gamecard clickable-card",
                 src=card.card,
                 data-toggle="modal",
                 data-target="#hand_"+card.uname,

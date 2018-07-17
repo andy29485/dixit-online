@@ -7,6 +7,7 @@ block content
   div  
     form.form(action="/caption/"+code, method="POST")
       - let required = 1;
+      - let center = true;
       include cards
       div.form-group
         lable(for="quote") #{t('caption')}:

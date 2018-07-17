@@ -1,32 +1,31 @@
 .card {
   border: none;
-  margin: 0 auto; /* Added */
-  float: none; /* Added */
-  margin-bottom: 10px; /* Added */
+  margin: 0 0 0 10 !important;
+  float: none;
 }
 
 img.gamecard {
   /* IMAGE STYLES */
   border: 3px solid #000;
   margin: 0 auto;
+}
+
+.row {
+  margin-bottom: 20px;
+}
+
+img.clickable-card:hover, .row > div > .card > input + img.gamecard:hover {
+  opacity: 0.45;
   cursor: pointer;
 }
 
-.card-deck {
-  margin-bottom: 10px;
-}
-
-.card-deck > div > .card > input + img.gamecard:hover {
-  opacity: 0.45;
-}
-
-.card-deck > div > .card > input {
+.row > div > .card > input {
   /* HIDE RADIO */
   visibility: hidden;   /* Makes input not-clickable */
   position:   absolute; /* Remove input from document flow */
 }
 
-.card-deck > div > .card > input:checked + img {
+.row > div > .card > input:checked + img {
   /* (RADIO CHECKED) IMAGE STYLES */
   box-shadow: 0 0 0 3px #f00;
 }
