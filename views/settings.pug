@@ -1,7 +1,7 @@
 extends layout
 
 prepend title
-  - let gamename   = t('Settings');
+  - let gamename   = t('settings');
   - let maxdisplay = 6;
   unless uname
     - let uname = user.username;
@@ -13,7 +13,7 @@ block content
       strong #{t('error')}
       ul
         each msg in badsetmessage
-          li #{msg}
+          li #{t(msg)}
   
   if goodsetmessage.length
     div(class="alert alert-success")
@@ -21,7 +21,7 @@ block content
       strong #{t('success')}
       ul
         each msg in goodsetmessage
-          li #{msg}
+          li #{t(msg)}
       
   form(action="/settings", method="POST")
     table

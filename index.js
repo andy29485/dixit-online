@@ -41,7 +41,7 @@ app.use(passport.session());
 i18n.configure({
     locales:       ['en', 'ru'],
     directory:      __dirname + '/locales',
-    cookie:         'passport.user.lang',
+    cookie:         'lang',
     queryParameter: 'lang',
     autoReload:     true,
     updateFiles:    false,

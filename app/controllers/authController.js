@@ -13,6 +13,7 @@ var AuthController = {
       req.logIn(user, function(err) {
         if (err) { return next(err); }
 
+        res.cookie('lang', req.user.lang);
         return res.redirect('/profile');
       });
     })(req, res, next);

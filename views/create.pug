@@ -11,7 +11,7 @@ block content
         a(href="#" class="close" data-dismiss="alert") &times;
         strong #{t('error')}
         each msg in errmessage
-          | #{t(msg)}
+          p #{t(msg)}
     
     form(action="/create", method="POST")
       table
