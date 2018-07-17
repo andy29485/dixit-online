@@ -6,7 +6,13 @@ prepend title
   
 block content
   div  
-    .error #{errmessage}
+    if errmessage.length
+      div(class="alert alert-danger")
+        a(href="#" class="close" data-dismiss="alert") &times;
+        strong #{t('error')}
+        each msg in errmessage
+          | #{t(msg)}
+    
     form(action="/create", method="POST")
       table
         tr

@@ -112,11 +112,12 @@ var ProfileController = {
               .exec(function(err, archived) {
             if (!archived) { archived = []; }
             res.render('profile', {
-              user:     user,
-              uname:    req.user.username,
-              games:    active  .map(g=>ProfileController.info(g, req.t)),
-              other:    other   .map(g=>ProfileController.info(g, req.t)),
-              archived: archived.map(g=>ProfileController.info(g, req.t)),
+              user:       user,
+              uname:      req.user.username,
+              games:      active  .map(g=>ProfileController.info(g, req.t)),
+              other:      other   .map(g=>ProfileController.info(g, req.t)),
+              archived:   archived.map(g=>ProfileController.info(g, req.t)),
+              errmessage: req.flash('game'),
             });
           });
         });

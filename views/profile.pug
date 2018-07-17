@@ -7,6 +7,12 @@ prepend title
     - let uname = user.username;
 
 block content
+  if errmessage.length
+    div(class="alert alert-danger")
+      a(href="#" class="close" data-dismiss="alert") &times;
+      strong #{t('error')}
+      each msg in errmessage
+        p #{t(msg)}
   div
     if games && Object.keys(games).length > 0
       - let gamesarray = games

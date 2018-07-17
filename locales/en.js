@@ -13,6 +13,8 @@
 
   "error":           "Error!",
   "success":         "Success!",
+  "game_not_exists": "Game does not exist",
+  "not_in_game":     "You are not in this game",
   "pass_missmatch":  "passwords do not match",
   "pass_short":      "passwords must be at least %d characters long",
   "uname_short":     "username must be at least %d characters long",

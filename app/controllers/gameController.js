@@ -472,14 +472,21 @@ var GameController = {
 
   game: function(req, res) {
     let code = req.params.id.toLowerCase();
-    let user  = req.user;
+    let user = req.user;
     let uname = user.username;
     Game.findOne({code: code})
         .populate('users', ['name', 'username', 'email', 'lang'])
         .exec(function(err, game) {
       if(err || !game) {
-        req.flash('game', 'Game does not exist');
-        res.redirect('/create')
+        req.flash('game', res.t('game_not_exists'));
+        res.redirect('/create');
+        return;
+      }
+      if(!['join','end'].includes(game.stage) &&
+         !game.users.map(u=>u.username).includes(uname)
+      ) {
+        req.flash('game', res.t('not_in_game'));
+        res.redirect('/profile');
         return;
       }
       let captions = [];
@@ -491,8 +498,8 @@ var GameController = {
       switch(game.stage) {
         case 'join':
           res.render('setup', {
-            gamename:   game.name,
             username:   uname,
+            gamename:   game.name,
             players:    game.users,
             enddate:    game.deadline,
             maxplayers: game.max_players,
