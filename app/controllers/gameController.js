@@ -39,7 +39,7 @@ var GameController = {
 
   create_post: function(req, res) {
     let deadline = new Date();
-    deadline.setDate(deadline.getDate() + req.body.dur);
+    deadline.setDate(deadline.getDate() + Number(req.body.dur)||2);
     deadline.setSeconds(0);
     deadline.setMinutes(0);
     deadline.setUTCHours(0);
