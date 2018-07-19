@@ -37,6 +37,7 @@
   "profile_head": "%s's Profile",
   "create_new":   "Create New Game",
 
+  "games":            "Games",
   "active_games":     "Active Games",
   "joinable_games":   "Joinable Games",
   "archived_games":   "Archived Games",

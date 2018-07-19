@@ -37,6 +37,7 @@
   "profile_head": "Профиль %s",
   "create_new":   "Создать новую игру",
 
+  "games":            "Игры",
   "active_games":     "Активные игры",
   "joinable_games":   "Доступные игры",
   "archived_games":   "Завершенные игры",
