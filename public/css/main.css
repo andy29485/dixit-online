@@ -9,6 +9,10 @@ a.disabled {
   pointer-events: none;
 }
 .btn-group > .btn-primary,
-.btn-group > .btn-info {
+.btn-group > .btn-secondary,
+.btn-group > .btn-success,
+.btn-group > .btn-warning,
+.btn-group > .btn-info,
+.btn-group > .btn-danger {
   border: 1px solid #666;
 }
