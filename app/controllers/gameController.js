@@ -349,6 +349,7 @@ var GameController = {
         players.push(uname);
         players = game.users.filter(u=>players.includes(u.username));
         if (players.length < 3) {
+          req.flash('starterr', req.t('lacking_players'));
           res.redirect('/game/'+code);
           return;
         }
@@ -503,6 +504,7 @@ var GameController = {
             players:    game.users,
             enddate:    game.deadline,
             maxplayers: game.max_players,
+            starterr:   req.flash('starterr'),
             gameid:     code,
           });
           break;

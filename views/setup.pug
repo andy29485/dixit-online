@@ -6,6 +6,14 @@ prepend title
 
 block content
   div
+    if starterr.length
+      div(class="alert alert-danger")
+        a(href="#" class="close" data-dismiss="alert") &times;
+        strong #{t('error')}
+        ul
+          each msg in starterr
+            li #{msg}
+            
     form(action="/next/"+gameid, method="POST")
       table(class="table table-striped table-bordered")
         - let index = 0

@@ -87,12 +87,13 @@ app.get('/profile/:username', LoggedIn('/'), profile.profile_get);
 app.get ('/settings', LoggedIn('/'), profile.settings_get);
 app.post('/settings', LoggedIn('/'), profile.settings_post);
 
-app.get('/search',        LoggedIn('/'), profile.search);
-app.get('/search/:page',  LoggedIn('/'), profile.search);
-app.get('/archive',       LoggedIn('/'), profile.archive);
-app.get('/archive/:page', LoggedIn('/'), profile.archive);
-app.get('/active',        LoggedIn('/'), profile.active);
-app.get('/active/:page',  LoggedIn('/'), profile.active);
+app.get('/search',              LoggedIn('/'), profile.search);
+app.get('/search/:page',        LoggedIn('/'), profile.search);
+app.get('/archive',             LoggedIn('/'), profile.archive);
+app.get('/archive/:page',       LoggedIn('/'), profile.archive);
+app.get('/active',              LoggedIn('/'), profile.active);
+app.get('/active/:page',        LoggedIn('/'), profile.active);
+app.get('/active/:uname/:page', LoggedIn('/'), profile.active);
 
 app.post('/delete/:id',  LoggedIn('/'), profile.delete);
 

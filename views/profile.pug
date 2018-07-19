@@ -1,10 +1,11 @@
 extends layout
 
 prepend title
-  - let gamename   = t('profile_head', user.name);
-  - let maxdisplay = 6;
   unless uname
-    - let uname = user.username;
+    - uname = user.username;
+  - gamename   = t('profile_head', user.name);
+  - maxdisplay = 6;
+  - self = (uname===user.username); 
 
 block content
   if errmessage.length
@@ -14,28 +15,29 @@ block content
       each msg in errmessage
         p #{t(msg)}
   div
-    if games && Object.keys(games).length > 0
-      - let gamesarray = games
-      - let timetag = t('end_date_stage')
-      h3 #{t('active_games')}
-      include gamestable
+    if self
+      if games && Object.keys(games).length > 0
+        - let gamesarray = games
+        - let timetag = t('end_date_stage')
+        h3 #{t('active_games')}
+        include gamestable
 
-      if Object.keys(games).length >= maxdisplay
-        a(class="btn btn-primary" href='/active') #{t('more_results')}
-    else
-      h3 #{t('active_games')} - #{t('none_found')}
+        if Object.keys(games).length >= maxdisplay
+          a(class="btn btn-primary" href='/active') #{t('more_results')}
+      else
+        h3 #{t('active_games')} - #{t('none_found')}
 
-    if other && Object.keys(other).length > 0
-      - let maxdisplay = 5;
-      - let gamesarray = other
-      - let timetag = t('end_date_join')
-      h3 #{t('joinable_games')}
-      include gamestable
-      
-      if Object.keys(other).length >= maxdisplay
-        a(class="btn btn-primary" href='/search') #{t('more_results')}
-    else
-      h3 #{t('joinable_games')} - #{t('none_found')}
+      if other && Object.keys(other).length > 0
+        - let maxdisplay = 5;
+        - let gamesarray = other
+        - let timetag = t('end_date_join')
+        h3 #{t('joinable_games')}
+        include gamestable
+        
+        if Object.keys(other).length >= maxdisplay
+          a(class="btn btn-primary" href='/search') #{t('more_results')}
+      else
+        h3 #{t('joinable_games')} - #{t('none_found')}
 
     if archived && Object.keys(archived).length > 0
       - let maxdisplay = 5;
@@ -45,7 +47,8 @@ block content
       include gamestable
       
       if Object.keys(archived).length >= maxdisplay
-        a(class="btn btn-primary" href='/archive') #{t('more_results')}
+        - let link = self ? '/archive' : '/archive/'+user.username 
+        a(class="btn btn-primary" href=link) #{t('more_results')}
     else
       h3 #{t('archived_games')} - #{t('none_found')}
 
