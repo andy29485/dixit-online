@@ -45,6 +45,7 @@ var AuthController = {
       err = true;
     }
     if (err) {
+      req.flash('form', req.body);
       res.redirect('/?register');
       return;
     }
@@ -57,10 +58,12 @@ var AuthController = {
       if (err) {
         console.log(err);
         req.flash('regerror', req.t('uname_exist'));
+        req.flash('form', req.body);
         res.redirect('/?register');
         return;
       }
 
+      req.flash('success', req.t('user_created'));
       res.redirect('/');
     });
   },

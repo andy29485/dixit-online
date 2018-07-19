@@ -6,6 +6,14 @@ prepend title
   - let ignore_logout = ignore_profile = true;
 
 block content
+  if goodmessage.length
+    div(class="alert alert-success")
+      a(href="#" class="close" data-dismiss="alert") &times;
+      strong #{t('success')}
+      ul
+        each msg in goodmessage
+          li #{t(msg)}
+          
   ul(class="nav nav-tabs"  role="tablist")
     li.nav-item
       a(class="nav-link "+(register?"":"active"),data-toggle="tab",href="#signin") 

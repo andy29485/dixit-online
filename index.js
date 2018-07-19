@@ -71,6 +71,8 @@ app.get('/', function(req, res) {
     register:    'register' in req.query,
     regmessage:   req.flash('regerror'),
     loginmessage: req.flash('error'),
+    goodmessage:  req.flash('success'),
+    form:         req.flash('form')[0],
   });
 });
 

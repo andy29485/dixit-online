@@ -13,6 +13,7 @@
 
   "error":           "Error!",
   "success":         "Success!",
+  "user_created":    "user has been Created",
   "game_not_exists": "Game does not exist",
   "not_in_game":     "You are not in this game",
   "pass_missmatch":  "passwords do not match",
