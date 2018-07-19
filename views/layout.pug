@@ -18,6 +18,15 @@ block head
   link(href='/css/cards.css', rel='stylesheet')
     
   meta(name="viewport", content="width=device-width,initial-scale=1.0")
+  
+  script.
+    function clicklabel(e) {
+      i = e.childNodes[0];
+      console.log(i);
+      if(i.tagName.toLowerCase() == 'input') {
+        i.click(); 
+      }
+    }
 
 block body
   nav(

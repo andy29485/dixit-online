@@ -5,6 +5,7 @@ unless cardpicker
   - cardpicker='cardpicker'
 unless selected
   - selected=""
+- cp = cardpicker
 
 div.row
   - let size   = cards.length;
@@ -28,12 +29,12 @@ div.row
       
   for card in cards
     div(class=classes+(center ? (offsets[index]||'') : ''))
-      label.card
+      label.card(onclick="clicklabel(this)")
         - let c = (selected === card);
         unless no_input
           if required
-            input(type="radio",name=cardpicker,checked=c,value=card,required)
+            input(type="radio",name=cp,checked=c,value=card,required)
           else
-            input(type="radio",name=cardpicker,checked=c,value=card)
+            input(type="radio",name=cp,checked=c,value=card)
         img(src=card, class="card-img rounded gamecard")
     - ++index
