@@ -49,6 +49,7 @@
   "no_limit":         "No Limit",
   "no_lim_0":         "(0 for no limit)",
   "admin_tag":        "(admin)",
+  "you_tag":          "(you)",
   "max_players":      "Max players",
   "delete_explain":   "Delete the game and all its records",
   "delete_not_admin": "You are not the admin for this game",

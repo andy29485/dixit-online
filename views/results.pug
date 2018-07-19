@@ -46,7 +46,10 @@ block content-outer
         tr
           td #{++i}
           td
-            a(href="/profile/"+score.uname) #{score.cname}
+            a(href="/profile/"+score.uname)
+              | #{score.cname}
+              |
+              | #{score.uname===uname ? t('you_tag') : ''}
           td
             span #{score.score}
   
@@ -72,7 +75,10 @@ block content-outer
         tr(class="wrap")
           td #{++index}
           td
-            a(href="/profile/"+caption.uname) #{caption.cname}
+            a(href="/profile/"+caption.uname)
+              | #{caption.cname}
+              |
+              | #{caption.uname===uname ? t('you_tag') : ''}
           td
             span #{caption.quote}
             hr
@@ -103,7 +109,10 @@ block content-outer
                 title=t('hand_ownership', card.cname),
               )
               td
-                a(href="/profile/"+card.uname) #{card.cname}
+                a(href="/profile/"+card.uname)
+                  | #{card.cname}
+                  |
+                  | #{card.uname===uname ? t('you_tag') : ''}
                 hr
                 div #{t('voted_for', card.vote||t('no_one'))}
                   

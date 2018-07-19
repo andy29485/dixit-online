@@ -671,6 +671,7 @@ var GameController = {
             gamename: game.name,
             captions: captions,
             hands:    hands,
+            uname:    uname,
             scores:   scores,
           });
           break;

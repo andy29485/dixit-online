@@ -33,7 +33,11 @@ block content
               else
                 td
             td(style="text-align:center")
-              | #{player.name} #{index===1 ? t('admin_tag') : ''}
+              | #{player.name}
+              |
+              | #{index===1 ? t('admin_tag') : ''}
+              |
+              | #{player.username===username ? t('you_tag') : ''}
       if (new Date()) < enddate
         if !admin
           if players.map(p => p.username).includes(username)
