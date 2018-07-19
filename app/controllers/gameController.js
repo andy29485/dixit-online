@@ -369,7 +369,7 @@ var GameController = {
 
   nextStage: function(game, t, deck, next) {
     // cards to replenish hand
-    if!(deck) {
+    if(!deck) {
       deck = GameController.buildDeck(game);
     }
 
