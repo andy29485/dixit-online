@@ -160,8 +160,8 @@ var GameController = {
     let code  = req.params.id.toLowerCase();
     Game.findOne({code: code},
     function(err, game) {
-      if(err) {console.log('find game by id: '+err);}
-      if(!game) {
+      if(!game||err) {
+        if(err) console.log('find game by id: '+err);
         req.flash('game', 'Game does not exist');
         res.redirect('/create')
         return;
@@ -182,6 +182,11 @@ var GameController = {
       });
       game.captions.get(uname).set(req.body.cardpicker, uname)
       game.captionIds.set(game.captions.get(uname).code, uname);
+
+      if(game.captions.size() === game.users.length) {
+        game.deadline = new Date();
+        game.deadline.setMinutes(game.deadline.getMinutes() + 40);
+      }
 
       game.save(function(err) {
         if (err) console.log('caption save fail: '+err);
@@ -331,7 +336,6 @@ var GameController = {
   next: function(req, res) {
     let code    = req.params.id.toLowerCase();
     let uname   = req.user.username;
-    let deck    = GameController.buildDeck(game);
     Game.findOne({code: code})
         .populate('users', ['name', 'username', 'email', 'lang'])
         .exec(function(err, game) {
@@ -345,6 +349,9 @@ var GameController = {
         res.redirect('/game/'+code);
         return;
       }
+
+      let deck = GameController.buildDeck(game);
+
       if(game.stage === 'join') {
         let players = req.body.players;
         players.push(uname);
@@ -500,6 +507,12 @@ var GameController = {
         res.redirect('/profile');
         return;
       }
+      if(game.deadline < new Date() && (
+         (game.stage === 'join' && game.captions.size() === game.users.length)
+      )) {
+        GameController.nextStage(game, req.t, null, null);
+      }
+
       let captions = [];
       let selected = {};
       let hands  = [];
