@@ -27,9 +27,16 @@ block content
           td #{player.name}
           td #{player.stat ? t('status_done') : t('status_waiting')}
     div
-      | #{t('end_date_stage')}:
-      |
-      b #{enddate.toISOString().replace(/[A-Z].*/, '')}
+      if waiting === 0
+        | #{t('end_date_advance')}:
+        |
+        b #{enddate.toISOString().replace('T', ' ').replace(/\..*/, '')}
+          |
+          | (#{t('utc')})
+      else
+        | #{t('end_date_stage')}:
+        |
+        b #{enddate.toISOString().replace(/[A-Z].*/, '')}
     div
       if admin && waiting === 0
         form.btn-group(action="/next/"+gameid, method="POST")

@@ -186,7 +186,7 @@ var GameController = {
 
       if(game.captions.size() === game.users.length) {
         game.deadline = new Date();
-        game.deadline.setMinutes(game.deadline.getMinutes() + 40);
+        game.deadline.setMinutes(game.deadline.getMinutes() + 15);
       }
 
       game.save(function(err) {
@@ -220,6 +220,15 @@ var GameController = {
         caption.lookup.set(req.body[key].replace(/\./g,'_'), uname);
       }
 
+      let done = [];
+      game.captions.forEach(c => {
+        done.push(c.pcards.size === game.users.length-1)
+      });
+      if (done.length>0 && done.every(x=>x)) {
+        game.deadline = new Date();
+        game.deadline.setMinutes(game.deadline.getMinutes() + 15);
+      }
+
       game.save(function(err) {
         if (err) console.log('caption guess save fail: '+err);
         res.redirect('/game/'+code);
@@ -247,6 +256,15 @@ var GameController = {
         let id    = key.split('_')[1];
         let cname = game.captionIds.get(id); // captioner's name
         game.captions.get(cname).votes.set(uname, req.body[key]);
+      }
+
+      let done = [];
+      game.captions.forEach(c => {
+        done.push(c.votes.size === game.users.length-1)
+      });
+      if (done.length>0 && done.every(x=>x)) {
+        game.deadline = new Date();
+        game.deadline.setMinutes(game.deadline.getMinutes() + 15);
       }
 
       game.save(function(err) {
@@ -508,8 +526,19 @@ var GameController = {
         res.redirect('/profile');
         return;
       }
+      let done = [];
+      game.captions.forEach(c => {
+        if(game.stage === 'choice') {
+          done.push(c.pcards.size === game.users.length-1)
+        }
+        else if(game.stage === 'vote') {
+          done.push(c.votes.size === game.users.length-1)
+        }
+      });
+
       if(game.deadline < new Date() && (
-         (game.stage === 'join' && game.captions.size() === game.users.length)
+        (game.stage === 'join' && game.captions.size() === game.users.length)
+      ||(done.length>0 && done.every(x=>x))
       )) {
         GameController.nextStage(game, req.t, null, null);
       }

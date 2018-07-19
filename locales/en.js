@@ -76,6 +76,8 @@
   "end_date_join":     "Sign Up Before",
   "end_date_join_alt": "Registration Closes",
   "end_date_stage":    "Stage End Date",
+  "utc":               "UTC",
+  "end_date_advance":  "Game will advance at",
   "end_date_end":      "Game End Date",
 
   "join_button":     "Join Game",
