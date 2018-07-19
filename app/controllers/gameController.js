@@ -54,6 +54,7 @@ var GameController = {
         name:        req.body.name,
         users:       [user],
         max_players:  req.body.max,
+        extra_cards:  req.body.extra,
         scoring:      req.body.scoring,
         duration:     req.body.dur,
         deadline:     deadline,
@@ -361,9 +362,9 @@ var GameController = {
           res.redirect('/game/'+code);
           return;
         }
-        // cards_needed = players.length*(players.length+1)
-        // max_players = Math.floor((Math.sqrt(4*deck.length+1)-1)/2)
-        if (players.length*(players.length+1) > deck.length) {
+        // cards_needed = players.length*(players.length+game.extra_cards)
+        // max_players = floor((sqrt(4*deck.length+game.extra_cards)-1)/2)
+        if (players.length*(players.length+game.extra_cards) > deck.length) {
           req.flash('starterr', req.t('too_many_players'));
           res.redirect('/game/'+code);
           return;
@@ -382,7 +383,7 @@ var GameController = {
 
     switch(game.stage) {
       case 'join':
-        let hand_size = game.users.length+1;
+        let hand_size = game.users.length+game.extra_cards;
         if(hand_size < 4) { // not enough users
           break;
         }

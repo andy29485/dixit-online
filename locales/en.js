@@ -51,6 +51,7 @@
   "admin_tag":        "(admin)",
   "you_tag":          "(you)",
   "max_players":      "Max players",
+  "extra_cards":      "Cards in hand (number of players + N)",
   "delete_explain":   "Delete the game and all its records",
   "delete_not_admin": "You are not the admin for this game",
 

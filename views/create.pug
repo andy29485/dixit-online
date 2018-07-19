@@ -16,12 +16,12 @@ block content
     form(action="/create", method="POST")
       table
         tr
-          td
+          td(style="text-align:left")
             label #{t('game_name')}:
           td
             input(type="text" name="name" placeholder=t('game_name') required)
         tr
-          td
+          td(style="text-align:left")
             label #{t('stage_duration')}:
           td
             input(
@@ -33,7 +33,7 @@ block content
             | 
             | #{t('duration_days')}
         tr
-          td
+          td(style="text-align:left")
             label #{t('decks_to_use')}:
           td
             for deck in decks
@@ -47,7 +47,7 @@ block content
                 )
                 | #{deck}
         tr
-          td
+          td(style="text-align:left")
             label #{t('scoring_method')}:
           td
             label.radio-inline
@@ -60,11 +60,18 @@ block content
               input(type="radio", name="scoring", value="rus")
               a(target="_blank", href="https://ru.wikipedia.org/wiki/Dixit_(%D0%B8%D0%B3%D1%80%D0%B0)#%D0%9D%D0%B0%D1%87%D0%B8%D1%81%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5_%D0%BE%D1%87%D0%BA%D0%BE%D0%B2") #{t('scoring.russian')}
         tr
-          td
+          td(style="text-align:left")
             label #{t('max_players')} #{t('no_lim_0')}:
           td
             input(type="number", step="1", pattern="\d+",
               name="max", value=0, min=0
+            )
+        tr
+          td(style="text-align:left")
+            label #{t('extra_cards')}:
+          td
+            input(type="number", step="1", pattern="\d+",
+              name="extra", value=1, min=1
             )
       button(type="submit", class="btn btn-primary") #{t('create_new')}
             

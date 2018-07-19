@@ -50,6 +50,7 @@ var gameSchema = new mongoose.Schema({
     unique:    true
   },
   max_players: {type:Number, min:0},
+  extra_cards: {type:Number, min:0, default: 1},
   stage:       {type:String, enum:stages, default:'join'},
   scoring:     {type:String, enum:['orig','v2','rus'], default:'orig'},
   duration:    {type:Number, min:1, max:14},
