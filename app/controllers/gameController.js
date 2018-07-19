@@ -591,8 +591,10 @@ var GameController = {
           break;
         case 'choice':
           game.captions.forEach((value, key) => {
+            let cname = game.users.find(u=>u.username === key).name;
             captions.push({
               uname:    key,
+              cname:    cname,
               selected: value.pcards.get(uname) || "",
               quote:    value.quote,
               id:       value.code,

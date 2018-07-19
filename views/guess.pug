@@ -12,6 +12,8 @@ block content
       unless caption.uname == uname
         lable 
           h2 #{caption.quote}
+            |
+            small (#{caption.cname})
         - let cardpicker = "picker_"+caption.id
         - let selected = caption.selected
         if caption.cards
