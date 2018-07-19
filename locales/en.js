@@ -95,6 +95,7 @@
   "game_full_long":   "Joining Deadline Reached, new users can't join game",
   "deadline_reached": "Deadline Reached, click to extend",
   "lacking_players":  "Not Enough People",
+  "too_many_players": "Too many players, there are not enough cards",
   "status_waiting":   "Waiting",
   "status_done":      "Done",
 

@@ -331,6 +331,7 @@ var GameController = {
   next: function(req, res) {
     let code    = req.params.id.toLowerCase();
     let uname   = req.user.username;
+    let deck    = GameController.buildDeck(game);
     Game.findOne({code: code})
         .populate('users', ['name', 'username', 'email', 'lang'])
         .exec(function(err, game) {
@@ -353,15 +354,24 @@ var GameController = {
           res.redirect('/game/'+code);
           return;
         }
+        // cards_needed = players.length*(players.length+1)
+        // max_players = Math.floor((Math.sqrt(4*deck.length+1)-1)/2)
+        if (players.length*(players.length+1) > deck.length) {
+          req.flash('starterr', req.t('too_many_players'));
+          res.redirect('/game/'+code);
+          return;
+        }
         game.users = players;
       }
-      GameController.nextStage(game, req.t, res.redirect('/game/'+code));
+      GameController.nextStage(game, req.t, deck, res.redirect('/game/'+code));
     });
   },
 
-  nextStage: function(game, t, next) {
+  nextStage: function(game, t, deck, next) {
     // cards to replenish hand
-    let deck = GameController.buildDeck(game);
+    if!(deck) {
+      deck = GameController.buildDeck(game);
+    }
 
     switch(game.stage) {
       case 'join':
