@@ -620,6 +620,7 @@ var GameController = {
           else {
             res.render('guess', {
               gamename: game.name,
+              help_msg: req.t('guess_help'),
               title:    req.t('stages.choice'),
               action:   '/guess/'+code,
               quotes:   shuffle(captions),
@@ -665,6 +666,7 @@ var GameController = {
           else {
             res.render('guess', {
               gamename: game.name,
+              help_msg: req.t('vote_help'),
               title:    req.t('stages.vote'),
               action:  '/vote/'+code,
               enddate:  game.deadline,

@@ -4,23 +4,29 @@ prepend title
   - let section = title;
 
 block content
-  form(action=action, method="POST")
-    - let index = 0;
-    each caption in quotes
-      unless index
-        hr
-      unless caption.uname == uname
-        lable 
-          h2 #{caption.quote}
-            |
-            small (#{caption.cname})
-        - let cardpicker = "picker_"+caption.id
-        - let selected = caption.selected
-        if caption.cards
-          - cards = caption.cards
-        include cards
-      - ++index
-    button(type="submit", class="btn btn-primary") #{t('submit_button')}
+  div.card.bg-info
+    h3.card-title #{t('instructions')}
+    div.card-text #{help_msg}
+  div
+    form(action=action, method="POST")
+      - let index = 0;
+      each caption in quotes
+        unless index
+          hr
+        unless caption.uname == uname
+          lable 
+            h2 #{caption.quote}
+              |
+              |
+              if caption.cname
+                small (#{caption.cname})
+          - let cardpicker = "picker_"+caption.id
+          - let selected = caption.selected
+          if caption.cards
+            - cards = caption.cards
+          include cards
+        - ++index
+      button(type="submit", class="btn btn-primary") #{t('submit_button')}
   
   div
     | #{t('end_date_stage')}:

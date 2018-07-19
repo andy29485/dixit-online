@@ -130,6 +130,11 @@
     "end":    "Ended"
   },
 
+  "instructions": "Instructions",
+  "choose_help":  "Please chose a card and caption it:",
+  "guess_help":   "Please choose cards to throw in:",
+  "vote_help":    "Please choose the cards that fit the caption best:",
+
   "email_messages": {
     "capt":   "The game has started, please chose a card and caption it:",
     "choice": "The game advances, please choose cards to throw in:",
