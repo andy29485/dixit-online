@@ -12,6 +12,19 @@ prepend title
   if !self
     - path = path + '/' + user.username 
     
+mixin gamebuttons
+  a.btn.btn-info(href='/active')
+    span(class="fa fa-gamepad")
+    |
+    | #{t('active_games')}
+  a.btn.btn-info(href='/search')
+    span(class="fa fa-door-open")
+    |
+    | #{t('joinable_games')}
+  a.btn.btn-info(href='/archive')
+    span(class="fa fa-archive")
+    |
+    | #{t('archived_games')}
 
 mixin pages
   if count > 1
@@ -32,20 +45,10 @@ mixin pages
 block content
   div.content
     if self
-      //- TODO: navigation (active, search, archived)
-      div.btn-group
-        a.btn.btn-info(href='/active')
-          span(class="fa fa-gamepad")
-          |
-          | #{t('active_games')}
-        a.btn.btn-info(href='/search')
-          span(class="fa fa-door-open")
-          |
-          | #{t('joinable_games')}
-        a.btn.btn-info.btn-outline-dark(href='/archive')
-          span(class="fa fa-archive")
-          |
-          | #{t('archived_games')}
+      div.btn-group.d-none.d-sm-none.d-md-block
+        +gamebuttons
+      div.btn-group.btn-group-vertical.d-block.d-md-none
+        +gamebuttons
     
     +pages
 

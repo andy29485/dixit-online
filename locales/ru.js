@@ -102,7 +102,7 @@
   "caption":     "Ассоциация",
   "explanation": "Пояснение",
 
-  "hand_ownership": "карты %s",
+  "hand_ownership": "Карты %s",
   "total_scores":   "Итого",
   "player":         "Игрок",
   "score":          "Счет",

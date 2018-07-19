@@ -38,9 +38,9 @@ block content-outer
         tr
           th(colspan=3) #{t('total_scores')}
         tr
-          th #{t('header_number')}
-          th #{t('player')}
-          th #{t('score')}
+          th(style="min-width:10px") #{t('header_number')}
+          th(style="min-width:120px") #{t('player')}
+          th(style="min-width:30px") #{t('score')}
       - let i = 0
       for score in scores.sort((a,b) => b.score - a.score)
         tr
@@ -54,22 +54,22 @@ block content-outer
             span #{score.score}
   
   div.table-responsive
-    table(class="table table-striped table-bordered")
+    table(class="table table-striped table-bordered table-sm")
       thead
         tr
-          th #{t('round')}
-          th #{t('dealer_name')}
-          th #{t('dealer_caption')}
-          th(colspan=2, ) #{t('dealer_card')}
+          th(style="min-width:50px") #{t('round')}
+          th(style="min-width:140px") #{t('dealer_name')}
+          th(style="min-width:140px") #{t('dealer_caption')}
+          th(colspan=2) #{t('dealer_card')}
           th(colspan=3*captions[0].cards.length) #{t('other_cards')}
         tr
           th(colspan=3)
-          th #{t('votes_score')}
-          th #{t('player_card')}
+          th(style="min-width:120px") #{t('votes_score')}
+          th(style="min-width:150px") #{t('player_card')}
           for card in captions[0].cards
-            th #{t('votes_score')}
-            th #{t('player_card')}
-            th #{t('player_name')}
+            th(style="min-width:120px") #{t('votes_score')}
+            th(style="min-width:150px") #{t('player_card')}
+            th(style="min-width:140px") #{t('player_name')}
       - let index = 0
       each caption in captions
         tr(class="wrap")

@@ -6,15 +6,19 @@ prepend title
 
 block content
   - let admin = (uname === players[0].uname);
+  - let pwait = [], pdone = [];
+  each player in players
+    - (player.stat ? pdone : pwait).push(player);
+  - players = pwait.concat(pdone)
   div.table-responsive
     table(class="table table-striped table-bordered")
       - let index = 0
       tr
-        th(colspan=3) #{t('stages.wait')}
+        th(colspan=3 style="min-width:50px") #{t('stages.wait')}
       tr
-        th(style="width:3%") #{t('header_number')}
-        th                   #{t('header_name')}
-        th                   #{t('header_status')}
+        th(style="min-width:10px;width:3%") #{t('header_number')}
+        th(style="min-width:150px")         #{t('header_name')}
+        th(style="min-width:40px")          #{t('header_status')}
       each player in players
         if !player.stat
           - ++waiting;

@@ -4,12 +4,12 @@ unless timetag
 div.table-responsive
   table(class="table table-striped table-bordered")
     tr
-      th #{t('game_name')}
-      th #{t('stage')}
-      th #{t('admin')}
-      th #{t('players_and_limit')}
-      th #{timetag}
-      th #{t('delete')}
+      th(style="min-width:140px") #{t('game_name')}
+      th(style="min-width:100px") #{t('stage')}
+      th(style="min-width:100px") #{t('admin')}
+      th(style="min-width:140px") #{t('players_and_limit')}
+      th(style="min-width:120px") #{timetag}
+      th(style="min-width:100px") #{t('delete')}
       
     - let index = 1
     for game in gamesarray

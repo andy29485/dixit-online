@@ -21,23 +21,25 @@ block head
 
 block body
   nav(
-    class="navbar navbar-default navbar-expand-sm navbar-light bg-light",
+    class="navbar navbar-default navbar-expand-md navbar-light bg-light",
     role="navigation"
   )
     div.container-fluid
-      div.navbar-header
-        h4(class="navbar-brand w-75")
-          b.navbar-band #{gamename}
-            if section
-              |
-              | (#{section})
-      button.navbar-toggler(
-        type="button",
-        data-toggle="collapse",
-        data-target="#collapsingNavbar"
-      )
-        span.navbar-toggler-icon
-      div(class="navbar-collapse collapse w-50"  id="collapsingNavbar")
+      div.navbar-header(w-50 mw-75)
+        h4
+          b #{gamename}
+          if section
+            |
+            | (#{section})
+      unless ignore_logout && ignore_profile
+        button.navbar-toggler(
+          type="button",
+          data-toggle="collapse",
+          data-target="#collapsingNavbar"
+        )
+          span.navbar-toggler-icon
+      
+      div(class="navbar-collapse collapse" id="collapsingNavbar")
         div(class="nav navbar-nav btn-group ml-auto")
           unless ignore_logout
             a.btn(href="/logout")

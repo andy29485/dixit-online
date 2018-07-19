@@ -16,3 +16,28 @@ a.disabled {
 .btn-group > .btn-danger {
   border: 1px solid #666;
 }
+@media (max-width: 480px) {
+  .container-fluid > .navbar-header {
+    max-width: 75%;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
+  .container-fluid > .navbar-header {
+    max-width: 730px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .container-fluid > .navbar-header {
+    max-width: 50%;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
+
+}
+
+@media (min-width: 1200px) {
+
+}
