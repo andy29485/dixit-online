@@ -29,14 +29,15 @@ mixin gamebuttons
 mixin pages
   if count > 1
     nav(aria-label="Page navigation")
-      ul.pagination
+      ul.pagination.justify-content-center
         li.page-item
           a.page-link(href='/'+path+'/1') #{t('first_page')}
         - for(let i=Math.max(2,page-3); i<Math.min(page+4,count); ++i) {
-          li.page-item
-            if page === i
-              a(class="page-link disabled" href='#') #{i}
-            else
+          if page === i
+            li(class="page-item active")
+              a(class="page-link" href='#') #{i}
+          else
+            li(class="page-item active")
               a.page-link(href='/'+path+'/'+i) #{i}
         - }
         li.page-item

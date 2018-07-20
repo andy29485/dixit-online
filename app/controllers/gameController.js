@@ -184,7 +184,7 @@ var GameController = {
       game.captions.get(uname).set(req.body.cardpicker, uname)
       game.captionIds.set(game.captions.get(uname).code, uname);
 
-      if(game.captions.size() === game.users.length) {
+      if(game.captions.size === game.users.length) {
         game.deadline = new Date();
         game.deadline.setMinutes(game.deadline.getMinutes() + 15);
       }
@@ -537,7 +537,7 @@ var GameController = {
       });
 
       if(game.deadline < new Date() && (
-        (game.stage === 'join' && game.captions.size() === game.users.length)
+        (game.stage === 'join' && game.captions.size === game.users.length)
       ||(done.length>0 && done.every(x=>x))
       )) {
         GameController.nextStage(game, req.t, null, null);
