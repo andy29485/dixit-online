@@ -1,5 +1,7 @@
 extends layout
 
+include cards
+
 prepend title
   - let section = title;
 
@@ -20,11 +22,10 @@ block content
               |
               if caption.cname
                 small (#{caption.cname})
-          - let cardpicker = "picker_"+caption.id
-          - let selected = caption.selected
-          if caption.cards
-            - cards = caption.cards
-          include cards
+          +cards(caption.cards || cards, caption.selected,
+                 false, false, false,
+                 "picker_"+caption.id
+         )
         - ++index
       button(type="submit", class="btn btn-primary") #{t('submit_button')}
   

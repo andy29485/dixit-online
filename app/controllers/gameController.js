@@ -633,6 +633,7 @@ var GameController = {
         case 'vote':
           game.captions.forEach((value, key) => {
             let cards = [value.image];
+            let cname = game.users.find(u=>u.username === key).name;
             for(let entry of value.pcards.entries()) {
               if(uname !== entry[0]) {
                 cards.push(entry[1]);
@@ -640,6 +641,7 @@ var GameController = {
             }
             captions.push({
               uname:    key,
+              cname:    cname,
               selected: value.votes.get(uname) || "",
               cards:    shuffle(cards),
               quote:    value.quote,
