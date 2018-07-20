@@ -6,9 +6,9 @@ prepend title
   - let section = t('stages.choice');
   
 block content
-  div.card.bg-info
-    h3.card-title #{t('instructions')}
-    div.card-text #{t('choose_help')}
+  div.card.border-info
+    h3.card-header #{t('instructions')}
+    div.card-body #{t('choose_help')}
   hr
   div  
     form.form(action="/caption/"+code, method="POST")

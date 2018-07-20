@@ -2,6 +2,42 @@
 //- if center===true, cards will be centered
 //- if no_input===true, cards will to highlight
 
+mixin card_input(card, cp, selected, required)
+  label.card(onclick="clicklabel(this)")
+    - let c = (selected === card);
+    if required
+      input(type="radio",name=cp,checked=c,value=card,required)
+    else
+      input(type="radio",name=cp,checked=c,value=card)
+    img(src=card, class="card-img-top rounded gamecard")
+      
+mixin card_img(card)
+  div.card.h-100
+    if card.cname
+      div.card-header(style="height: 60px; max-height: 60px; padding: 5px")
+        p.card-text
+          a(href="/profile/"+card.uname)
+            | #{card.cname}
+            |
+            | #{card.uname===uname ? t('you_tag')+' ' : ' '}
+    img(src=card.card ? card.card : card, class="card-img rounded gamecard")
+    if card.vote || card.uname
+      div.card-body(style="height: 25%; max-height: 25%; padding:5px")
+        p.card-text
+          span.float-left #{t('votes')}: #{card.votes || 0}
+          span.float-right #{t('score')}: #{card.score || 0}
+        if card.vote
+          br
+          p.card-text #{t('voted_for')}:
+            br
+            | #{card.vote||t('no_one')}
+    if card.uname
+      a.card-footer.btn.btn-primary.float-left.w-100(
+        style="height: 10%",
+        data-toggle="modal",
+        data-target="#hand_"+card.uname
+      ) #{t('view_hand')}
+
 mixin cards(cards, selected, center, no_input, required, cp)
   unless cp
     - cp='cardpicker'
@@ -29,12 +65,9 @@ mixin cards(cards, selected, center, no_input, required, cp)
         
     for card in cards
       div(class=classes+(center ? (offsets[index]||'') : ''))
-        label.card(onclick="clicklabel(this)")
-          - let c = (selected === card);
-          unless no_input
-            if required
-              input(type="radio",name=cp,checked=c,value=card,required)
-            else
-              input(type="radio",name=cp,checked=c,value=card)
-          img(src=card, class="card-img rounded gamecard")
+        if no_input
+          +card_img(card)
+        else
+          +card_input(card, cp, selected, required)
+      if no_input
       - ++index

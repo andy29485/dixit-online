@@ -684,6 +684,22 @@ var GameController = {
             let votes = {};
             let score = {};
 
+            for(let card of caption.votes.values()) {
+              if(card in votes) ++votes[card];
+              else                votes[card] = 1;
+            }
+            for(let entry of caption.scores.entries()) {
+              score[entry[0]] = entry[1];
+            }
+
+            cards.push({
+              card:  caption.image,
+              uname: key,
+              cname: cname,
+              votes: votes[caption.image],
+              score: score[key],
+            });
+
             for(let entry of caption.pcards.entries()) {
               let name = game.users.find(u=>u.username === entry[0]).name;
               let vote = caption.lookup.get(
@@ -694,23 +710,15 @@ var GameController = {
                 uname: entry[0],
                 cname: name,
                 vote:  vote?game.users.find(u=>u.username === vote).name:cname,
+                votes: votes[entry[1]],
+                score: score[entry[0]],
               });
-            }
-            for(let card of caption.votes.values()) {
-              if(card in votes) ++votes[card];
-              else                votes[card] = 1;
-            }
-            for(let entry of caption.scores.entries()) {
-              score[entry[0]] = entry[1];
             }
             captions.push({
               uname:   key,
               cname:   cname,
               quote:   caption.quote,
               explain: caption.explain,
-              image:   caption.image,
-              votes:   votes,
-              scores:  score,
               cards:   cards,
             });
           });

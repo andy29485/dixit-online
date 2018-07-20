@@ -6,9 +6,9 @@ prepend title
   - let section = title;
 
 block content
-  div.card.bg-info
-    h3.card-title #{t('instructions')}
-    div.card-text #{help_msg}
+  div.card.border-info
+    h3.card-header #{t('instructions')}
+    div.card-body #{help_msg}
   div
     form(action=action, method="POST")
       - let index = 0;

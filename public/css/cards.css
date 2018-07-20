@@ -1,5 +1,4 @@
 .card {
-  border: none;
   margin: 0 0 0 10 !important;
   float: none;
 }
@@ -8,10 +7,6 @@ img.gamecard {
   /* IMAGE STYLES */
   border: 3px solid #000;
   margin: 0 auto;
-}
-
-.row {
-  margin-bottom: 20px;
 }
 
 img.clickable-card:hover, .row > div > .card > input + img.gamecard:hover {
