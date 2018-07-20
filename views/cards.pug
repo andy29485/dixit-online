@@ -13,7 +13,7 @@ mixin card_input(card, cp, selected, required)
       
 mixin card_img(card, first, extra_id)
   - let cl = first ? "f" : 'o';
-  - let id = "card_"_extra_id+'_'+card.uname;
+  - let id = "card_"+extra_id+'_'+card.uname;
   if card.uname
     div(
       class="modal fade",
