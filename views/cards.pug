@@ -11,10 +11,58 @@ mixin card_input(card, cp, selected, required)
       input(type="radio",name=cp,checked=c,value=card)
     img(src=card, class="card-img-top rounded gamecard")
       
-mixin card_img(card)
-  div.card.h-100
+mixin card_img(card, first)
+  - let cl = first ? "f" : 'o';
+  - let id = "card_"+card.uname;
+  if card.uname
+    div(
+      class="modal fade",
+      id=id,
+      tabindex="-1",
+      role="dialog",
+      aria-labelledby="modalLabelLarge",
+      aria-hidden="true",
+    )
+      div(class="modal-dialog modal-lg")
+        div.modal-content
+          div.modal-header
+            h4.modal-title #{card.cname}
+            button.close(
+              type="button",
+              data-dismiss="modal",
+              aria-label="Close"
+            )
+              span(aria-hidden="true") &times;
+          div.modal-body
+            div.row
+              div.col-6.col-md-4.offset-md-2
+                h4 #{t('players_card')}:
+              div.col-6.col-md-4
+                if card.vote
+                  h4 #{t('voted_for')}: #{card.vote.cname}
+            div.row
+              div.col-6.col-md-4.offset-md-2
+                +card_img(card.card, false)
+              div.col-6.col-md-4
+                if card.vote
+                  +card_img(card.vote.card, false)
+                else
+                  p #{card.quote}
+                  hr
+                  p #{card.expl}
+            div.row-no-margin
+              h4 #{t('Votes')}:
+            if card.votes
+              ul.list-inline.row-no-margin
+                each vote in card.votes
+                  li.list-inline-item.col-3 - #{vote}
+            else
+              div.row-no-margin
+                p(style="margin-left:25px") #{t('no_one')}
+
+  div.card(class=cl + (card.uname ? ' h-100' : ''))
     if card.cname
-      div.card-header(style="height: 60px; max-height: 60px; padding: 5px")
+      div.card-header.green(class=cl)
         p.card-text
           a(href="/profile/"+card.uname)
             | #{card.cname}
@@ -22,21 +70,27 @@ mixin card_img(card)
             | #{card.uname===uname ? t('you_tag')+' ' : ' '}
     img(src=card.card ? card.card : card, class="card-img rounded gamecard")
     if card.vote || card.uname
-      div.card-body(style="height: 25%; max-height: 25%; padding:5px")
+      div.card-body(style="padding:5px")
         p.card-text
-          span.float-left #{t('votes')}: #{card.votes || 0}
+          span.float-left #{t('votes')}: #{(card.votes||[]).length}
           span.float-right #{t('score')}: #{card.score || 0}
-        if card.vote
-          br
-          p.card-text #{t('voted_for')}:
-            br
-            | #{card.vote||t('no_one')}
+        //if card.vote
+        //  br
+        //  p.card-text #{t('voted_for')}:
+        //    br
+        //    | #{card.vote||t('no_one')}
     if card.uname
-      a.card-footer.btn.btn-primary.float-left.w-100(
-        style="height: 10%",
-        data-toggle="modal",
-        data-target="#hand_"+card.uname
-      ) #{t('view_hand')}
+      div.card-footer.btn-group.p-0(class=cl)
+        a.btn.w-50.p-0.border-left-0.border-top-0.border-bottom-0(
+          class=cl,
+          data-toggle="modal",
+          data-target="#hand_"+card.uname
+        ) #{t('view_hand')}
+        a.btn.w-50.p-0.border-right-0.border-top-0.border-bottom-0(
+          class=cl,
+          data-toggle="modal",
+          data-target="#"+id,
+        ) more
 
 mixin cards(cards, selected, center, no_input, required, cp)
   unless cp
@@ -66,7 +120,7 @@ mixin cards(cards, selected, center, no_input, required, cp)
     for card in cards
       div(class=classes+(center ? (offsets[index]||'') : ''))
         if no_input
-          +card_img(card)
+          +card_img(card, index===0)
         else
           +card_input(card, cp, selected, required)
       if no_input

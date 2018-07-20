@@ -25,6 +25,35 @@ img.clickable-card:hover, .row > div > .card > input + img.gamecard:hover {
   box-shadow: 0 0 0 3px #f00;
 }
 
+.f {
+  border: 1px solid green;
+}
+.o {
+  border: 1px solid blue;
+}
+
+.f.card-header, .f.card-footer {
+  background: rgba(0, 240, 0, .1);
+}
+
+.o.card-header, .o.card-footer {
+  background: rgba(0, 0, 240, .1);
+}
+
+.f.card-header > .btn:hover, .f.card-footer > .btn:hover {
+  background: rgba(0, 240, 0, .6);
+}
+
+.o.card-header > .btn:hover, .o.card-footer > .btn:hover {
+  background: rgba(0, 0, 240, .6);
+}
+
+.row > div > .card > .card-header, .row > div > .card > .card-footer {
+  height:     30px;
+  max-height: 30px;
+  padding:    3px;
+}
+
 /*
 @media (min-width: @screen-sm-min) {
   .box {

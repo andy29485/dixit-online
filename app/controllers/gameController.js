@@ -684,10 +684,11 @@ var GameController = {
             let votes = {};
             let score = {};
 
-            for(let card of caption.votes.values()) {
-              if(card in votes) ++votes[card];
-              else                votes[card] = 1;
-            }
+            caption.votes.forEach((card, key) => {
+              let cname = game.users.find(u=>u.username === key).name;
+              if(card in votes) votes[card].push(cname);
+              else              votes[card] = [cname];
+            });
             for(let entry of caption.scores.entries()) {
               score[entry[0]] = entry[1];
             }
@@ -697,6 +698,8 @@ var GameController = {
               uname: key,
               cname: cname,
               votes: votes[caption.image],
+              quote: caption.quote,
+              expl:  caption.explain,
               score: score[key],
             });
 
@@ -705,11 +708,20 @@ var GameController = {
               let vote = caption.lookup.get(
                 caption.votes.get(entry[0]).replace(/\./g,'_')
               );
+              if(vote) {
+                vote = {
+                  card: caption.pcards.get(vote),
+                  cname: game.users.find(u=>u.username === vote).name,
+                }
+              }
+              else {
+                vote = {cname:cname + req.t('dealer'), card: caption.image}
+              }
               cards.push({
                 card:  entry[1],
                 uname: entry[0],
                 cname: name,
-                vote:  vote?game.users.find(u=>u.username === vote).name:cname,
+                vote:  vote,
                 votes: votes[entry[1]],
                 score: score[entry[0]],
               });
