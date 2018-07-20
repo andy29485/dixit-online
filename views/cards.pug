@@ -11,9 +11,9 @@ mixin card_input(card, cp, selected, required)
       input(type="radio",name=cp,checked=c,value=card)
     img(src=card, class="card-img-top rounded gamecard")
       
-mixin card_img(card, first)
+mixin card_img(card, first, extra_id)
   - let cl = first ? "f" : 'o';
-  - let id = "card_"+card.uname;
+  - let id = "card_"_extra_id+'_'+card.uname;
   if card.uname
     div(
       class="modal fade",
@@ -120,7 +120,7 @@ mixin cards(cards, selected, center, no_input, required, cp)
     for card in cards
       div(class=classes+(center ? (offsets[index]||'') : ''))
         if no_input
-          +card_img(card, index===0)
+          +card_img(card, index===0, index)
         else
           +card_input(card, cp, selected, required)
       if no_input
