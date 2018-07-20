@@ -14,7 +14,7 @@ exports = module.exports = function(users, options) {
     },
   });
 
-  let bcc = users.map(u=>u.email).filter(u=>u).join(', ');
+  let bcc = [...new Set(users.map(u=>u.email).filter(u=>u)].join(', ');
 
   // setup email data with unicode symbols
   let mailOptions = {
