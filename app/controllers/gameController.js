@@ -6,6 +6,7 @@ var Shuffle  = require('shuffle');
 var fs       = require('fs');
 
 var deck_dir = '/decks';
+var auto_transition = 15;
 
 function shuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
@@ -186,7 +187,7 @@ var GameController = {
 
       if(game.captions.size === game.users.length) {
         game.deadline = new Date();
-        game.deadline.setMinutes(game.deadline.getMinutes() + 15);
+        game.deadline.setMinutes(game.deadline.getMinutes() + auto_transition);
       }
 
       game.save(function(err) {
@@ -226,7 +227,7 @@ var GameController = {
       });
       if (done.length>0 && done.every(x=>x)) {
         game.deadline = new Date();
-        game.deadline.setMinutes(game.deadline.getMinutes() + 15);
+        game.deadline.setMinutes(game.deadline.getMinutes() + auto_transition);
       }
 
       game.save(function(err) {
@@ -264,7 +265,7 @@ var GameController = {
       });
       if (done.length>0 && done.every(x=>x)) {
         game.deadline = new Date();
-        game.deadline.setMinutes(game.deadline.getMinutes() + 15);
+        game.deadline.setMinutes(game.deadline.getMinutes() + auto_transition);
       }
 
       game.save(function(err) {
@@ -537,7 +538,7 @@ var GameController = {
       });
 
       if(game.deadline < new Date() && (
-        (game.stage === 'join' && game.captions.size === game.users.length)
+        (game.stage === 'capt' && game.captions.size === game.users.length)
       ||(done.length>0 && done.every(x=>x))
       )) {
         GameController.nextStage(game, req.t, null, null);
