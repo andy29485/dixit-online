@@ -468,7 +468,7 @@ var GameController = {
           }
 
           if( (votes[caption.image] === game.users.length-1)
-            ||(votes[caption.image] === 0)) {
+            ||((votes[caption.image]||0) === 0)) {
             // every one voted for dealer OR no one did
             scores[uname] = 0;
             for(let user of caption.pcards.keys()) {
