@@ -26,7 +26,11 @@ div.table-responsive
             | /
             |
             | #{game.max===0 ? t('no_limit') : game.max}
-          td #{game.date.toISOString().replace(/[A-Z].*/, '')}
+          td(id='dt_'+game.code)
+            | #{game.date.toISOString().replace(/[A-Z].*/, '')}
+            script.
+              let date = formatDT(#{game.date.valueOf()}, false);
+              document.getElementById('dt_'+game.code).innerHTML = date;
           td
             form(action='/delete/'+game.code, method='POST')
               button(

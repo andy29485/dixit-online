@@ -26,6 +26,16 @@ block head
         i.click(); 
       }
     }
+    function formatDT(ts, t) {
+      dt=new Date(ts);
+      y=dt.getFullYear().toString().padStart(4, '0');
+      m=dt.getMonth().toString().padStart(2, '0');
+      d=dt.getDate().toString().padStart(2, '0');
+      h=dt.getHours().toString().padStart(2, '0');
+      M=dt.getMinutes().toString().padStart(2, '0');
+      s=dt.getSeconds().toString().padStart(2, '0');
+      return y+'-'+m+'-'+d+(t?(' '+h+':'+M+':'+s):'');
+    }
 
 block body
   nav(

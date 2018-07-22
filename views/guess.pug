@@ -32,4 +32,7 @@ block content
   div
     | #{t('end_date_stage')}:
     |
-    b #{enddate.toISOString().replace(/[A-Z].*/, '')}
+    b(id='dt') #{enddate.toISOString().replace(/[A-Z].*/, '')}
+    script.
+      let date = formatDT(#{enddate.valueOf()}, false);
+      document.getElementById('dt').innerHTML = date;

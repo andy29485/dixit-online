@@ -30,13 +30,19 @@ block content
       if waiting === 0
         | #{t('end_date_advance')}:
         |
-        b #{enddate.toISOString().replace('T', ' ').replace(/\..*/, '')}
+        b(id='dt') #{enddate.toISOString().replace('T', ' ').replace(/\..*/, '')}
           |
           | (#{t('utc')})
+        script.
+          let date = formatDT(#{enddate.valueOf()}, true);
+          document.getElementById('dt').innerHTML = date;
       else
         | #{t('end_date_stage')}:
         |
-        b #{enddate.toISOString().replace(/[A-Z].*/, '')}
+        b(id='dt') #{enddate.toISOString().replace(/[A-Z].*/, '')}
+        script.
+          let date = formatDT(#{enddate.valueOf()}, false);
+          document.getElementById('dt').innerHTML = date;
     div
       if admin && waiting === 0
         form.btn-group(action="/next/"+gameid, method="POST")
