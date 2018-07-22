@@ -64,5 +64,5 @@ block content-outer
             | #{caption.uname===uname ? t('you_tag') : ''}
           | )
         div.card-body #{caption.explain || t('no_explain')}
-      +cards(caption.cards, false, true, true)
+      +cards(caption.cards, false, true, true, false, null, index)
         

@@ -123,6 +123,7 @@
   "player_name":    "name",
   "voted_for":      "Voted for",
   "view_hand":      "Hand",
+  "more":           "more",
   "no_one":         "<No One>",
   "no_explain":     "<No Explaination>",
 

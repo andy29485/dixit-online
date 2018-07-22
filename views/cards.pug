@@ -92,7 +92,7 @@ mixin card_img(card, first, extra_id)
           data-target="#"+id,
         ) more
 
-mixin cards(cards, selected, center, no_input, required, cp)
+mixin cards(cards, selected, center, no_input, required, cp, rownum)
   unless cp
     - cp='cardpicker'
   unless selected
@@ -120,8 +120,7 @@ mixin cards(cards, selected, center, no_input, required, cp)
     for card in cards
       div(class=classes+(center ? (offsets[index]||'') : ''))
         if no_input
-          +card_img(card, index===0, index)
+          +card_img(card, index===0, rownum||0)
         else
           +card_input(card, cp, selected, required)
-      if no_input
       - ++index
