@@ -21,6 +21,7 @@ var ProfileController = {
 
   settings_get: function(req, res) {
     User.findOne({username: req.user.username}, function(err, user) {
+      res.cookie('lang', req.user.lang = user.lang);
       res.render('settings', {
         user: user,
         badsetmessage:  req.flash('badsetmessage'),
@@ -38,8 +39,7 @@ var ProfileController = {
 
       if(req.body.lang && req.body.lang !== user.lang) {
         req.flash('goodsetmessage', 'lang_updated');
-        req.user.lang = user.lang = req.body.lang;
-        res.cookie('lang', req.user.lang);
+        res.cookie('lang', req.user.lang = user.lang = req.body.lang);
       }
 
       // User wishes to change their email
@@ -84,8 +84,7 @@ var ProfileController = {
         console.log('profile get err: '+err);
         return res.sendStatus(404);
       }
-
-      req.session.lang = req.user.lang;
+      res.cookie('lang', req.user.lang = user.lang);
 
       Game.find({users: ObjectID(user._id), stage: {'$ne': 'end'}})
           .limit(6)
@@ -138,6 +137,7 @@ var ProfileController = {
         console.log('search user: '+err);
         return res.sendStatus(404);
       }
+      res.cookie('lang', req.user.lang = user.lang);
 
       let query = {users: ObjectID(user._id), stage: {'$ne': 'end'}};
 
@@ -179,6 +179,7 @@ var ProfileController = {
         console.log('search user: '+err);
         return res.sendStatus(404);
       }
+      res.cookie('lang', req.user.lang = user.lang);
 
       let query = {
         users: {'$nin':[ObjectID(user._id)]},
@@ -231,6 +232,7 @@ var ProfileController = {
         console.log('search user: '+err);
         return res.sendStatus(404);
       }
+      res.cookie('lang', req.user.lang = user.lang);
 
       let query = {
         users: ObjectID(user._id),
@@ -270,6 +272,7 @@ var ProfileController = {
         console.log('search user: '+err);
         return res.sendStatus(404);
       }
+      res.cookie('lang', req.user.lang = user.lang);
 
       let query = {
         'users.0': ObjectID(user._id),

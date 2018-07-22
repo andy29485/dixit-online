@@ -51,6 +51,8 @@ var GameController = {
         res.redirect('#error-user');
         return;
       }
+      res.cookie('lang', req.user.lang = user.lang);
+
       Game.create({
         name:        req.body.name,
         users:       [user],
@@ -81,6 +83,8 @@ var GameController = {
     User.findOne({username:req.user.username},
     function(err, user) {
       if(err) {console.log('could not find user: '+err);}
+      res.cookie('lang', req.user.lang = user.lang);
+
       Game.findOne({code: code}, ['users', 'max_players', 'stage', 'name'])
           .populate('users', 'username')
           .exec(function(err, game) {
@@ -122,6 +126,7 @@ var GameController = {
     User.findOne({username:req.user.username},
     function(err, user) {
       if(err) {console.log('could not find user: '+err);}
+      res.cookie('lang', req.user.lang = user.lang);
 
       Game.findOne({code: code}, ['users', 'stage'])
           .populate('users', 'username')
