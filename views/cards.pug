@@ -52,7 +52,7 @@ mixin card_img(card, first, extra_id)
                   p #{card.expl}
             div.row-no-margin
               h4 #{t('Votes')}:
-            if card.votes
+            if card.votes.length
               ul.list-inline.row-no-margin
                 each vote in card.votes
                   li.list-inline-item.col-3 - #{vote}

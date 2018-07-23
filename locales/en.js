@@ -148,5 +148,5 @@
     "end":    "The game has ended, you can view the results here:"
   },
 
-  "subject": "%s has Advanced a Stage"
+  "sub": "%s has Advanced a Stage"
 }

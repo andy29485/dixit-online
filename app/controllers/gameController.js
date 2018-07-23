@@ -190,7 +190,13 @@ var GameController = {
       game.captions.get(uname).set(req.body.cardpicker, uname)
       game.captionIds.set(game.captions.get(uname).code, uname);
 
-      if(game.captions.size === game.users.length) {
+      if(!game.done_users) {
+        game.done_users = [uname]
+      }
+      else if(!game.done_users.includes(uname)) {
+        game.done_users.push(uname);
+      }
+      if(game.done = (game.captions.size === game.users.length)) {
         game.deadline = new Date();
         game.deadline.setMinutes(game.deadline.getMinutes() + auto_transition);
       }
@@ -228,11 +234,19 @@ var GameController = {
 
       let done = [];
       game.captions.forEach(c => {
-        done.push(c.pcards.size === game.users.length-1)
+        done.push(c.pcards.has(uname))
       });
       if (done.length>0 && done.every(x=>x)) {
-        game.deadline = new Date();
-        game.deadline.setMinutes(game.deadline.getMinutes() + auto_transition);
+        if(!game.done_users) {
+          game.done_users = [uname]
+        }
+        else if(!game.done_users.includes(uname)) {
+          game.done_users.push(uname);
+        }
+        if(game.done = (game.captions.size === game.users.length)) {
+          game.deadline = new Date();
+          game.deadline.setMinutes(game.deadline.getMinutes() + auto_transition);
+        }
       }
 
       game.save(function(err) {
@@ -266,11 +280,19 @@ var GameController = {
 
       let done = [];
       game.captions.forEach(c => {
-        done.push(c.votes.size === game.users.length-1)
+        done.push(c.votes.has(uname))
       });
       if (done.length>0 && done.every(x=>x)) {
-        game.deadline = new Date();
-        game.deadline.setMinutes(game.deadline.getMinutes() + auto_transition);
+        if(!game.done_users) {
+          game.done_users = [uname]
+        }
+        else if(!game.done_users.includes(uname)) {
+          game.done_users.push(uname);
+        }
+        if(game.done = (game.captions.size === game.users.length)) {
+          game.deadline = new Date();
+          game.deadline.setMinutes(game.deadline.getMinutes() + auto_transition);
+        }
       }
 
       game.save(function(err) {
@@ -356,6 +378,87 @@ var GameController = {
         t:    t,
       });
     }
+  },
+
+  genResults: function(game, t) {
+    let captions = [];
+    let hands    = [];
+    let scores   = [];
+    game.captions.forEach((caption, key) => {
+      let cname = game.users.find(u=>u.username === key).name;
+      let cards = [];
+      let votes = {};
+      let score = {};
+
+      caption.votes.forEach((card, key) => {
+        let cname = game.users.find(u=>u.username === key).name;
+        if(card in votes) votes[card].push(cname);
+        else              votes[card] = [cname];
+      });
+      for(let entry of caption.scores.entries()) {
+        score[entry[0]] = entry[1];
+      }
+
+      cards.push({
+        card:  caption.image,
+        uname: key,
+        cname: cname,
+        votes: votes[caption.image],
+        quote: caption.quote,
+        expl:  caption.explain,
+        score: score[key],
+      });
+
+      for(let entry of caption.pcards.entries()) {
+        let name = game.users.find(u=>u.username === entry[0]).name;
+        let vote = caption.lookup.get(
+          caption.votes.get(entry[0]).replace(/\./g,'_')
+        );
+        if(vote) {
+          vote = {
+            card: caption.pcards.get(vote),
+            cname: game.users.find(u=>u.username === vote).name,
+          }
+        }
+        else {
+          vote = {cname:cname + t('dealer'), card: caption.image}
+        }
+        cards.push({
+          card:  entry[1],
+          uname: entry[0],
+          cname: name,
+          vote:  vote,
+          votes: votes[entry[1]],
+          score: score[entry[0]],
+        });
+      }
+      captions.push({
+        uname:   key,
+        cname:   cname,
+        quote:   caption.quote,
+        explain: caption.explain,
+        cards:   cards,
+      });
+    });
+    game.hands.forEach((hand, key) => {
+      hands.push({
+        cname: game.users.find(u=>u.username === key).name,
+        uname: key,
+        cards: hand,
+      });
+    });
+    for(let user of game.users) {
+      scores.push({
+        cname: user.name,
+        uname: user.username,
+        score: game.scores.get(user.username),
+      });
+    }
+    game.results = {
+      captions: captions,
+      hands:    hands,
+      scores:   scores,
+    };
   },
 
   next: function(req, res) {
@@ -504,14 +607,32 @@ var GameController = {
         console.log(game.captions);
         game.scores = totalscores;
         game.stage = 'end';
-        break
+        GameController.genResults(game, t);
+        break;
       case 'end':
         return;
     }
 
+    game.done_users = [];
+    game.done = false;
     GameController.sendMail(game, t);
     return GameController.updateDeadline(game, true, next);
   },
+
+  advance: function(t) {
+    Game.findOne({deadline: {$lt: new Date()}, done:true})
+        .exec(function(err, game) {
+      if(err || !games) {
+        games = [];
+      }
+      for(let game of games) {
+        GameController.nextStage(game, t, null, null);
+      }
+    }
+    setTimeout(function() {
+        GameController.advance(t);
+    }, 1800000); // once every 30 min (1800000 = 30*60*1000)
+  }
 
   game: function(req, res) {
     let code = req.params.id.toLowerCase();
@@ -542,10 +663,7 @@ var GameController = {
         }
       });
 
-      if(game.deadline < new Date() && (
-        (game.stage === 'capt' && game.captions.size === game.users.length)
-      ||(done.length>0 && done.every(x=>x))
-      )) {
+      if(game.deadline < new Date() && game.done) {
         GameController.nextStage(game, req.t, null, null);
       }
 
@@ -684,82 +802,18 @@ var GameController = {
           }
           break;
         case 'end':
-          game.captions.forEach((caption, key) => {
-            let cname = game.users.find(u=>u.username === key).name;
-            let cards = [];
-            let votes = {};
-            let score = {};
-
-            caption.votes.forEach((card, key) => {
-              let cname = game.users.find(u=>u.username === key).name;
-              if(card in votes) votes[card].push(cname);
-              else              votes[card] = [cname];
-            });
-            for(let entry of caption.scores.entries()) {
-              score[entry[0]] = entry[1];
-            }
-
-            cards.push({
-              card:  caption.image,
-              uname: key,
-              cname: cname,
-              votes: votes[caption.image],
-              quote: caption.quote,
-              expl:  caption.explain,
-              score: score[key],
-            });
-
-            for(let entry of caption.pcards.entries()) {
-              let name = game.users.find(u=>u.username === entry[0]).name;
-              let vote = caption.lookup.get(
-                caption.votes.get(entry[0]).replace(/\./g,'_')
-              );
-              if(vote) {
-                vote = {
-                  card: caption.pcards.get(vote),
-                  cname: game.users.find(u=>u.username === vote).name,
-                }
-              }
-              else {
-                vote = {cname:cname + req.t('dealer'), card: caption.image}
-              }
-              cards.push({
-                card:  entry[1],
-                uname: entry[0],
-                cname: name,
-                vote:  vote,
-                votes: votes[entry[1]],
-                score: score[entry[0]],
-              });
-            }
-            captions.push({
-              uname:   key,
-              cname:   cname,
-              quote:   caption.quote,
-              explain: caption.explain,
-              cards:   cards,
-            });
-          });
-          game.hands.forEach((hand, key) => {
-            hands.push({
-              cname: game.users.find(u=>u.username === key).name,
-              uname: key,
-              cards: hand,
-            });
-          });
-          for(let user of game.users) {
-            scores.push({
-              cname: user.name,
-              uname: user.username,
-              score: game.scores.get(user.username),
+          if(!game.results) {
+            GameController.genResults(game, req.t);
+            game.save(function(err) {
+              if (err) console.log('results next save fail: '+err);
             });
           }
           res.render('results', {
-            gamename: game.name,
-            captions: captions,
-            hands:    hands,
             uname:    uname,
-            scores:   scores,
+            gamename: game.name,
+            captions: game.results.captions,
+            hands:    game.results.hands,
+            scores:   game.results.scores,
           });
           break;
       }

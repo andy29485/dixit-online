@@ -1,5 +1,5 @@
 div
-  h1 #{t('title')} #{game.name}
-  div #{t('email.message')[game.stage]} 
+  h1 #{t({phrase:'title',locale:lang})} #{game.name}
+  div #{t({phrase:'email_messages.'+game.stage,locale:lang})} 
     a(href='https://dixit.andy29485.tk/game/'+game.code) #{game.name}
     

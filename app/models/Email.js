@@ -20,7 +20,7 @@ exports = module.exports = function(users, options) {
   let mailOptions = {
     from:    '"'+account.name+'" <'+account.address+'>',
     bcc:     bcc,
-    subject: options.t('subject', options.game.name),
+    subject: options.t({phrase:'sub',locale:options.lang},options.game.name),
     html:    compiledFunction(options),
   };
 

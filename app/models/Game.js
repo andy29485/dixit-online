@@ -1,7 +1,7 @@
 var mongoose   = require('mongoose');
 var Hashids    = require('hashids');
 var userSchema = require('./User.js').prototype.schema;
-var NumberInt  = mongoose.mongo.NumberInt;
+var NumberInt  = require('mongoose-int32');
 
 var hashids8 = new Hashids('secret seed', 8, 'abcdefghijklmnopqrstuvwxyz');
 var randId8  = () => hashids8.encode(Date.now()%410338672);
@@ -37,6 +37,48 @@ var captionSchema = new mongoose.Schema({
   },
 });
 
+var rVoteSchema = new mongoose.Schema({
+  cname: String,
+  card: String,
+});
+
+var rCardSchema = new mongoose.Schema({
+  cname:    String,
+  uname:    String,
+  card:     String,
+  quote:    String,
+  expl:     String,
+  votes:   [String],
+  vote:    rVoteSchema,
+  score:   NumberInt,
+});
+
+var rCaptionSchema = new mongoose.Schema({
+  cname:   String,
+  uname:   String,
+  quote:   String,
+  explain: String,
+  cards:   [rCardSchema],
+});
+
+var rHandSchema = new mongoose.Schema({
+  cname: String,
+  uname: String,
+  cards: [String],
+});
+
+var rScoreSchema = new mongoose.Schema({
+  cname: String,
+  uname: String,
+  score: NumberInt,
+});
+
+var resultsSchema = new mongoose.Schema({
+  captions: [rCaptionSchema],
+  hands:    [rHandSchema],
+  scores:   [rScoreSchema],
+});
+
 let stages = ['join', 'capt', 'choice', 'vote', 'end'];
 
 var gameSchema = new mongoose.Schema({
@@ -56,6 +98,9 @@ var gameSchema = new mongoose.Schema({
   duration:    {type:Number, min:1, max:14},
   deadline:    Date,
   card_dirs:  [String],
+  done_users: [String],
+  done:       {type:Boolean, default:false},
+  results:    resultsSchema,
   captionIds: { // caption._id -> username
     type: Map,
     of:   String,

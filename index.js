@@ -110,4 +110,5 @@ app.post('/vote/:id',    LoggedIn('/'), game.vote);
 
 app.listen(app.get('port'), function() {
   console.log('experss started: http://localhost:'+app.get('port'));
+  game.advance(i18n.__);
 });
