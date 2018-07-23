@@ -621,18 +621,18 @@ var GameController = {
 
   advance: function(t) {
     Game.findOne({deadline: {$lt: new Date()}, done:true})
-        .exec(function(err, game) {
+        .exec(function(err, games) {
       if(err || !games) {
         games = [];
       }
       for(let game of games) {
         GameController.nextStage(game, t, null, null);
       }
-    }
+    });
     setTimeout(function() {
         GameController.advance(t);
     }, 1800000); // once every 30 min (1800000 = 30*60*1000)
-  }
+  },
 
   game: function(req, res) {
     let code = req.params.id.toLowerCase();
