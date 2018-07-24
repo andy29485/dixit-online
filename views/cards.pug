@@ -40,6 +40,8 @@ mixin card_img(card, first, extra_id)
               div.col-6.col-md-4
                 if card.vote
                   h4 #{t('voted_for')}: #{card.vote.cname}
+                    if card.dealer
+                      | #{t('dealer')}
             div.row
               div.col-6.col-md-4.offset-md-2
                 +card_img(card.card, false)
@@ -116,7 +118,7 @@ mixin cards(cards, selected, center, no_input, required, cp, rownum)
         if (offset||'').indexOf(label) === -1
           - offset = offset + ' offset'+label+'0'
       - offsets[oindex] = offset
-        
+
     for card in cards
       div(class=classes+(center ? (offsets[index]||'') : ''))
         if no_input

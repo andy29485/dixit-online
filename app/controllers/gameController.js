@@ -380,7 +380,7 @@ var GameController = {
     }
   },
 
-  genResults: function(game, t) {
+  genResults: function(game) {
     let captions = [];
     let hands    = [];
     let scores   = [];
@@ -421,7 +421,7 @@ var GameController = {
           }
         }
         else {
-          vote = {cname:cname + t('dealer'), card: caption.image}
+          vote = {cname: cname, card: caption.image, dealer:true}
         }
         cards.push({
           card:  entry[1],
@@ -607,7 +607,7 @@ var GameController = {
         console.log(game.captions);
         game.scores = totalscores;
         game.stage = 'end';
-        GameController.genResults(game, t);
+        GameController.genResults(game);
         break;
       case 'end':
         return;
@@ -803,7 +803,7 @@ var GameController = {
           break;
         case 'end':
           if(!game.results) {
-            GameController.genResults(game, req.t);
+            GameController.genResults(game);
             game.save(function(err) {
               if (err) console.log('results next save fail: '+err);
             });
