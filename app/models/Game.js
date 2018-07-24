@@ -38,8 +38,9 @@ var captionSchema = new mongoose.Schema({
 });
 
 var rVoteSchema = new mongoose.Schema({
-  cname: String,
-  card: String,
+  cname:  String,
+  card:   String,
+  dealer: Boolean,
 });
 
 var rCardSchema = new mongoose.Schema({
