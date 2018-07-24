@@ -418,6 +418,7 @@ var GameController = {
           vote = {
             card: caption.pcards.get(vote),
             cname: game.users.find(u=>u.username === vote).name,
+            dealer: vote === entry[0],
           }
         }
         else {
