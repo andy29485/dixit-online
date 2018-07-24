@@ -40,7 +40,7 @@ mixin card_img(card, first, extra_id)
               div.col-6.col-md-4
                 if card.vote
                   h4 #{t('voted_for')}: #{card.vote.cname}
-                    if card.dealer
+                    if card.vote.dealer
                       | #{t('dealer')}
             div.row
               div.col-6.col-md-4.offset-md-2
