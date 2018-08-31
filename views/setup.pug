@@ -66,7 +66,7 @@ block content
               title=(can_join ? false : t('game_full')),
             ) #{t('join_button')}
         div
-          | #{t('end_date_join_alt')}
+          | #{t('end_date_join')}
           |
           b(id='dt') #{enddate.toISOString().replace(/[A-Z].*/, '')}
       else if admin
