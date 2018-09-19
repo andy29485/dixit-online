@@ -33,6 +33,7 @@
 
   "title":    "Dixit Online",
   "profile":  "Профиль",
+  "menu":     "Меню",
   "settings": "Настройки",
   "logout":   "Выход",
   "profile_head": "Профиль %s",

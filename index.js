@@ -30,6 +30,7 @@ app.use(session({
     secret: 'secret tunnel of love',
     resave: false,
     saveUninitialized: true,
+    expires: new Date(Date.now() + (90 * 86400 * 1000)), // 3 months
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
 }));
 

@@ -59,12 +59,11 @@ block body
       
       div(class="navbar-collapse collapse" id="collapsingNavbar")
         div(class="nav navbar-nav btn-group ml-auto")
-          unless ignore_logout
-            a.btn(href="/logout")
-              span(class="fa fa-sign-out-alt")
-              |
-              | #{t('logout')}
           unless ignore_profile
+            a.btn(href="/profile")
+              span(class="fa fa-elementor"")
+              |
+              | #{t('menu')}
             a.btn(href="/settings")
               span(class="fa fa-cog")
               |
@@ -73,10 +72,11 @@ block body
               span(class="fa fa-gamepad")
               |
               | #{t('games')}
-            a.btn(href="/profile")
-              span(class="fa fa-user")
+          unless ignore_logout
+            a.btn(href="/logout")
+              span(class="fa fa-sign-out-alt")
               |
-              | #{t('profile')}
+              | #{t('logout')}
   
   block content-outer
     div.container
