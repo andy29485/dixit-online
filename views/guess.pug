@@ -6,6 +6,14 @@ prepend title
   - let section = title;
 
 block content
+  if messages.length
+    div(class="alert alert-success")
+      a(href="#" class="close" data-dismiss="alert") &times;
+      strong #{t('success')}
+      ul
+        each msg in messages
+          li #{t(msg)}
+
   div.card.border-info
     h3.card-header #{t('instructions')}
     div.card-body #{help_msg}
@@ -16,7 +24,7 @@ block content
         unless index
           hr
         unless caption.uname == uname
-          lable 
+          lable
             h2 #{caption.quote}
               |
               |

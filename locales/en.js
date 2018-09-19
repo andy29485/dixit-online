@@ -101,6 +101,7 @@
   "too_many_players": "Too many players, there are not enough cards",
   "status_waiting":   "Waiting",
   "status_done":      "Done",
+  "choices_saved":    "Choices Saved",
 
   "caption":     "Caption",
   "explanation": "Explanation",

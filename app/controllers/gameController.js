@@ -3,6 +3,7 @@ var Game     = require('../models/Game.js');
 var User     = require('../models/User.js');
 var Email    = require('../models/Email.js');
 var Shuffle  = require('shuffle');
+var crypto   = require('crypto');
 var fs       = require('fs');
 
 var deck_dir = '/decks';
@@ -23,6 +24,24 @@ function shuffle(array) {
     array[currentIndex] = array[randomIndex];
     array[randomIndex] = temporaryValue;
   }
+
+  return array;
+}
+
+function hash(obj) {
+  let c = crypto.createHash('md5');
+  c.update(obj);
+  return md5sum.digest('hex');
+}
+
+function sortCards(array) {
+  array = [... array];
+
+  array.sort((a,b) => {
+    a = JSON.stringify(a.uname||a) + extra;
+    b = JSON.stringify(b.uname||b) + extra;
+    return hash(a) > hash(b);
+  });
 
   return array;
 }
@@ -245,8 +264,11 @@ var GameController = {
         }
         if(game.done = (game.captions.size === game.users.length)) {
           game.deadline = new Date();
-          game.deadline.setMinutes(game.deadline.getMinutes() + auto_transition);
+          game.deadline.setMinutes(game.deadline.getMinutes()+auto_transition);
         }
+      }
+      else {
+        req.flash('messages', 'choices_saved');
       }
 
       game.save(function(err) {
@@ -293,6 +315,9 @@ var GameController = {
           game.deadline = new Date();
           game.deadline.setMinutes(game.deadline.getMinutes() + auto_transition);
         }
+      }
+      else {
+        req.flash('messages', 'choices_saved');
       }
 
       game.save(function(err) {
@@ -748,7 +773,8 @@ var GameController = {
               help_msg: req.t('guess_help'),
               title:    req.t('stages.choice'),
               action:   '/guess/'+code,
-              quotes:   shuffle(captions),
+              quotes:   sort(captions, game.name),
+              messages: req.flash('messages'),
               enddate:  game.deadline,
               cards:    game.hands.get(uname),
               uname:    uname,
@@ -768,7 +794,7 @@ var GameController = {
               uname:    key,
               cname:    cname,
               selected: value.votes.get(uname) || "",
-              cards:    shuffle(cards),
+              cards:    sort(cards, game.name, game.name),
               quote:    value.quote,
               id:       value.code,
             });
@@ -797,7 +823,8 @@ var GameController = {
               title:    req.t('stages.vote'),
               action:  '/vote/'+code,
               enddate:  game.deadline,
-              quotes:  shuffle(captions),
+              messages: req.flash('messages'),
+              quotes:  sort(captions, game.name),
               uname:   uname,
             });
           }

@@ -101,6 +101,7 @@
   "too_many_players": "Слишком много игроков, карт недостаточно",
   "status_waiting":   "Ожидание",
   "status_done":      "Завершено",
+  "choices_saved":    "Выбор Сохранён",
 
   "caption":     "Ассоциация",
   "explanation": "Пояснение",
