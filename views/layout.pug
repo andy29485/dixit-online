@@ -8,13 +8,12 @@ block head
         | - #{section}
   meta(charset="utf-8")
   link(rel='stylesheet', href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css')
-  link(rel='stylesheet', href="https://use.fontawesome.com/releases/v5.1.1/css/all.css")
+  link(rel='stylesheet', href="https://use.fontawesome.com/releases/v5.3.1/css/all.css")
 
   script(src='https://code.jquery.com/jquery-3.1.1.slim.min.js')
   script(src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.bundle.min.js')
   
   link(href='/css/main.css',  rel='stylesheet')
-  link(href='/css/flags.css', rel='stylesheet')
   link(href='/css/cards.css', rel='stylesheet')
     
   meta(name="viewport", content="width=device-width,initial-scale=1.0")
@@ -61,7 +60,7 @@ block body
         div(class="nav navbar-nav btn-group ml-auto")
           unless ignore_profile
             a.btn(href="/profile")
-              span(class="fa fa-elementor")
+              span(class="fa fa-book-open")
               |
               | #{t('menu')}
             a.btn(href="/settings")
