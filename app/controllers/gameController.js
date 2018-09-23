@@ -34,7 +34,7 @@ function hash(obj) {
   return md5sum.digest('hex');
 }
 
-function sortCards(array) {
+function sortCards(array, extra) {
   array = [... array];
 
   array.sort((a,b) => {
