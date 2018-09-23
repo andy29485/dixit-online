@@ -654,7 +654,7 @@ var GameController = {
       else if(!Array.isArray(games)) {
         games = [games];
       }
-      
+
       for(let game of games) {
         GameController.nextStage(game, t, null, null);
       }
@@ -777,7 +777,7 @@ var GameController = {
               help_msg: req.t('guess_help'),
               title:    req.t('stages.choice'),
               action:   '/guess/'+code,
-              quotes:   sort(captions, game.name),
+              quotes:   sortCards(captions, game.name),
               messages: req.flash('messages'),
               enddate:  game.deadline,
               cards:    game.hands.get(uname),
@@ -798,7 +798,7 @@ var GameController = {
               uname:    key,
               cname:    cname,
               selected: value.votes.get(uname) || "",
-              cards:    sort(cards, game.name, game.name),
+              cards:    sortCards(cards, game.name, game.name),
               quote:    value.quote,
               id:       value.code,
             });
@@ -828,7 +828,7 @@ var GameController = {
               action:  '/vote/'+code,
               enddate:  game.deadline,
               messages: req.flash('messages'),
-              quotes:  sort(captions, game.name),
+              quotes:  sortCards(captions, game.name),
               uname:   uname,
             });
           }
