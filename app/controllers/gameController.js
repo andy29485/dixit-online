@@ -31,7 +31,7 @@ function shuffle(array) {
 function hash(obj) {
   let c = crypto.createHash('md5');
   c.update(obj);
-  return md5sum.digest('hex');
+  return c.digest('hex');
 }
 
 function sortCards(array, extra) {
