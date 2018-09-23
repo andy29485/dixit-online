@@ -651,6 +651,10 @@ var GameController = {
       if(err || !games) {
         games = [];
       }
+      else if(!Array.isArray(games)) {
+        games = [games];
+      }
+      
       for(let game of games) {
         GameController.nextStage(game, t, null, null);
       }
