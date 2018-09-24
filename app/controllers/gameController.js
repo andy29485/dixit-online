@@ -786,22 +786,40 @@ var GameController = {
           }
           break;
         case 'vote':
+          let own_row = null;
           game.captions.forEach((value, key) => {
             let cards = [value.image];
             let cname = game.users.find(u=>u.username === key).name;
+            let own_card = null;
             for(let entry of value.pcards.entries()) {
               if(uname !== entry[0]) {
                 cards.push(entry[1]);
               }
+              else {
+                own_card = entry[1];
+              }
             }
-            captions.push({
+            cards = sortCards(cards, game.name);
+            if(own_card !== null) {
+              cards.unshift(own_card);
+            }
+            else {
+              cards.unshift(value.image);
+            }
+            let caption = {
               uname:    key,
               cname:    cname,
               selected: value.votes.get(uname) || "",
-              cards:    sortCards(cards, game.name, game.name),
+              cards:    cards,
               quote:    value.quote,
               id:       value.code,
-            });
+            };
+            if(caption.uname == uname) {
+              own_row = caption;
+            }
+            else {
+              captions.push(caption);
+            }
             for(let u of value.votes.keys()) {
               if(u in selected) ++selected[u];
               else                selected[u] = 1;
@@ -821,15 +839,20 @@ var GameController = {
             });
           }
           else {
+            captions = sortCards(captions, game.name);
+            if(own_row !== null) {
+              captions.unshift(own_row);
+            }
             res.render('guess', {
-              gamename: game.name,
-              help_msg: req.t('vote_help'),
-              title:    req.t('stages.vote'),
-              action:  '/vote/'+code,
-              enddate:  game.deadline,
-              messages: req.flash('messages'),
-              quotes:  sortCards(captions, game.name),
-              uname:   uname,
+              gamename:  game.name,
+              help_msg:  req.t('vote_help'),
+              title:     req.t('stages.vote'),
+              action:    '/vote/'+code,
+              enddate:   game.deadline,
+              messages:  req.flash('messages'),
+              quotes:    captions,
+              uname:     uname,
+              dis_first: true,
             });
           }
           break;

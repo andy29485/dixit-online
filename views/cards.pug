@@ -2,13 +2,13 @@
 //- if center===true, cards will be centered
 //- if no_input===true, cards will to highlight
 
-mixin card_input(card, cp, selected, required)
+mixin card_input(card, cp, selected, required, dis)
   label.card(onclick="clicklabel(this)")
     - let c = (selected === card);
     if required
-      input(type="radio",name=cp,checked=c,value=card,required)
+      input(type="radio",name=cp,checked=c,value=card,disabled=dis,required)
     else
-      input(type="radio",name=cp,checked=c,value=card)
+      input(type="radio",name=cp,checked=c,value=card,disabled=dis)
     img(src=card, class="card-img-top rounded gamecard")
       
 mixin card_img(card, first, extra_id)
@@ -124,5 +124,6 @@ mixin cards(cards, selected, center, no_input, required, cp, rownum)
         if no_input
           +card_img(card, index===0, rownum||0)
         else
-          +card_input(card, cp, selected, required)
+          - let dis = dis_first && (rownum===0||index===0);
+          +card_input(card, cp, selected, required, dis)
       - ++index

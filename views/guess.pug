@@ -23,17 +23,17 @@ block content
       each caption in quotes
         unless index
           hr
-        unless caption.uname == uname
-          lable
-            h2 #{caption.quote}
-              |
-              |
-              if caption.cname
-                small (#{caption.cname})
-          +cards(caption.cards || cards, caption.selected,
-                 false, false, false,
-                 "picker_"+caption.id
-         )
+        lable
+          h2 #{caption.quote}
+            |
+            |
+            if caption.cname
+              small (#{caption.cname})
+        +cards(caption.cards || cards, caption.selected,
+               false, false, false,
+               "picker_"+caption.id,
+               index
+        )
         - ++index
       button(type="submit", class="btn btn-primary") #{t('submit_button')}
   
