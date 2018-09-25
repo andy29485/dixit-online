@@ -252,9 +252,9 @@ var GameController = {
       }
 
       let done = [];
-      game.captions.forEach(c => {
-        done.push(c.pcards.has(uname))
-      });
+      for(let [u,c] of game.captions.entries()) {
+        done.push(u===uname || c.pcards.has(uname))
+      }
       if (done.length>0 && done.every(x=>x)) {
         if(!game.done_users) {
           game.done_users = [uname]
