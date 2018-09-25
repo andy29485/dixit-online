@@ -389,7 +389,7 @@ var GameController = {
     let usergroups = {};
     for(let user of game.users) {
       if(!usergroups[user.lang]) {
-        usergroups[user.lang]=[user]
+        usergroups[user.lang] = [user];
       }
       else {
         usergroups[user.lang].push(user);
@@ -802,9 +802,6 @@ var GameController = {
             cards = sortCards(cards, game.name);
             if(own_card !== null) {
               cards.unshift(own_card);
-            }
-            else {
-              cards.unshift(value.image);
             }
             let caption = {
               uname:    key,

@@ -27,7 +27,7 @@ img.clickable-card:hover, .row > div > .card > input + img.gamecard:hover {
 
 .row > div > .card > input:disabled + img {
   /* (RADIO disabled) IMAGE STYLES */
-  box-shadow: 0 0 0 3px #3f5;
+  box-shadow: 0 0 0 5px #3f5;
   opacity: 0.60 !important;
   cursor: default !important;
 }
