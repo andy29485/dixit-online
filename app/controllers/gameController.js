@@ -361,10 +361,7 @@ var GameController = {
   },
 
   updateDeadline: function(game, save, next) {
-    if(game.stage === 'vote') {
-
-    }
-    else if(game.stage !== 'end') {
+    if(game.stage !== 'end') {
       game.deadline = new Date();
       game.deadline.setDate(game.deadline.getDate() + game.duration);
       game.deadline.setSeconds(0);
@@ -529,6 +526,14 @@ var GameController = {
   },
 
   nextStage: function(game, t, deck, next) {
+    // if game is not done, don't move on
+    if(!game.done || game.stage == 'join') {
+      if (typeof next === 'function') {
+        return next();
+      }
+      return;
+    }
+
     // cards to replenish hand
     if(!deck) {
       deck = GameController.buildDeck(game);
@@ -792,11 +797,11 @@ var GameController = {
             let cname = game.users.find(u=>u.username === key).name;
             let own_card = null;
             for(let entry of value.pcards.entries()) {
-              if(uname !== entry[0]) {
-                cards.push(entry[1]);
+              if(uname === entry[0]) {
+                own_card = entry[1];
               }
               else {
-                own_card = entry[1];
+                cards.push(entry[1]);
               }
             }
             cards = sortCards(cards, game.name);
