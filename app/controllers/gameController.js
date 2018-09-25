@@ -751,13 +751,15 @@ var GameController = {
         case 'choice':
           game.captions.forEach((value, key) => {
             let cname = game.users.find(u=>u.username === key).name;
-            captions.push({
-              uname:    key,
-              cname:    cname,
-              selected: value.pcards.get(uname) || "",
-              quote:    value.quote,
-              id:       value.code,
-            });
+            if(uname !== key){
+              captions.push({
+                uname:    key,
+                cname:    cname,
+                selected: value.pcards.get(uname) || "",
+                quote:    value.quote,
+                id:       value.code,
+              });
+            }
             for(let u of value.pcards.keys()) {
               if(u in selected) ++selected[u];
               else                selected[u] = 1;
