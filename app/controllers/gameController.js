@@ -215,7 +215,7 @@ var GameController = {
       else if(!game.done_users.includes(uname)) {
         game.done_users.push(uname);
       }
-      if(game.done = (game.captions.size === game.users.length)) {
+      if(game.done = (game.done_users.size === game.users.length)) {
         game.deadline = new Date();
         game.deadline.setMinutes(game.deadline.getMinutes() + auto_transition);
       }
@@ -262,7 +262,7 @@ var GameController = {
         else if(!game.done_users.includes(uname)) {
           game.done_users.push(uname);
         }
-        if(game.done = (game.captions.size === game.users.length)) {
+        if(game.done = (game.done_users.size === game.users.length)) {
           game.deadline = new Date();
           game.deadline.setMinutes(game.deadline.getMinutes()+auto_transition);
         }
