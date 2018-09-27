@@ -527,7 +527,7 @@ var GameController = {
 
   nextStage: function(game, t, deck, next) {
     // if game is not done, don't move on
-    if(!game.done || game.stage == 'join') {
+    if(game.stage !== 'join' && !game.done) {
       if (typeof next === 'function') {
         return next();
       }
